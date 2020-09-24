@@ -1,0 +1,36 @@
+body {
+
+}
+
+#row1 {
+    background-color: lightskyblue;
+}
+
+#row1 img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block; /* remove extra space below image */
+
+}
+
+#row2 {
+  background-color:rosybrown;
+}
+
+#row3 {
+  background: #dbdfe5;
+}
+
+#row4 {
+  background-color: rosybrown;
+}
+#row5 {
+  background: #dbdfe5;
+}
+#row6 {
+  background-color: rosybrown;
+}
+
+#footer {
+  
+}

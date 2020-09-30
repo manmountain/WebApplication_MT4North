@@ -14,4 +14,8 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
+.nav-bk7-body {
+  background: #c2e59c;
+  background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
+  background: linear-gradient(to right, #64b3f4, #c2e59c);
+}

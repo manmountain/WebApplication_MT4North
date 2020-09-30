@@ -1,9 +1,12 @@
 <header>
   <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 justify-content-center nav-bk7" 
+       class="container-fluid navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 nav-bk7 nav-body_width fixed-top" 
   >
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">MT4North - Innovations Model</a>
+    <div class=""
+         >
+      <a class="navbar-brand navbar_title" [routerLink]="['/']">
+        <img src="\lib\images\img3.jpg" height="30"/>MT4North - Innovations Model
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,20 +19,18 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse nav_menu"
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
+          <li class="nav-item"
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
             <a class="nav-link text-dark" [routerLink]="['/']">Hem</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Om oss</a
+            <a class="nav-link text-dark" [routerLink]="['/counter']">Om oss</a
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">

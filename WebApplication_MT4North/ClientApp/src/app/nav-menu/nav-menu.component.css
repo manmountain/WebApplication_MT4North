@@ -2,6 +2,7 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+ 
 }
 
 html {
@@ -20,4 +21,22 @@ html {
   background: #c2e59c;
   background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
   background: linear-gradient(to right, #64b3f4, #c2e59c);
+ 
+}
+
+.nav-text-align{
+  
+}
+.nav-body_width {
+  width: 100%;
+ 
+}
+.navbar_title{
+
+}
+.nav_menu {
+  
+  justify-content:center;
+ 
+ 
 }

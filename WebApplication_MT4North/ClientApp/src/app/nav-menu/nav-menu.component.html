@@ -1,10 +1,9 @@
 <header>
   <nav
-       class="container-fluid navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 nav-bk7 nav-body_width fixed-top" 
+       class=" navbar navbar-expand-sm navbar-toggleable-sm navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3 nav-bk7 nav-body_width fixed-top" 
   >
-    <div class=""
-         >
-      <a class="navbar-brand navbar_title" [routerLink]="['/']">
+    <div class="container-fluid navbar-left">
+      <a class="navbar-brand" [routerLink]="['/']">
         <img src="\lib\images\img3.jpg" height="30"/>MT4North - Innovations Model
       </a>
       <button
@@ -19,24 +18,31 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse nav_menu"
+        class=" navbar navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
         [ngClass]="{ show: isExpanded }"
       >
-        <ul class="navbar-nav flex-grow">
+        <ul class=" navbar navbar-nav flex-grow font-weight-normal navbar-center">
           <li class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Hem</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']">Om oss</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/counter']">Om oss</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Vår Mission</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Vår Mission</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/counter']">Contakt</a>
+          </li>
+        </ul>
+        <ul class=" navbar navbar-nav d-sm-inline-flex flex-sm-row-reverse flex-grow font-weight-normal navbar-right">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-user"></span>Register</a>
           </li>
         </ul>
       </div>

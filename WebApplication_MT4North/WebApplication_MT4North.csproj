@@ -20,17 +20,25 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\src\app\home\NewFolder\**" />
+    <Compile Remove="ClientApp\src\app\NewFolder1\**" />
+    <Compile Remove="ClientApp\src\app\NewFolder\**" />
     <Compile Remove="wwwroot\lib\NewFolder\**" />
     <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="$(SpaRoot)**" />
     <Content Remove="ClientApp\src\app\home\NewFolder\**" />
+    <Content Remove="ClientApp\src\app\NewFolder1\**" />
+    <Content Remove="ClientApp\src\app\NewFolder\**" />
     <Content Remove="wwwroot\lib\NewFolder\**" />
     <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="ClientApp\src\app\home\NewFolder\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\NewFolder1\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\NewFolder\**" />
     <EmbeddedResource Remove="wwwroot\lib\NewFolder\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="$(SpaRoot)**" />
     <None Remove="ClientApp\src\app\home\NewFolder\**" />
+    <None Remove="ClientApp\src\app\NewFolder1\**" />
+    <None Remove="ClientApp\src\app\NewFolder\**" />
     <None Remove="wwwroot\lib\NewFolder\**" />
     <None Remove="wwwroot\NewFolder\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
@@ -41,6 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\NewFolder2\" />
     <Folder Include="wwwroot\lib\bootstrap\" />
     <Folder Include="wwwroot\lib\images\" />
   </ItemGroup>

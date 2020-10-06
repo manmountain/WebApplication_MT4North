@@ -40,10 +40,17 @@ body {
 }
 
 #footer {
-    background-color:gainsboro;
+ /* background: #64b3f4;
+  background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
+  background: linear-gradient(to right, #64b3f4, #c2e59c);*/
 }
-.footer_width{
 
+
+
+
+.footer_width {
+  width: 100%;
+ background-color:paleturquoise;
 }
 
 .no-padding {

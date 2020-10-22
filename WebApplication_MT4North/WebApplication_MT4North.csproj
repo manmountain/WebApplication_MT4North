@@ -15,17 +15,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.8" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\src\app\home\NewFolder\**" />
     <Compile Remove="ClientApp\src\app\NewFolder1\**" />
-    <Compile Remove="ClientApp\src\app\NewFolder2\**" />
+    <Compile Remove="ClientApp\src\app\NewFolder\**" />
     <Compile Remove="wwwroot\lib\bootstrap\**" />
     <Compile Remove="wwwroot\lib\NewFolder1\**" />
     <Compile Remove="wwwroot\lib\NewFolder\**" />
@@ -33,14 +29,14 @@
     <Content Remove="$(SpaRoot)**" />
     <Content Remove="ClientApp\src\app\home\NewFolder\**" />
     <Content Remove="ClientApp\src\app\NewFolder1\**" />
-    <Content Remove="ClientApp\src\app\NewFolder2\**" />
+    <Content Remove="ClientApp\src\app\NewFolder\**" />
     <Content Remove="wwwroot\lib\bootstrap\**" />
     <Content Remove="wwwroot\lib\NewFolder1\**" />
     <Content Remove="wwwroot\lib\NewFolder\**" />
     <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="ClientApp\src\app\home\NewFolder\**" />
     <EmbeddedResource Remove="ClientApp\src\app\NewFolder1\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\NewFolder2\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\NewFolder\**" />
     <EmbeddedResource Remove="wwwroot\lib\bootstrap\**" />
     <EmbeddedResource Remove="wwwroot\lib\NewFolder1\**" />
     <EmbeddedResource Remove="wwwroot\lib\NewFolder\**" />
@@ -48,7 +44,7 @@
     <None Remove="$(SpaRoot)**" />
     <None Remove="ClientApp\src\app\home\NewFolder\**" />
     <None Remove="ClientApp\src\app\NewFolder1\**" />
-    <None Remove="ClientApp\src\app\NewFolder2\**" />
+    <None Remove="ClientApp\src\app\NewFolder\**" />
     <None Remove="wwwroot\lib\bootstrap\**" />
     <None Remove="wwwroot\lib\NewFolder1\**" />
     <None Remove="wwwroot\lib\NewFolder\**" />
@@ -59,15 +55,11 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\custom.css" />
     <None Remove="ClientApp\src\app\home\NewFolder\home.component.css" />
-    <None Remove="ClientApp\src\app\login\login.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\NewFolder2\" />
     <Folder Include="wwwroot\lib\images\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\login\login.component.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

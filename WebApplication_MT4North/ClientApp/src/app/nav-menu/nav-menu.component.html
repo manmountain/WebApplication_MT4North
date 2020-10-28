@@ -17,10 +17,8 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class=" navbar navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <div class=" navbar navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+           [ngClass]="{ show: isExpanded }">
         <ul class=" navbar navbar-nav flex-grow font-weight-normal navbar-center">
           <li class="nav-item"
               [routerLinkActive]="['link-active']"
@@ -33,19 +31,31 @@
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Vår Mission</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item mr-5" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/counter']">Contakt</a>
           </li>
-        </ul>
-        <ul class=" navbar navbar-nav d-sm-inline-flex flex-sm-row-reverse flex-grow font-weight-normal navbar-right">
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+
+          <li class="nav-item ml-5" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-user"></span>Register</a>
           </li>
+
         </ul>
+        <!--
+  <ul class=" navbar navbar-nav d-sm-inline-flex flex-sm-row-reverse flex-grow font-weight-normal navbar-right">
+    <li class="nav-item" [routerLinkActive]="['link-active']">
+      <a class="nav-link text-dark" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
+    </li>
+    <li class="nav-item" [routerLinkActive]="['link-active']">
+      <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-user"></span>Register</a>
+    </li>
+  </ul>
+    -->
       </div>
+
     </div>
+
   </nav>
 </header>

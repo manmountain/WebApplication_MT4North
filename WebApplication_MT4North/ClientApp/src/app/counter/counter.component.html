@@ -1,13 +1,52 @@
 
-<div class="justify-content-center">
-  <h1>About Us</h1>
+
+<div class="container p-5 mb-2 mt-5 bg-info text-white">
+
+  <div class="row-6 p-5 mt-1">
+
+    <!--<div class="col-lg-4"></div>-->
+
+    <div class="col-lg-4 container">
+
+      <div class="form-group">
+        <h4>Om oss</h4>
+        <p>Det är om oss Angular component.</p>
+
+        
+        <p aria-live="polite">Aktuell Räkna: <strong>{{ currentCount }}</strong></p>
+        <button class="btn btn-primary" (click)="incrementCounter()">Increment</button>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-4 container">
+      <!--
+      <form class="p-3 mb-2 text-white form_login container-fluid">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <!-- <small id="emailHelp" class="form-text text-white">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    -->
+    </div>
+
+    <div class="col-lg-4 container"></div>
+
+  </div>
 
 
-  <p>This is a simple example of an Angular component.</p>
 
 
-  <p aria-live="polite">Current count: <strong>{{ currentCount }}</strong></p>
-
-  <button class="btn btn-primary" (click)="incrementCounter()">Increment</button>
 
 </div>

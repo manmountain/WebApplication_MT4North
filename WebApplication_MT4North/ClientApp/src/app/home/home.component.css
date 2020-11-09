@@ -7,6 +7,31 @@ body {
   
   
   }
+.carousel .carousel-item{
+    height: 400px;
+}
+  .carousel .carousel-item img {
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    min-height: 400px;
+  }
+
+.carousel .carousel-inner {
+  height: 400px
+}
+
+.carousel-inner .carousel-item img {
+  min-height: 400px;
+  /*prevent it from stretch in screen size < than 768px object-fit:cover */
+}
+
+@media(max-width:768px) {
+  .carousel .carousel-inner {
+    /*prevent it from adding a white space between carousel and container elements height:auto */
+  }
+}
 
 #row1 {
     background-color: lightskyblue;

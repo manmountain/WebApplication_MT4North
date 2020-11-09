@@ -68,7 +68,9 @@
     <None Remove="ClientApp\images\projekt3.jpg" />
     <None Remove="ClientApp\images\projekt4.jpg" />
     <None Remove="ClientApp\images\projekt5.jpg" />
+    <None Remove="ClientApp\src\app\contact-us\contact-us.component.ts" />
     <None Remove="ClientApp\src\app\custom.css" />
+    <None Remove="ClientApp\src\app\footer\footer.component.ts" />
     <None Remove="ClientApp\src\app\home\NewFolder\home.component.css" />
     <None Remove="ClientApp\src\app\login\login.component.ts" />
   </ItemGroup>

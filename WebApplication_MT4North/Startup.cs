@@ -69,7 +69,7 @@ namespace WebApplication_MT4North
                 {
 
                     // spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    spa.UseProxyToSpaDevelopmentServer("https://localhost:4200/");
                 }
             });
         }

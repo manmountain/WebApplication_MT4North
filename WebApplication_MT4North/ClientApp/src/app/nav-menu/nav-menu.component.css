@@ -48,3 +48,13 @@ html {
     left:50%;
     transform: translateX(-50%);
 }
+
+/*
+.navbar a:hover {
+  background-color: #000;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+    */

@@ -1,20 +1,12 @@
-body{
+body {
 
 }
+
 .body-height {
   min-height: 700px;
 }
-
 .bk7-homebody-helabg {
   background: #c2e59c;
   background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
   background: linear-gradient(to right, #64b3f4, #c2e59c);
 }
-  .form_login{
-    border: 1px solid gray;
-    padding: 10% 15%;
-    margin-top: 20%;
-    background-color: indianred;
-}
-
-

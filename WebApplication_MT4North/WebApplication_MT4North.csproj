@@ -57,17 +57,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\images\img1.jpg" />
-    <None Remove="ClientApp\images\img2.jpg" />
-    <None Remove="ClientApp\images\img3.jpg" />
-    <None Remove="ClientApp\images\img4.jpg" />
-    <None Remove="ClientApp\images\img5.jpg" />
-    <None Remove="ClientApp\images\innovation.jpg" />
-    <None Remove="ClientApp\images\projekt1.jpg" />
-    <None Remove="ClientApp\images\projekt2.jpg" />
-    <None Remove="ClientApp\images\projekt3.jpg" />
-    <None Remove="ClientApp\images\projekt4.jpg" />
-    <None Remove="ClientApp\images\projekt5.jpg" />
+    <None Remove="ClientApp\src\assets\images\img1.jpg" />
+    <None Remove="ClientApp\src\assets\images\img2.jpg" />
+    <None Remove="ClientApp\src\assets\images\img3.jpg" />
+    <None Remove="ClientApp\src\assets\images\img4.jpg" />
+    <None Remove="ClientApp\src\assets\images\img5.jpg" />
+    <None Remove="ClientApp\src\assets\images\innovation.jpg" />
+    <None Remove="ClientApp\src\assets\images\projekt1.jpg" />
+    <None Remove="ClientApp\src\assets\images\projekt2.jpg" />
+    <None Remove="ClientApp\src\assets\images\projekt3.jpg" />
+    <None Remove="ClientApp\src\assets\images\projekt4.jpg" />
+    <None Remove="ClientApp\src\assets\images\projekt5.jpg" />
     <None Remove="ClientApp\src\app\contact-us\contact-us.component.ts" />
     <None Remove="ClientApp\src\app\custom.css" />
     <None Remove="ClientApp\src\app\footer\footer.component.ts" />
@@ -76,47 +76,47 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ClientApp\images\img1.jpg">
+    <Content Include="ClientApp\src\assets\images\img1.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\img2.jpg">
+    <Content Include="ClientApp\src\assets\images\img2.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\img3.jpg">
+    <Content Include="ClientApp\src\assets\images\img3.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\img4.jpg">
+    <Content Include="ClientApp\src\assets\images\img4.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\img5.jpg">
+    <Content Include="ClientApp\src\assets\images\img5.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\innovation.jpg">
+    <Content Include="ClientApp\src\assets\images\innovation.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\projekt1.jpg">
+    <Content Include="ClientApp\src\assets\images\projekt1.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\projekt2.jpg">
+    <Content Include="ClientApp\src\assets\images\projekt2.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\projekt3.jpg">
+    <Content Include="ClientApp\src\assets\images\projekt3.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\projekt4.jpg">
+    <Content Include="ClientApp\src\assets\images\projekt4.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="ClientApp\images\projekt5.jpg">
+    <Content Include="ClientApp\src\assets\images\projekt5.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

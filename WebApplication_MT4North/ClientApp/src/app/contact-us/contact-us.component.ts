@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.css']
 })
-export class ContactUsComponent implements OnInit {
+export class ContactUsComponent  {
 
  /* public currentCount = 0;
 

@@ -14,7 +14,13 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
-import { ContactUsComponent} from './contact-us/contact-us.component'
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { MyPagesComponent } from './my-pages/my-pages.component';
+import { MyPagesStartComponent } from './my-pages-start/my-pages-start.component';
+import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.component';
+import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
+import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -22,7 +28,32 @@ const routes: Routes = [
   { path: 'fetch-data', component: FetchDataComponent },
   { path: 'login', component: LoginComponent },
   { path: 'footer', component: FooterComponent },
-  { path: 'contact-us', component: ContactUsComponent}
+  { path: 'contact-us', component: ContactUsComponent },
+  {
+    path: 'my-pages',
+    component: MyPagesComponent,
+    children: [
+      {
+        path: 'start',
+        component: MyPagesStartComponent
+      },
+      {
+        path: 'projects',
+        component: MyPagesProjectComponent,
+        children: [
+          {
+            path: 'activity-status',
+            component: MyPagesActivityStatusComponent
+          },
+          {
+            path: 'activity',
+            component: MyPagesActivityComponent
+          }
+        ]
+      }
+    ]
+  }
+
 ];
 
 @NgModule({
@@ -34,7 +65,12 @@ const routes: Routes = [
     FetchDataComponent,
     LoginComponent,
     FooterComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    MyPagesComponent,
+    MyPagesStartComponent,
+    MyPagesProjectComponent,
+    MyPagesActivityStatusComponent,
+    MyPagesActivityComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

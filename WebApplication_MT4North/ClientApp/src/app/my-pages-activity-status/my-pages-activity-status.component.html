@@ -1,0 +1,30 @@
+<p class=" text-black mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+<div class="row mr-4">
+  <table class="table ml-3 m-0" id="t01" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="im-header im-header-first border-top-0" style="width:13%; border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
+        </th>
+        <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">Konceptualisering</th>
+        <th scope="col" class="im-header border-top-0 triangle" style="border-bottom: 1px solid white; margin-bottom: -1px;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">Proof of concept</th>
+        <th scope="col" class="im-header border-top-0 triangle" style="border-bottom: 1px solid white; margin-bottom: -1px;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">Produktvalidering</th>
+        <th scope="col" class="im-header border-top-0 triangle" style="border-bottom: 1px solid white; margin-bottom: -1px;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">Produktlansering</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+
+          <td *ngFor="let column of headers; let i=index">
+        <ng-template [ngIf]="index==1" [ngIfElse]="phaseColumn">
+            {{row[column].Name}}
+          </ng-template>
+        <ng-template #phaseColumn>
+          {{row[column].Name}}
+
+          Aktiviteter
+        </ng-template>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>

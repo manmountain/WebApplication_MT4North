@@ -20,3 +20,25 @@ code {
   background: linear-gradient(to right, #64b3f4, #c2e59c);
 }
 
+*:focus {
+  outline: 0;
+}
+
+a.nav-link {
+    cursor: pointer;
+}
+
+a.nav-link {
+  color: gray;
+}
+
+a.nav-link.active {
+  color: black;
+}
+
+/*
+h4 {
+  font-size: 1em;
+}
+*/
+

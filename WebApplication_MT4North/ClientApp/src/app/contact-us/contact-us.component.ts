@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 // import { Component, OnInit, HostListener } from '@angular/core';
-// import { ConnectionService } from './connection.service';
+//import { ConnectionService } from './connection.service';
 //import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 //import { Component, OnInit, HostListener } from '@angular/core';
 
@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.css']
 })
-export class ContactUsComponent {
+export class ContactUsComponent  {
 
  /* public currentCount = 0;
 
@@ -19,13 +19,12 @@ export class ContactUsComponent {
     this.currentCount++;
   }
   */
-  
+  /*
 
   contactForm: FormGroup;
   disabledSubmitButton: boolean = true;
   optionsSelect: Array<any>;
 
-  /*
   @HostListener('input') oninput() {
 
     if (this.contactForm.valid) {

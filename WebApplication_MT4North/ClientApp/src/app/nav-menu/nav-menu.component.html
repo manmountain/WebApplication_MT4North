@@ -1,61 +1,32 @@
 <header>
-  <nav
-       class=" navbar navbar-expand-sm navbar-toggleable-sm navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow nav-bk7 nav-body_width fixed-top" 
-  >
-    <div class="container-fluid navbar-left">
-      <a class="navbar-brand" [routerLink]="['/']">
-        <img src="\lib\images\img3.jpg" height="30"/>MT4North-InnovationsModell
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
-        <span class="navbar-toggler-icon"></span>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top nav-bk7" role="navigation">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Medtech Innovation Model</a>
+      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
+        &#9776;
+        <!--<img src="\lib\images\img3.jpg" height="30" />MT4North-InnovationsModell-->
       </button>
-      <div class=" navbar navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-           [ngClass]="{ show: isExpanded }">
-        <ul class=" navbar navbar-nav font-weight-normal navbar-center">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Hem</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']">Om oss</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Vår Mission</a>
-          </li>
-          <li class="nav-item " [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/contact-us']">Contakt</a>
-          </li>
-
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-user"></span>Register</a>
-          </li>
-
+      <div class="collapse navbar-collapse" id="exCollapsingNavbar">
+        <ul class="nav navbar-nav">
+          <li class="nav-item"><a href="#" class="nav-link">Om oss</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Samarbetspartners</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Kontakt</a></li>
         </ul>
-        <!--
-  <ul class=" navbar navbar-nav d-sm-inline-flex flex-sm-row-reverse flex-grow font-weight-normal navbar-right">
-    <li class="nav-item" [routerLinkActive]="['link-active']">
-      <a class="nav-link text-dark" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
-    </li>
-    <li class="nav-item" [routerLinkActive]="['link-active']">
-      <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-user"></span>Register</a>
-    </li>
-  </ul>
-    -->
+        <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
+          <li class="">
+            <ul class="navbar navbar-nav p-0">
+              <li class="nav-item" [routerLinkActive]="['link-active']">
+                <a class="nav-link text-dark" [routerLink]="['/counter']"><span class="glyphicon glyphicon-user"></span>Registrera</a>
+              </li>
+              <li class="nav-item" [routerLinkActive]="['link-active']">
+                <a class="nav-link text-dark" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
-
     </div>
-
   </nav>
+
 </header>

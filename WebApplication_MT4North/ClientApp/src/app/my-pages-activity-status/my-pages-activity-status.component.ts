@@ -27,8 +27,7 @@ export class MyPagesActivityStatusComponent {
       "Produktvalidering": "Male",
       "Produktlansering": "India"
     }
-  ]
+  ];
 
-  activities: Activity[];
 
 }

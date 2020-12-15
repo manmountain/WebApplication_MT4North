@@ -20,7 +20,8 @@ import { MyPagesStartComponent } from './my-pages-start/my-pages-start.component
 import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.component';
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
-
+import { MatchesPhasePipe } from './models/matchesPhasePipe'; 
+import { EnumToArrayPipe } from './models/enumToArrayPipe';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -70,7 +71,9 @@ const routes: Routes = [
     MyPagesStartComponent,
     MyPagesProjectComponent,
     MyPagesActivityStatusComponent,
-    MyPagesActivityComponent
+    MyPagesActivityComponent,
+    MatchesPhasePipe,
+    EnumToArrayPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

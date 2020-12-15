@@ -58,6 +58,9 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\models\activity.model.ts" />
+    <None Remove="ClientApp\src\app\models\common.ts" />
+    <None Remove="ClientApp\src\app\models\enumToArrayPipe.ts" />
+    <None Remove="ClientApp\src\app\models\matchesPhasePipe.ts" />
     <None Remove="ClientApp\src\app\models\theme.model.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity-status\my-pages-activity-status.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity\my-pages-activity.component.ts" />

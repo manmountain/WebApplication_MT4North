@@ -2,9 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Activity = void 0;
 var Activity = /** @class */ (function () {
-    function Activity() {
+    function Activity(name, description, phase) {
+        this.name = name;
+        this.description = description;
+        this.phase = phase;
+        console.log("pahe : ", phase);
     }
     return Activity;
 }());
 exports.Activity = Activity;
-//# sourceMappingURL=Activity.js.map
+//# sourceMappingURL=activity.model.js.map

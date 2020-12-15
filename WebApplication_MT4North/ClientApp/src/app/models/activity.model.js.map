@@ -1,1 +1,1 @@
-{"version":3,"file":"Activity.js","sourceRoot":"","sources":["Activity.ts"],"names":[],"mappings":";;;AAAA;IAAA;IAGA,CAAC;IAAD,eAAC;AAAD,CAAC,AAHD,IAGC;AAHY,4BAAQ"}
+{"version":3,"file":"activity.model.js","sourceRoot":"","sources":["activity.model.ts"],"names":[],"mappings":";;;AAIA;IAKE,kBAAY,IAAY,EAAE,WAAmB,EAAE,KAAY;QACzD,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,IAAI,CAAC,WAAW,GAAG,WAAW,CAAC;QAC/B,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QAEnB,OAAO,CAAC,GAAG,CAAC,SAAS,EAAE,KAAK,CAAC,CAAC;IAChC,CAAC;IACH,eAAC;AAAD,CAAC,AAZD,IAYC;AAZY,4BAAQ"}

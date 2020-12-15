@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Theme } from "../models/theme.model";
+import { Activity } from "../models/activity.model";
+import { Phase } from "../models/common";
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,25 +11,32 @@ import { RouterModule } from '@angular/router';
 })
 
 export class MyPagesActivityStatusComponent {
-  headers = ["Namn", "Konceptualisering", "Proof of concept", "Produktvalidering", "Produktlansering"];
-  themes: Theme[];
+  phases = Phase;
+  themes: Theme[] = [];
 
-  rows = [
-    {
-      "Namn": "Tema 1",
-      "Konceptualisering": [{ "Namn": "Aktivitet 1", "Beskrivning": "Beskrivning" }, { "Namn": "Aktivitet 1", "Beskrivning": "Beskrivning" }],
-      "Proof of concept": "21",
-      "Produktvalidering": "Male",
-      "Produktlansering": "India"
-    },
-    {
-      "Namn": "Tema 2",
-      "Konceptualisering": "Ajay",
-      "Proof of concept": "21",
-      "Produktvalidering": "Male",
-      "Produktlansering": "India"
-    }
-  ];
+  constructor() {
+  }
 
+  ngOnInit() {
+    let technicalDevelopmentTheme = new Theme("Teknikutveckling", "Beskrivning");
+    let activity1 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.CONCEPTUALIZATION);
+    let activity2 = new Activity("Genomför kravanalys", "Genomför en kravanalys för konceptet. Finns standarder att förhålla sig till?", Phase.CONCEPTUALIZATION);
+    let activity3 = new Activity("Utveckla prototyp baserat på koncept", "En första prototyp ska utvecklas som kan användas både som proof-of-concept och för att genomföra nödvändiga användartester i detta skede.", Phase.PROOFOFCONCEPT);
+    technicalDevelopmentTheme.addActivity(activity1);
+    technicalDevelopmentTheme.addActivity(activity2);
+    technicalDevelopmentTheme.addActivity(activity3);
 
+    this.themes.push(technicalDevelopmentTheme);
+
+    let clinicalDevelopmentTheme = new Theme("Klinisk utveckling", "Beskrivning");
+    let activity4 = new Activity("Kontakta klinisk personal", "Kontakta klinisk personal inom relevant område för att bekräfta att produktidén svarar mot ett faktiskt, upplevt behov inom vården, alternativt innebär en för dem relevant förbättring av en existerande lösning. Undersök möjlighet till samarbeten för framtida klinisk utvärdering av prototyp/produkt.", Phase.CONCEPTUALIZATION);
+    let activity5 = new Activity("Genomför klinisk riskanalys", "Genomför en riskanalys i enlighet med relevant standard, tillsammans med personer med nödvändig klinisk kompetens.", Phase.PROOFOFCONCEPT);
+    let activity6 = new Activity("Genomför kliniska tester i laboratoriemiljö", "Testa att prototypen uppfyller de tänkta kliniska grundfunktionerna i relevant laboratoriemiljö.", Phase.PROOFOFCONCEPT);
+    clinicalDevelopmentTheme.addActivity(activity4);
+    clinicalDevelopmentTheme.addActivity(activity5);
+    clinicalDevelopmentTheme.addActivity(activity6);
+
+    this.themes.push(clinicalDevelopmentTheme);
+
+  }
 }

@@ -22,4 +22,7 @@ export class Theme {
     return this.activities.find(x => x.phase == phase);
   }
   */
+    /**
+      Fredrik was here
+     */
 }

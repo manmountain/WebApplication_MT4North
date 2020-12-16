@@ -4,3 +4,10 @@ export enum Phase {
   VALIDATION = "Produktvalidering",
   LAUNCH = "Produktlansering"
 }
+
+export enum Status {
+  NOTSTARTED = "unchecked",
+  ONGOING = "crossed",
+  FINISHED = "checked"
+}
+

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Theme } from "../models/theme.model";
 import { Activity } from "../models/activity.model";
 import { Phase } from "../models/common";
-import { RouterModule } from '@angular/router';
+import { Status } from "../models/common";
+import { Console } from 'console';
 
 @Component({
   selector: 'app-my-pages-activity-status',
@@ -38,5 +39,30 @@ export class MyPagesActivityStatusComponent {
 
     this.themes.push(clinicalDevelopmentTheme);
 
+  }
+
+  getStatusValue(theme: Theme): number {
+    let activityVal = 100 / theme.activities.length;
+    let nrOfStarted = theme.activities.filter(x => x.status != Status.NOTSTARTED).length;
+
+    return activityVal * nrOfStarted;
+  }
+
+  checkStatus(activity: Activity) {
+    console.log(activity.status);
+    switch (activity.status) {
+      case "checked": {
+        activity.status = Status.FINISHED;
+        break;
+      }
+      case "unchecked": {
+        activity.status = Status.NOTSTARTED;
+        break;
+      }
+      case "crossed": {
+        activity.status = Status.ONGOING;
+        break;
+      }
+    }
   }
 }

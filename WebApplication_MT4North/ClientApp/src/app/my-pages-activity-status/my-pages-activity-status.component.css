@@ -190,7 +190,7 @@ ul, ol {
 }
 
 td.im-inner-col-first {
-  width: 14%;
+  width: 20%;
 }
 /*
    .table tr.accordion-toggle:nth-child(4n - 1) {
@@ -341,6 +341,10 @@ a.im-checkbox {
 
 .panel-body.im-theme-0 {
   background: white !important;
+}
+
+.red {
+    background: red !important;
 }
 /*
    .progress-bar.im-theme-1 {

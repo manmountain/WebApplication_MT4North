@@ -8,7 +8,6 @@ var Theme = /** @class */ (function () {
         this.description = description;
     }
     Theme.prototype.addActivity = function (activity) {
-        console.log("activity name in constr: ", activity.name);
         this.activities.push(activity);
     };
     return Theme;

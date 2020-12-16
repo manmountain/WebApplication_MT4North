@@ -1,5 +1,4 @@
 import { Activity } from "./activity.model";
-import { Phase } from "./common";
 
 export class Theme {
   name: string;
@@ -12,7 +11,6 @@ export class Theme {
   }
 
   addActivity(activity: Activity) {
-    console.log("activity name in constr: ", activity.name);
     this.activities.push(activity);
   }
 
@@ -22,4 +20,7 @@ export class Theme {
     return this.activities.find(x => x.phase == phase);
   }
   */
+  /**
+   * testing
+   * */
 }

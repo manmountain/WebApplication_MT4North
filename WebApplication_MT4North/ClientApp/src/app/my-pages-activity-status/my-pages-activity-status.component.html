@@ -30,9 +30,9 @@
 
           <!-- PROGRESS BARS -->
           <ng-container *ngFor="let phase of phases | enumToArray; let l = index">
-            <td colspan="1" class="align-middle">
+            <td colspan="1" class="align-middle d-none d-md-table-cell">
               <div class="progress">
-                <div id="row{{i}}col{{l}}-progress" class="progress-bar progress-bar-striped im-theme-{{i}}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="row{{i}}col{{l}}-progress" class="im-theme-{{i}}" [class]="containsOngoingAcitvities(theme, phase) ? 'progress-bar progress-bar-striped' : 'progress-bar'" [style.width]="getProgress(theme, phase) + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </td>
           </ng-container>
@@ -42,10 +42,10 @@
         <tr class="child-parent-{{i}} sticky im-theme-{{i}} exlude-from-sortable">
           <td colspan="12" class="hiddenRow">
             <div class="accordion-body collapse container-fluid pl-0 pr-0" id="collapsedRow{{i}}">
-              <table class="table table-striped borderless im-inner-table im-theme-{{i}}">
+              <table class="table borderless im-inner-table im-theme-{{i}}">
                 <tbody>
                   <tr class="exlude-from-sortable">
-                    <td class="col-xs-1 im-inner-col im-inner-col-first">
+                    <td class="col-xs-1 im-inner-col im-inner-col-first d-none d-md-table-cell">
                     </td>
 
                     <!-- ACTIVITES -->
@@ -55,10 +55,10 @@
                           <div class="panel panel-default">
                             <div class="panel-heading">
                               <h3 class="panel-title">
-                                <a class="im-checkbox collapsed im-theme-{{i}}" id="checkbox-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
+                                <a class="im-checkbox collapsed im-theme-{{i}}" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
                                   <label>
-                                    <input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">
-                                    <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'"  ng-click="this.checked=!this.checked;" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)"> -->
+                                    <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
+                                    <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'">
                                     {{activity.name}}
                                   </label>
                                 </a>

@@ -41,26 +41,30 @@ export class MyPagesActivityStatusComponent {
 
   }
 
-  getStatusValue(theme: Theme): number {
-    let activityVal = 100 / theme.activities.length;
-    let nrOfStarted = theme.activities.filter(x => x.status != Status.NOTSTARTED).length;
+  getProgress(theme: Theme, phase: Phase): number {
+    let activityVal = 100 / theme.activities.filter(x => x.phase == phase).length;
+    let nrOfStarted = theme.activities.filter(x => x.status != Status.NOTSTARTED && x.phase == phase).length;
 
     return activityVal * nrOfStarted;
   }
 
+  containsOngoingAcitvities(theme: Theme, phase: Phase): boolean {
+    console.log("nr of ongoing acitivties: ", theme.activities.filter(x => x.phase == phase && x.status == Status.ONGOING).length);
+    return theme.activities.filter(x => x.phase == phase && x.status == Status.ONGOING).length > 0;
+  }
+
   checkStatus(activity: Activity) {
-    console.log(activity.status);
     switch (activity.status) {
       case "checked": {
-        activity.status = Status.FINISHED;
-        break;
-      }
-      case "unchecked": {
         activity.status = Status.NOTSTARTED;
         break;
       }
-      case "crossed": {
+      case "unchecked": {
         activity.status = Status.ONGOING;
+        break;
+      }
+      case "crossed": {
+        activity.status = Status.FINISHED;
         break;
       }
     }

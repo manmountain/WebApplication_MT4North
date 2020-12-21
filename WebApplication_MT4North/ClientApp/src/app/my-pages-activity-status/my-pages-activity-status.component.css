@@ -51,7 +51,6 @@ input[type="checkbox"] {
 
 .hiddenRow {
   padding: 0 !important;
-  background-color: #eeeeee;
   font-size: 13px;
 }
 
@@ -94,6 +93,7 @@ ul, ol {
 .panel-group .panel-group .panel-heading + .panel-collapse > .panel-body {
   border-radius: 2px;
   border: 0;
+  color: inherit;
 }
 
   .panel-group .panel-heading + .panel-collapse > .panel-body {
@@ -107,7 +107,6 @@ ul, ol {
 
     .panel-group .panel-heading a {
       display: block;
-      color: black;
       padding: 15px;
       text-decoration: none;
       position: relative;
@@ -293,8 +292,8 @@ th.triangle {
 .im-theme {
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 30px;
-  height: 1.2em;
+  /*width: 30px;
+  height: 1.2em;*/
   white-space: nowrap;
 }
 
@@ -604,10 +603,6 @@ a.im-checkbox {
   padding: 0 !important;
 }
 
-.accordion-body {
-  background: #f2f2f2;
-}
-
 .hiddenRow {
   background: white !important;
 }
@@ -626,10 +621,6 @@ table {
   border: none;
 }
 
-td, tbody {
-  border: none !important;
-  border-top: 1px solid lightgray !important;
-}
 
 .im-inner-table {
   border: 1px solid lightgray !important;
@@ -679,10 +670,6 @@ td, tbody {
 .progress-bar {
 }
 
-body, .hiddenRow {
-  background: #f4f5f7 !important;
-}
-
 .accordion-toggle {
   background: white;
 }
@@ -712,3 +699,48 @@ body, .hiddenRow {
   .im-include-btn:hover {
     cursor: pointer;
   }
+
+
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+  /* Force table to not be like tables anymore */
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+  td {
+    /* Behave  like a "row" */
+    position: relative;
+  }
+
+  .im-inner-col {
+    border: none;
+    border-bottom: 1px solid lightgray !important;
+  }
+
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    .im-theme {
+        text-align: left;
+        border-right: 1px solid lightgray;
+    }
+    .im-inner-table {
+        border-bottom: none !important;
+    }
+}

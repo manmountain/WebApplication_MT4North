@@ -3,7 +3,7 @@ import { Theme } from "../models/theme.model";
 import { Activity } from "../models/activity.model";
 import { Phase } from "../models/common";
 import { Status } from "../models/common";
-import { Console } from 'console';
+/*import { Console } from 'console';*/
 
 @Component({
   selector: 'app-my-pages-activity-status',
@@ -49,7 +49,6 @@ export class MyPagesActivityStatusComponent {
   }
 
   containsOngoingAcitvities(theme: Theme, phase: Phase): boolean {
-    console.log("nr of ongoing acitivties: ", theme.activities.filter(x => x.phase == phase && x.status == Status.ONGOING).length);
     return theme.activities.filter(x => x.phase == phase && x.status == Status.ONGOING).length > 0;
   }
 

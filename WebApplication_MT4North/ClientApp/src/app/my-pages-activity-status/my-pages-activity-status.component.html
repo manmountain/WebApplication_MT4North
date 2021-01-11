@@ -55,10 +55,10 @@
                           <div class="panel panel-default">
                             <div class="panel-heading">
                               <h3 class="panel-title">
-                                <a class="im-checkbox collapsed im-theme-{{i}}" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
+                                <a class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isExcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
                                   <label>
                                     <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
-                                    <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'">
+                                    <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isExcluded">
                                     {{activity.name}}
                                   </label>
                                 </a>
@@ -122,9 +122,9 @@
 
                                 </div>
                                 <div>
-                                  <a class="btn p-0 im-theme-{{i}}">
+                                  <a class="btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
                                     <p>
-                                      <i class="fa fa-eye fa-fw"></i><span class="ml-1">Exkludera</span>
+                                      <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-eye-slash' : 'fa-eye'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
                                     </p>
                                   </a>
                                 </div>

@@ -140,7 +140,7 @@ ul, ol {
   }
 
   .panel-group .panel-body {
-    padding: 15px;
+    /*padding: 15px;*/
   }
 
   .panel-group .panel {
@@ -334,6 +334,12 @@ a.im-checkbox {
   color: #f77780;
 }
 
+/*
+.card.im-theme-0 {
+  background-color: #feeff0;
+}
+    */
+
 .im-checkbox.im-theme-0 {
   background: #faa7ad;
 }
@@ -341,6 +347,11 @@ a.im-checkbox {
 .panel-body.im-theme-0 {
   background: white !important;
 }
+
+.panel-footer.im-theme-0 {
+  background: #faa7ad !important;
+}
+
 
 .red {
     background: red !important;
@@ -701,7 +712,6 @@ table {
   }
 
 .btn p {
-  color: red;
   float:left;
 }
 

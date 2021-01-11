@@ -66,35 +66,69 @@
                             </div>
                             <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
                               <div class="panel-body im-theme-{{i}}">
-                                <p>
+                                <label>
+                                  Deadline:
+                                  <input type="date" class="w-100" id="test" />
+                                </label>
+                                <p class="mb-2 p-0">
                                   {{activity.description}}
                                 </p>
-                                <a class="btn p-0"><p>Visa alternativ</p></a>
-                                  <label> Deadline: 
-                                    <input type="date" class="w-100" id="test" />
-                                  </label>
-                                <hr />
+                                <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
+                                <hr class="m-0 pb-1" />
                                 <div>
-                                  <a class="btn p-0">
+                                  <a class="btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
                                     <p>
-                                      <i class="fa fa-calendar-alt"></i> Deadline:
+                                      <i class="fa fa-pen-square fa-fw"></i><span class="ml-1">Visa anteckningar</span>
+                                    </p>
+                                  </a>
+
+                                  <!-- Modal -->
+                                  <div class="modal fade" [attr.id]="'notesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'notesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="notesModalLabel-r{{i}}c{{j}}-{{k}}">
+                                            Anteckningar
+                                            <br />
+                                            <small>{{activity.name}}</small>
+                                          </h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <div class="card im-theme-{{i}}">
+                                            <h6 class="card-header mt-0 mb-0 pt-1 pb-1">
+                                              <small class="align-middle"><span class="mr-4">2020-01-01</span><span><i>Tillagd av: </i></span><span>Test Testsson</span><a class="btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
+                                            </h6>
+                                            <div class="card-body">
+                                              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                                            </div>
+                                          </div>
+                                          <form ngNativeValidate class="form-group mt-2" id="noteForm-r{{i}}c{{j}}-{{k}}">
+                                            <label for="note-text-r{{i}}c{{j}}-{{k}}" class="col-form-label">Ny anteckning:</label>
+                                            <textarea class="form-control" id="note-text-r{{i}}c{{j}}-{{k}}" maxlength="250" required></textarea>
+                                            <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
+                                          </form>
+                                        </div>
+                                        <!--
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                        </div>
+                                          -->
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                                <div>
+                                  <a class="btn p-0 im-theme-{{i}}">
+                                    <p>
+                                      <i class="fa fa-eye fa-fw"></i><span class="ml-1">Exkludera</span>
                                     </p>
                                   </a>
                                 </div>
-                                <div>
-                                  <a class="btn p-0">
-                                    <p>
-                                      <i class="fa fa-pen-square"></i> Anteckningar
-                                    </p>
-                                  </a>
-                                </div>
-                                <div>
-                                  <a class="btn p-0">
-                                    <p>
-                                      <i class="fa fa-eye"></i> Exkludera
-                                    </p>
-                                  </a>
-                                </div>
+
                               </div>
                             </div>
                           </div>

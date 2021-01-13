@@ -3,7 +3,7 @@ import { Theme } from "../models/theme.model";
 import { Activity } from "../models/activity.model";
 import { Phase } from "../models/common";
 import { Status } from "../models/common";
-import { Console } from 'console';
+//import { Console } from 'console';
 
 @Component({
   selector: 'app-my-pages-activity-status',
@@ -19,7 +19,7 @@ export class MyPagesActivityStatusComponent {
   }
 
   ngOnInit() {
-    console.log("initiating");
+    //console.log("initiating");
 
     let technicalDevelopmentTheme = new Theme("Teknikutveckling", "Beskrivning");
     let activity1 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.CONCEPTUALIZATION, false);

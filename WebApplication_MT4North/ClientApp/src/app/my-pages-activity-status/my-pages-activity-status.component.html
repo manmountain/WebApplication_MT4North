@@ -1,4 +1,4 @@
-<p class=" text-black mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
 
 <div class="row ml-0 mt-0 mb-2">
   <div class="col m-0 p-0  d-none d-md-inline">
@@ -133,7 +133,7 @@
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />
                                   <div>
-                                    <a class="btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
+                                    <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
                                       <p>
                                         <i class="fa fa-pen-square fa-fw"></i><span class="ml-1">Visa anteckningar</span>
                                       </p>
@@ -156,14 +156,14 @@
                                           <div class="modal-body">
                                             <div class="card im-theme-{{i}}">
                                               <h6 class="card-header mt-0 mb-0 pt-1 pb-1">
-                                                <small class="align-middle"><span class="mr-4">2020-01-01</span><span><i>Tillagd av: </i></span><span>Test Testsson</span><a class="btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
+                                                <small class="align-middle"><span class="mr-4">2020-01-01</span><span><i>Tillagd av: </i></span><span>Test Testsson</span><a class="btn icon-btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
                                               </h6>
                                               <div class="card-body">
                                                 <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
                                               </div>
                                             </div>
                                             <form ngNativeValidate class="form-group mt-2" id="noteForm-r{{i}}c{{j}}-{{k}}">
-                                              <label for="note-text-r{{i}}c{{j}}-{{k}}" class="col-form-label">Ny anteckning:</label>
+                                              <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}" class="col-form-label">Ny anteckning:</label></p>
                                               <textarea class="form-control" id="note-text-r{{i}}c{{j}}-{{k}}" maxlength="250" required></textarea>
                                               <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
                                             </form>
@@ -179,7 +179,7 @@
 
                                   </div>
                                   <div>
-                                    <a class="btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
+                                    <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
                                       <p>
                                         <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-eye-slash' : 'fa-eye'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
                                       </p>

@@ -16,6 +16,8 @@ import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MyPagesComponent } from './my-pages/my-pages.component';
+import { MyPagesMembersComponent } from './my-pages-members/my-pages-members.component';
+import { MyPagesProjectSettingsComponent } from './my-pages-project-settings/my-pages-project-settings.component';
 import { MyPagesStartComponent } from './my-pages-start/my-pages-start.component';
 import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.component';
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
@@ -49,6 +51,14 @@ const routes: Routes = [
           {
             path: 'activity',
             component: MyPagesActivityComponent
+          },
+          {
+            path: 'members',
+            component: MyPagesMembersComponent
+          },
+          {
+            path: 'settings',
+            component: MyPagesProjectSettingsComponent
           }
         ]
       }
@@ -72,6 +82,8 @@ const routes: Routes = [
     MyPagesProjectComponent,
     MyPagesActivityStatusComponent,
     MyPagesActivityComponent,
+    MyPagesMembersComponent,
+    MyPagesProjectSettingsComponent,
     MatchesPhasePipe,
     EnumToArrayPipe
   ],

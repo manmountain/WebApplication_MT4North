@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { Theme } from "../models/theme.model";
 import { Activity } from "../models/activity.model";
 import { Phase } from "../models/common";
 import { Status } from "../models/common";
+
 //import { Console } from 'console';
 
 @Component({
@@ -14,6 +15,8 @@ import { Status } from "../models/common";
 export class MyPagesActivityStatusComponent {
   phases = Phase;
   themes: Theme[] = [];
+  @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
+  @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
 
   constructor() {
   }
@@ -77,5 +80,32 @@ export class MyPagesActivityStatusComponent {
 
   hasActivities(theme: Theme, phase: Phase) {
     return theme.activities.filter(x => x.phase == phase && x.isExcluded == false).length > 0;
+  }
+
+  expandAll() {
+    this.expandThemes()
+    this.expandActivities();
+  }
+
+  expandThemes() {
+    this.themeElements.toArray().forEach(val => { if (val.nativeElement.getAttribute('aria-expanded') === "false") { val.nativeElement.click() } });
+  }
+
+  expandActivities() {
+    console.log("nr of activityElements: ", this.activityElements.toArray().length);
+    this.activityElements.toArray().forEach(val => { if (val.nativeElement.getAttribute('aria-expanded') === "false") { val.nativeElement.click() } });
+  }
+
+  collapseAll() {
+    this.collapseThemes();
+    this.collapseActivities();
+  }
+
+  collapseThemes() {
+    this.themeElements.toArray().forEach(val => { if (val.nativeElement.getAttribute('aria-expanded') === "true") { val.nativeElement.click() } });
+  }
+
+  collapseActivities() {
+    this.activityElements.toArray().forEach(val => { if (val.nativeElement.getAttribute('aria-expanded') === "true") { val.nativeElement.click() } });
   }
 }

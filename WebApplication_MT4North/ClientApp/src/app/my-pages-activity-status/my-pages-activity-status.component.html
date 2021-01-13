@@ -18,8 +18,9 @@
           Expandera...
         </button>
         <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
-          <a class="dropdown-item" href="#">Expandera allt</a>
-          <a class="dropdown-item" href="#">Expandera teman</a>
+          <button class="dropdown-item" (click)="expandAll()">Expandera allt</button>
+          <button class="dropdown-item" (click)="expandThemes()">Expandera teman</button>
+          <button class="dropdown-item" (click)="expandActivities()">Expandera aktiviteter</button>
         </div>
       </div>
       <div class="btn-group" role="group">
@@ -28,8 +29,9 @@
           Kollapsa...
         </button>
         <div class="dropdown-menu" aria-labelledby="collapseBtnGroup">
-          <a class="dropdown-item" href="#">Kollapsa allt</a>
-          <a class="dropdown-item" href="#">Kollapsa teman</a>
+          <button class="dropdown-item" (click)="collapseAll()">Kollapsa allt</button>
+          <button class="dropdown-item" (click)="collapseThemes()">Kollapsa teman</button>
+          <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
         </div>
       </div>
       <div class="w-100 btn btn-light btn-static">
@@ -67,7 +69,7 @@
         <ng-container *ngFor="let theme of themes; let i = index">
 
           <!-- MAIN ROW -->
-          <tr data-toggle="collapse" [attr.data-target]="'#collapsedRow'+i" aria-expanded="false" class="accordion-toggle parent im-theme-{{i}}" id="parent-{{i}}" title="Klicka för att expandera/kollapsa">
+          <tr #themeElement data-toggle="collapse" [attr.data-target]="'#collapsedRow'+i" aria-expanded="false" class="accordion-toggle parent im-theme-{{i}}" id="parent-{{i}}" title="Klicka för att expandera/kollapsa">
             <!-- FIRST COLUMN (THEME NAME) -->
             <td class="im-theme noselect align-middle">
               <span class="fa-stack fa-2x float-left im-theme-icon">
@@ -103,7 +105,7 @@
                             <div class="panel panel-default">
                               <div class="panel-heading">
                                 <h3 class="panel-title">
-                                  <a class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isExcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
+                                  <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isExcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
                                     <label>
                                       <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
                                       <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isExcluded">
@@ -140,7 +142,7 @@
                                               <br />
                                               <small>{{activity.name}}</small>
                                             </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <button type="button" class="closeModal" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                             </button>
                                           </div>

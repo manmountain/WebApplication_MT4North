@@ -3,7 +3,7 @@ html {
   overflow-x: hidden;
 }
 
-button.close {
+button.closeModal {
   -webkit-appearance: none;
   padding: 0;
   cursor: pointer;
@@ -11,7 +11,7 @@ button.close {
   border: 0;
 }
 
-.close {
+.closeModal {
   float: right;
   font-size: 21px;
   font-weight: 700;

@@ -74,4 +74,8 @@ export class MyPagesActivityStatusComponent {
   toggleActivityIsExcluded(activity: Activity) {
     activity.isExcluded = !activity.isExcluded;
   }
+
+  hasActivities(theme: Theme, phase: Phase) {
+    return theme.activities.filter(x => x.phase == phase && x.isExcluded == false).length > 0;
+  }
 }

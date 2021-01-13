@@ -79,7 +79,7 @@
             <!-- PROGRESS BARS -->
             <ng-container *ngFor="let phase of phases | enumToArray; let l = index">
               <td colspan="1" class="align-middle d-none d-md-table-cell">
-                <div class="progress">
+                <div class="progress" [style.visibility]="hasActivities(theme, phase) ? 'visible' : 'hidden'">
                   <div id="row{{i}}col{{l}}-progress" class="im-theme-{{i}}" [class]="containsOngoingAcitvities(theme, phase) ? 'progress-bar progress-bar-striped' : 'progress-bar'" [style.width]="getProgress(theme, phase) + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </td>

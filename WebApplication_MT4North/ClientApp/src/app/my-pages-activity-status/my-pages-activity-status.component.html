@@ -34,8 +34,15 @@
           <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
         </div>
       </div>
+      <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center" id="searchBar">
+        <input type="text" class="form-control form-control-sm" placeholder="Sök...">
+        <div class="input-group-append">
+          <button class="btn btn-light btn-sm" type="button" id="searchButton">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
       <div class="w-100 btn btn-light btn-static">
-
       </div>
       <button type="button" class="btn btn-light float-right" onmousedown="event.preventDefault()">Återställ</button>
     </div>

@@ -54,13 +54,8 @@
                 <ul class="list-group">
                   <li class="list-group-item" [routerLink]="['./projects/activity-status']">Projekt 1 <span class="badge badge-pill badge-primary">20</span></li>
                   <li class="list-group-item"><a href="#">Projekt 2</a></li>
-                  <li class="list-group-item"><a href="#"><i class="fa fa-plus"></i> Lägg till</a></li>
                 </ul>
-                 <!--
-                <button type="button" class="btn btn-default btn-sm">
-                  <span class="fa fa-plus-circle"></span> Lägg till nytt projekt
-                </button>
-                -->
+                <button class="btn w-100 text-left" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Lägg till</span></button>
               </div>
             </div>
           </div>
@@ -100,6 +95,63 @@
       <!-- Demo content -->
       <div class="col pr-5">
         <router-outlet></router-outlet>
+        <!-- Modal -->
+        <div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Lägg till nytt projekt</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form ngNativeValidate class="form-group mt-2" [style.display]="isFirstStepModal ? 'block' : 'none'" id="newProjectForm1">
+                  <label for="projectTitle"><b>Projektets titel</b></label>
+                  <input class="form-control" id="projectTitle" aria-describedby="projectTitleHelp" maxlength="50" required>
+                  <!--<small id="projectTitleHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+
+                  <p class="p-0 m-0"><label for="projectDescriptionText" class="col-form-label"><b>Kort projektbeskrivning</b><small class="ml-2">Valfritt</small></label></p>
+                  <textarea class="form-control" id="projectDescriptionText" maxlength="250"></textarea>
+                </form>
+
+                <form ngNativeValidate class="form-group mt-2" [style.display]="isFirstStepModal ? 'none' : 'block'" id="newProjectForm2">
+                  <label for="projectTitle"><b>Projektmedlemmar</b><small class="ml-2">Valfritt</small></label>
+                  <div *ngFor="let member of emailList">
+                    <div class="card mb-1 col-6" style="background-color: #F9F9F9; border: 1px solid lightgray">
+                      <span class="d-inline-block" style="white-space:nowrap">
+                        <span class="card-text">
+                          {{member}}
+                        </span>
+                        <span class="d-inline-block float-right" style="white-space:nowrap">
+
+                          <i class="fa fa-eye mr-2" style="font-size:10px; color: gray"></i>
+                          <span class="btn p-0 m-0" data-effect="fadeOut" (click)="removeMember(member)">×</span>
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row" style="margin:16px 0 16px 0">
+                    <input type="email" class="form-control col" id="memberEmail" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100">
+                    <div class="form-group m-0">
+                      <!--<label for="sel1">Behörighet:</label>-->
+                      <select class="form-control" id="sel1">
+                        <option>Kan endast läsa</option>
+                        <option>Kan läsa och redigera</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button class="btn btn-secondary" (click)="addMember('test@mail.com')">Lägg till</button>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="changeToInviteMembers()" [style.display]="isFirstStepModal ? 'block' : 'none'">Fortsätt</button>
+                <button type="button" class="btn" [style.display]="isFirstStepModal ? 'none' : 'block'" data-dismiss="modal"><u>Jag gör det här senare.</u></button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'">Bjud in till projekt</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!--<app-my-pages-start></app-my-pages-start>-->

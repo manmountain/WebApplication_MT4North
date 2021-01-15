@@ -1,6 +1,6 @@
-<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+<!--<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>-->
 
-<div class="row ml-0 mt-0 mb-2">
+<div class="row ml-0 mt-4 mb-2">
   <div class="col m-0 p-0  d-none d-md-inline">
     <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" data-toggle="tooltip" data-placement="bottom" title="Öppna fullskärmsläge">
@@ -122,23 +122,87 @@
                                   </a>
                                 </h3>
                               </div>
+
                               <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
                                 <div class="panel-body im-theme-{{i}}">
-                                  <label>
-                                    Deadline:
-                                    <input type="date" class="w-100" id="test" />
-                                  </label>
+
                                   <p class="mb-2 p-0">
                                     {{activity.description}}
                                   </p>
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />
-                                  <div>
-                                    <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
-                                      <p>
-                                        <i class="fa fa-pen-square fa-fw"></i><span class="ml-1">Visa anteckningar</span>
-                                      </p>
-                                    </a>
+                                  <div class="row">
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#datesModal-r'+i+'c'+j+'-'+k">
+                                        <p>
+                                          <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum</span>
+                                        </p>
+                                      </a>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
+                                        <p>
+                                          <i class="fa fa-pen-square fa-fw"></i><span class="ml-1">Anteckningar</span>
+                                        </p>
+                                      </a>
+                                    </div>
+
+                                    <div class="modal fade" [attr.id]="'datesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'datesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="datesModalLabel-r{{i}}c{{j}}-{{k}}">
+                                              Datum
+                                              <br />
+                                              <small>{{activity.name}}</small>
+                                            </h5>
+                                            <button type="button" class="closeModal" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <div class="row">
+                                              <!--
+  <div class="col-12 mb-3">
+    <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+  </div>
+    -->
+                                              <div class="col-12">
+                                                <h5>
+                                                  <small>
+                                                    Påbörjad:
+                                                    <input type="date" id="test" />
+                                                  </small>
+                                                </h5>
+                                              </div>
+                                              <div class="col-12">
+                                                <h5>
+                                                  <small>
+                                                    Avslutad:
+                                                    <input type="date" id="test" />
+                                                  </small>
+                                                </h5>
+                                              </div>
+                                              <div class="col-12">
+                                                <h5>
+                                                  <small>
+                                                    Deadline:
+                                                    <input type="date" id="test" />
+                                                  </small>
+                                                </h5>
+                                              </div>
+
+                                            </div>
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Spara</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
 
                                     <!-- Modal -->
                                     <div class="modal fade" [attr.id]="'notesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'notesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
@@ -170,21 +234,22 @@
                                             </form>
                                           </div>
                                           <!--
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
-                                          </div>
-                                            -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+              </div>
+                -->
                                         </div>
                                       </div>
                                     </div>
 
+
+                                  <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
+                                        <p>
+                                          <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-eye-slash' : 'fa-eye'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
+                                        </p>
+                                      </a>
                                   </div>
-                                  <div>
-                                    <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
-                                      <p>
-                                        <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-eye-slash' : 'fa-eye'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
-                                      </p>
-                                    </a>
                                   </div>
 
                                 </div>

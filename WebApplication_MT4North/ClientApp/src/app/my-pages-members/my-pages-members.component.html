@@ -2,16 +2,17 @@
 <div class="row mt-4">
   <div class="col-6">
     <table class="table table-borderless">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col" style="border-radius: 6px 0 0 0;">Namn</th>
-        <th scope="col">E-post</th>
-        <th scope="col">Roll</th>
-        <th scope="col">Behörighet</th>
-        <th scope="col" style="border-radius: 0 6px 0 0;">Verktyg</th>
-      </tr>
-    </thead>
-    
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" style="border-radius: 6px 0 0 0;">Namn</th>
+          <th scope="col">E-post</th>
+          <!---->
+          <th scope="col">Roll</th>
+          <th scope="col">Behörighet</th>
+          <th scope="col" style="border-radius: 0 6px 0 0;"></th>
+        </tr>
+      </thead>
+
       <tbody>
         <tr>
           <td>Jason Doe</td>
@@ -19,19 +20,31 @@
           <td>
             <div class="dropdown w-100">
               <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Administratör
+                Projektledare
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Projektmedlem</a>
+                <a class="dropdown-item" href="#">Utvecklare</a>
                 <a class="dropdown-item" href="#">Affärscoach</a>
                 <a class="dropdown-item" href="#">...</a>
               </div>
             </div>
           </td>
-          <td>Läsa och redigera</td>
-          <td><button class="btn btn-danger btn-sm text-left">Ta bort</button></td>
+          <td>
+            <div class="dropdown w-100">
+              <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Läsa och redigera
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Endast läsa</a>
+              </div>
+            </div>
+          </td>
+          <td><button class="btn btn-danger btn-sm">Ta bort</button></td>
         </tr>
+
       </tbody>
     </table>
+    <hr />
+    <button class="btn btn-primary btn-sm float-right mr-4">Bjud in fler</button>
   </div>
 </div>

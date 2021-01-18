@@ -17,6 +17,8 @@ export class MyPagesActivityStatusComponent {
   themes: Theme[] = [];
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
+  selectedDate = new Date().toISOString().split('T')[0];
+  maxDate = new Date().toISOString().split('T')[0];
 
   constructor() {
   }
@@ -107,5 +109,10 @@ export class MyPagesActivityStatusComponent {
 
   collapseActivities() {
     this.activityElements.toArray().forEach(val => { if (val.nativeElement.getAttribute('aria-expanded') === "true") { val.nativeElement.click() } });
+  }
+
+  setMaxDate() {
+    console.log(new Date().toISOString().split("T")[0]);
+    return new Date().toISOString().split("T")[0];
   }
 }

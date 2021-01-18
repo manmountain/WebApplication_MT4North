@@ -1,14 +1,17 @@
 <!--<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>-->
 
 <div class="row ml-0 mt-4 mb-2">
-  <div class="col m-0 p-0  d-none d-md-inline">
+  <div class="col m-0 p-0  d-none d-md-inline im-toolbar">
     <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" data-toggle="tooltip" data-placement="bottom" title="Öppna fullskärmsläge">
         <i class="fa fa-expand fa-fw"></i>
       </button>
-      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
-        <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
-      </button>
+      <div class="im-toolbar ml-2 mr-2" id="historyBar">
+        <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{maxDate}}"/>
+      </div>
+      <!--<button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
+    <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
+  </button>-->
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
         <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild"></i>
       </button>
@@ -34,7 +37,7 @@
           <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
         </div>
       </div>
-      <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center" id="searchBar">
+      <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center im-toolbar" id="searchBar">
         <input type="text" class="form-control form-control-sm" placeholder="Sök...">
         <div class="input-group-append">
           <button class="btn btn-light btn-sm" type="button" id="searchButton">
@@ -55,16 +58,19 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
-            <div class="dropdown w-100">
-              <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                2021-01-28
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">2020-08-15</a>
-                <a class="dropdown-item" href="#">2020-01-18</a>
-                <a class="dropdown-item" href="#">2019-09-07</a>
-              </div>
-            </div>
+
+            <!--
+  <div class="dropdown w-100">
+    <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      2021-01-28
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">2020-08-15</a>
+      <a class="dropdown-item" href="#">2020-01-18</a>
+      <a class="dropdown-item" href="#">2019-09-07</a>
+    </div>
+  </div>
+    -->
           </th>
           <ng-container *ngFor="let phase of phases | enumToArray">
             <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase}}</th>
@@ -157,40 +163,58 @@
                                               <br />
                                               <small>{{activity.name}}</small>
                                             </h5>
-                                            <button type="button" class="closeModal" data-dismiss="modal" aria-label="Close">
+                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                             </button>
                                           </div>
                                           <div class="modal-body">
                                             <div class="row">
                                               <!--
-  <div class="col-12 mb-3">
-    <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
-  </div>
-    -->
+            <div class="col-12 mb-3">
+              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+            </div>
+              -->
                                               <div class="col-12">
-                                                <h5>
-                                                  <small>
-                                                    Påbörjad:
-                                                    <input type="date" id="test" />
-                                                  </small>
-                                                </h5>
+                                                <div class="row">
+                                                  <div class="col-2 mr-1">
+                                                    <h5>
+                                                      <small>
+                                                        <span>Deadline:</span>
+                                                      </small>
+                                                    </h5>
+                                                  </div>
+                                                  <div class="col my-auto">
+                                                    <input type="date" class="rounded" id="deadline" />
+                                                  </div>
+                                                </div>
                                               </div>
                                               <div class="col-12">
-                                                <h5>
-                                                  <small>
-                                                    Avslutad:
-                                                    <input type="date" id="test" />
-                                                  </small>
-                                                </h5>
+                                                <div class="row">
+                                                  <div class="col-2 mr-1">
+                                                    <h5>
+                                                      <small>
+                                                        <span>Påbörjad:</span>
+                                                      </small>
+                                                    </h5>
+                                                  </div>
+                                                  <div class="col my-auto">
+                                                    <input type="date" class="rounded" id="started" />
+                                                  </div>
+                                                </div>
                                               </div>
                                               <div class="col-12">
-                                                <h5>
-                                                  <small>
-                                                    Deadline:
-                                                    <input type="date" id="test" />
-                                                  </small>
-                                                </h5>
+                                                <div class="row">
+                                                  <div class="col-2 mr-1">
+                                                    <h5>
+                                                      <small>
+                                                        <span>Avslutad:</span>
+                                                      </small>
+                                                    </h5>
+                                                  </div>
+                                                  <div class="col my-auto">
+                                                    <input type="date" class="rounded" id="finished" />
+                                                  </div>
+                                                </div>
                                               </div>
 
                                             </div>
@@ -214,7 +238,7 @@
                                               <br />
                                               <small>{{activity.name}}</small>
                                             </h5>
-                                            <button type="button" class="closeModal" data-dismiss="modal" aria-label="Close">
+                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                             </button>
                                           </div>
@@ -234,22 +258,56 @@
                                             </form>
                                           </div>
                                           <!--
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
-              </div>
-                -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+        </div>
+          -->
                                         </div>
                                       </div>
                                     </div>
 
 
-                                  <div class="col-12">
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#resourcesModal-r'+i+'c'+j+'-'+k">
+                                        <p>
+                                          <i class="fa fa-book fa-fw"></i><span class="ml-1">Resurser</span>
+                                        </p>
+                                      </a>
+                                    </div>
+
+                                    <div class="modal fade" [attr.id]="'resourcesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'resourcesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="resourcesModalLabel-r{{i}}c{{j}}-{{k}}">
+                                              Resurser
+                                              <br />
+                                              <small>{{activity.name}}</small>
+                                            </h5>
+                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h6>
+                                              <small>Resurser saknas för denna aktivitet.</small>
+                                            </h6>
+
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
                                         <p>
                                           <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-eye-slash' : 'fa-eye'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
                                         </p>
                                       </a>
-                                  </div>
+                                    </div>
                                   </div>
 
                                 </div>

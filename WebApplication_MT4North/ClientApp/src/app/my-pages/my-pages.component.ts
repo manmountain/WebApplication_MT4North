@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ViewService } from "../view.service";
+
 
 @Component({
   selector: 'app-my-pages',
@@ -10,6 +11,13 @@ import { RouterModule } from '@angular/router';
 export class MyPagesComponent {
   isFirstStepModal = true;
   emailList = [];
+
+  constructor(private viewService: ViewService) {
+  }
+
+  isFullscreen() {
+    return this.viewService.isFullscreen;
+  }
 
   changeToInviteMembers() {
     this.isFirstStepModal = false;

@@ -1,19 +1,20 @@
-<h4 class="display-8 text-black-50 pl-0">Projekt 1</h4>
-<p class=" text-black mb-3">Beskrivning.</p>
+<div [style.display]="isFullscreen() ? 'none' : 'block'">
+  <h4 class="display-8 text-black-50 pl-0">Projekt 1</h4>
+  <p class=" text-black mb-3">Beskrivning.</p>
 
-<ul class="nav nav-tabs" role="tablist">
-  <li class="nav-item" [routerLink]="['./activity-status']">
-    <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-chart-bar pr-1"></i><span class="d-none d-md-inline"> Aktivitetsstatus</span></span></a>
-  </li>
-  <li class="nav-item" [routerLink]="['./activity']">
-    <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-clock pr-1"></i><span class="d-none d-md-inline"> Händelser</span></span></a>
-  </li>
-  <li class="nav-item" [routerLink]="['./members']">
-    <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-users pr-1"></i><span class="d-none d-md-inline"> Medlemmar</span></span></a>
-  </li>
-  <li class="nav-item" [routerLink]="['./settings']">
-    <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-cog pr-1"></i><span class="d-none d-md-inline"> Inställningar</span></span></a>
-  </li>
-</ul>
-
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" [routerLink]="['./activity-status']">
+      <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-chart-bar pr-1"></i><span class="d-none d-md-inline"> Aktivitetsstatus</span></span></a>
+    </li>
+    <li class="nav-item" [routerLink]="['./activity']">
+      <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-clock pr-1"></i><span class="d-none d-md-inline"> Händelser</span></span></a>
+    </li>
+    <li class="nav-item" [routerLink]="['./members']">
+      <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-users pr-1"></i><span class="d-none d-md-inline"> Medlemmar</span></span></a>
+    </li>
+    <li class="nav-item" [routerLink]="['./settings']">
+      <a class="nav-link" [routerLinkActive]="['active']" data-toggle="tab"><span><i class="fa fa-cog pr-1"></i><span class="d-none d-md-inline"> Inställningar</span></span></a>
+    </li>
+  </ul>
+</div>
 <router-outlet></router-outlet>

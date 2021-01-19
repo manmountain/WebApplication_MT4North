@@ -51,7 +51,7 @@ li:focus {
   }
 
 .accordion .card-header {
-  background: linear-gradient(#fff, #f1f1f1);
+  /*background: linear-gradient(#fff, #f1f1f1);*/
   padding: .75rem 1rem;
   position: relative;
 }
@@ -129,6 +129,10 @@ li:focus {
 .accordion .rotate {
   transform: rotate(180deg);
 
+}
+
+#addBtn:hover {
+    color: blue;
 }
 
 @media (max-width: 768px) {

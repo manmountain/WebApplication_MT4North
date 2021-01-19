@@ -1,12 +1,12 @@
 <!-- Vertical navbar -->
-<div class="container-fluid mt-0">
-  <div class="vertical-nav bg-white mt-0" id="sidebar">
+<div class="container-fluid" [class.mt-5]="isFullscreen() === false" id="content">
+  <div class="vertical-nav bg-white mt-0" id="sidebar" [style.display]="isFullscreen() ? 'none' : 'block'" [class.active]="isFullscreen() === true">
     <div class="py-4 px-3 mb-4 bg-light mt-0">
       <div class="media d-flex align-items-center">
         <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">
         <div class="media-body">
           <h4 class="m-0">Jason Doe</h4>
-          <p class="font-weight-light text-muted mb-0">Web developer</p>
+          <p class="font-weight-light text-muted mb-0">Organisation</p>
         </div>
       </div>
     </div>
@@ -52,10 +52,10 @@
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
               <div class="card-body">
                 <ul class="list-group">
-                  <li class="list-group-item" [routerLink]="['./projects/activity-status']">Projekt 1 <!--<span class="badge badge-pill badge-primary">20</span>--></li>
-                  <li class="list-group-item"><a href="#">Projekt 2</a></li>
+                  <li class="btn text-left list-group-item" [routerLink]="['./projects/activity-status']"><a>Projekt 1</a> <!--<span class="badge badge-pill badge-primary">20</span>--></li>
+                  <li class="btn text-left list-group-item"><a>Projekt 2</a></li>
                 </ul>
-                <button class="btn w-100 text-left" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Lägg till</span></button>
+                <button class="btn w-100 text-left" id="addBtn" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Lägg till</span></button>
               </div>
             </div>
           </div>
@@ -86,10 +86,11 @@
   </div>
   <!-- End vertical navbar -->
   <!-- Page content holder -->
-  <div class="page-content pt-5" id="content">
+  <div class="page-content" [class.pt-5]="isFullscreen() === false" id="content" [class.active]="isFullscreen() === true">
+
     <!-- Toggle button -->
     <div class="row">
-      <div class="col- pl-3">
+      <div class="col-" [class.pl-3]="isFullscreen() === false" [style.display]="isFullscreen() ? 'none' : 'block'">
         <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm mb-4"><i class="fa fa-bars"></i></button>
       </div>
       <!-- Demo content -->

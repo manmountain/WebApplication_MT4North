@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ViewService } from "../view.service";
 
 @Component({
   selector: 'app-my-pages-project',
@@ -8,4 +8,10 @@ import { RouterModule } from '@angular/router';
 })
 
 export class MyPagesProjectComponent {
+  constructor(private viewService: ViewService) {
+  }
+
+  isFullscreen() {
+    return this.viewService.isFullscreen;
+  }
 }

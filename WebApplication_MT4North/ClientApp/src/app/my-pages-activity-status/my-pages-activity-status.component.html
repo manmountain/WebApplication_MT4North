@@ -3,8 +3,8 @@
 <div class="row ml-0 mt-4 mb-2">
   <div class="col m-0 p-0  d-none d-md-inline im-toolbar">
     <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
-      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" data-toggle="tooltip" data-placement="bottom" title="Öppna fullskärmsläge">
-        <i class="fa fa-expand fa-fw"></i>
+      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" (click)="toggleExpandView()" data-toggle="tooltip" data-placement="bottom" title="{{isFullscreen == true ? 'Stäng fullskärmsläge' : 'Öppna fullskärmsläge'}}">
+        <i class="fa" [ngClass]="(isFullscreen === true) ? 'fa-compress' : 'fa-expand'"></i>
       </button>
       <div class="im-toolbar ml-2 mr-2" id="historyBar">
         <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{maxDate}}"/>

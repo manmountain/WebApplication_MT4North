@@ -1,88 +1,329 @@
-<p class=" text-black mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+<!--<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>-->
 
-<div class="row mr-4">
-  <table class="table ml-3 m-0" id="t01" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
+<div class="row ml-0 mt-4 mb-2">
+  <div class="col m-0 p-0  d-none d-md-inline im-toolbar">
+    <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
+      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" data-toggle="tooltip" data-placement="bottom" title="Öppna fullskärmsläge">
+        <i class="fa fa-expand fa-fw"></i>
+      </button>
+      <div class="im-toolbar ml-2 mr-2" id="historyBar">
+        <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{maxDate}}"/>
+      </div>
+      <!--<button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
+    <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
+  </button>-->
+      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
+        <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild"></i>
+      </button>
+      <div class="btn-group" role="group">
+        <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
+          <i class="fas fa-expand-alt fa-fw"></i>
+          Expandera...
+        </button>
+        <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
+          <button class="dropdown-item" (click)="expandAll()">Expandera allt</button>
+          <button class="dropdown-item" (click)="expandThemes()">Expandera teman</button>
+          <button class="dropdown-item" (click)="expandActivities()">Expandera aktiviteter</button>
+        </div>
+      </div>
+      <div class="btn-group" role="group">
+        <button id="collapseBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
+          <i class="fas fa-compress-alt fa-fw"></i>
+          Kollapsa...
+        </button>
+        <div class="dropdown-menu" aria-labelledby="collapseBtnGroup">
+          <button class="dropdown-item" (click)="collapseAll()">Kollapsa allt</button>
+          <button class="dropdown-item" (click)="collapseThemes()">Kollapsa teman</button>
+          <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
+        </div>
+      </div>
+      <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center im-toolbar" id="searchBar">
+        <input type="text" class="form-control form-control-sm" placeholder="Sök...">
+        <div class="input-group-append">
+          <button class="btn btn-light btn-sm" type="button" id="searchButton">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+      <div class="w-100 btn btn-light btn-static">
+      </div>
+      <button type="button" class="btn btn-light float-right" onmousedown="event.preventDefault()">Återställ</button>
+    </div>
+  </div>
+  </div>
+  <div class="row mr-4">
+    <table class="table ml-3 m-0" id="t01" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
 
-    <!-- TABLE HEADER (PHASES) -->
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
-        </th>
-        <ng-container *ngFor="let phase of phases | enumToArray">
-          <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase}}</th>
-        </ng-container>
-      </tr>
-    </thead>
+      <!-- TABLE HEADER (PHASES) -->
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
 
-    <tbody>
-      <!-- THEME ROWS -->
-      <ng-container *ngFor="let theme of themes; let i = index">
-
-        <!-- MAIN ROW -->
-        <tr data-toggle="collapse" [attr.data-target]="'#collapsedRow'+i" aria-expanded="false" class="accordion-toggle parent im-theme-{{i}}" id="parent-{{i}}" title="Klicka för att expandera/kollapsa">
-          <!-- FIRST COLUMN (THEME NAME) -->
-          <td class="im-theme noselect align-middle">
-            <span class="fa-stack fa-2x float-left im-theme-icon">
-              <i class="fa fa-circle fa-stack-2x float-left im-theme-{{i}}"></i>
-              <i class="fa fa-cog fa-stack-1x fa-inverse float-left"></i>
-            </span><span class="align-middle im-theme-text ml-2">{{theme.name}}</span>
-          </td>
-
-          <!-- PROGRESS BARS -->
-          <ng-container *ngFor="let phase of phases | enumToArray; let l = index">
-            <td colspan="1" class="align-middle">
-              <div class="progress">
-                <div id="row{{i}}col{{l}}-progress" class="progress-bar progress-bar-striped im-theme-{{i}}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </td>
+            <!--
+  <div class="dropdown w-100">
+    <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      2021-01-28
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">2020-08-15</a>
+      <a class="dropdown-item" href="#">2020-01-18</a>
+      <a class="dropdown-item" href="#">2019-09-07</a>
+    </div>
+  </div>
+    -->
+          </th>
+          <ng-container *ngFor="let phase of phases | enumToArray">
+            <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase}}</th>
           </ng-container>
         </tr>
+      </thead>
 
-        <!-- SECONDARY (COLLAPSABLE) ROW -->
-        <tr class="child-parent-{{i}} sticky im-theme-{{i}} exlude-from-sortable">
-          <td colspan="12" class="hiddenRow">
-            <div class="accordion-body collapse container-fluid pl-0 pr-0" id="collapsedRow{{i}}">
-              <table class="table table-striped borderless im-inner-table im-theme-{{i}}">
-                <tbody>
-                  <tr class="exlude-from-sortable">
-                    <td class="col-xs-1 im-inner-col im-inner-col-first">
-                    </td>
+      <tbody>
+        <!-- THEME ROWS -->
+        <ng-container *ngFor="let theme of themes; let i = index">
 
-                    <!-- ACTIVITES -->
-                    <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
-                      <td class="col-xs-1 im-cell im-inner-col">
-                        <div *ngFor="let activity of (theme.activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
-                          <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h3 class="panel-title">
-                                <a class="im-checkbox collapsed im-theme-{{i}}" id="checkbox-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
-                                  <label>
-                                    <input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">
-                                    <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'"  ng-click="this.checked=!this.checked;" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)"> -->
-                                    {{activity.name}}
-                                  </label>
-                                </a>
-                              </h3>
-                            </div>
-                            <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
-                              <div class="panel-body im-theme-{{i}}">
-                                <p>
-                                  {{activity.description}}
-                                </p>
+          <!-- MAIN ROW -->
+          <tr #themeElement data-toggle="collapse" [attr.data-target]="'#collapsedRow'+i" aria-expanded="false" class="accordion-toggle parent im-theme-{{i}}" id="parent-{{i}}" title="Klicka för att expandera/kollapsa">
+            <!-- FIRST COLUMN (THEME NAME) -->
+            <td class="im-theme noselect align-middle">
+              <span class="fa-stack fa-2x float-left im-theme-icon">
+                <i class="fa fa-circle fa-stack-2x float-left im-theme-{{i}}"></i>
+                <i class="fa fa-cog fa-stack-1x fa-inverse float-left"></i>
+              </span><span class="align-middle im-theme-text ml-2">{{theme.name}}</span>
+            </td>
+
+            <!-- PROGRESS BARS -->
+            <ng-container *ngFor="let phase of phases | enumToArray; let l = index">
+              <td colspan="1" class="align-middle d-none d-md-table-cell">
+                <div class="progress" [style.visibility]="hasActivities(theme, phase) ? 'visible' : 'hidden'">
+                  <div id="row{{i}}col{{l}}-progress" class="im-theme-{{i}}" [class]="containsOngoingAcitvities(theme, phase) ? 'progress-bar progress-bar-striped' : 'progress-bar'" [style.width]="getProgress(theme, phase) + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </td>
+            </ng-container>
+          </tr>
+
+          <!-- SECONDARY (COLLAPSABLE) ROW -->
+          <tr class="child-parent-{{i}} sticky im-theme-{{i}} exlude-from-sortable">
+            <td colspan="12" class="hiddenRow">
+              <div class="accordion-body collapse container-fluid pl-0 pr-0" id="collapsedRow{{i}}">
+                <table class="table borderless im-inner-table im-theme-{{i}}">
+                  <tbody>
+                    <tr class="exlude-from-sortable">
+                      <td class="col-xs-1 im-inner-col im-inner-col-first d-none d-md-table-cell">
+                      </td>
+
+                      <!-- ACTIVITES -->
+                      <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
+                        <td class="col-xs-1 im-cell im-inner-col">
+                          <div *ngFor="let activity of (theme.activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <h3 class="panel-title">
+                                  <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isExcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
+                                    <label>
+                                      <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
+                                      <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isExcluded">
+                                      {{activity.name}}
+                                    </label>
+                                  </a>
+                                </h3>
+                              </div>
+
+                              <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
+                                <div class="panel-body im-theme-{{i}}">
+
+                                  <p class="mb-2 p-0">
+                                    {{activity.description}}
+                                  </p>
+                                  <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
+                                  <hr class="m-0 pb-1" />
+                                  <div class="row">
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#datesModal-r'+i+'c'+j+'-'+k">
+                                        <p>
+                                          <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum</span>
+                                        </p>
+                                      </a>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
+                                        <p>
+                                          <i class="fa fa-pen-square fa-fw"></i><span class="ml-1">Anteckningar</span>
+                                        </p>
+                                      </a>
+                                    </div>
+
+                                    <div class="modal fade" [attr.id]="'datesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'datesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="datesModalLabel-r{{i}}c{{j}}-{{k}}">
+                                              Datum
+                                              <br />
+                                              <small>{{activity.name}}</small>
+                                            </h5>
+                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <div class="row">
+                                              <!--
+            <div class="col-12 mb-3">
+              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+            </div>
+              -->
+                                              <div class="col-12">
+                                                <div class="row">
+                                                  <div class="col-2 mr-1">
+                                                    <h5>
+                                                      <small>
+                                                        <span>Deadline:</span>
+                                                      </small>
+                                                    </h5>
+                                                  </div>
+                                                  <div class="col my-auto">
+                                                    <input type="date" class="rounded" id="deadline" />
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-12">
+                                                <div class="row">
+                                                  <div class="col-2 mr-1">
+                                                    <h5>
+                                                      <small>
+                                                        <span>Påbörjad:</span>
+                                                      </small>
+                                                    </h5>
+                                                  </div>
+                                                  <div class="col my-auto">
+                                                    <input type="date" class="rounded" id="started" />
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-12">
+                                                <div class="row">
+                                                  <div class="col-2 mr-1">
+                                                    <h5>
+                                                      <small>
+                                                        <span>Avslutad:</span>
+                                                      </small>
+                                                    </h5>
+                                                  </div>
+                                                  <div class="col my-auto">
+                                                    <input type="date" class="rounded" id="finished" />
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            </div>
+                                          </div>
+
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Spara</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" [attr.id]="'notesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'notesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="notesModalLabel-r{{i}}c{{j}}-{{k}}">
+                                              Anteckningar
+                                              <br />
+                                              <small>{{activity.name}}</small>
+                                            </h5>
+                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <div class="card im-theme-{{i}}">
+                                              <h6 class="card-header mt-0 mb-0 pt-1 pb-1">
+                                                <small class="align-middle"><span class="mr-4">2020-01-01</span><span><i>Tillagd av: </i></span><span>Test Testsson</span><a class="btn icon-btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
+                                              </h6>
+                                              <div class="card-body">
+                                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                                              </div>
+                                            </div>
+                                            <form ngNativeValidate class="form-group mt-2" id="noteForm-r{{i}}c{{j}}-{{k}}">
+                                              <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}" class="col-form-label">Ny anteckning:</label></p>
+                                              <textarea class="form-control" id="note-text-r{{i}}c{{j}}-{{k}}" maxlength="250" required></textarea>
+                                              <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
+                                            </form>
+                                          </div>
+                                          <!--
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+        </div>
+          -->
+                                        </div>
+                                      </div>
+                                    </div>
+
+
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#resourcesModal-r'+i+'c'+j+'-'+k">
+                                        <p>
+                                          <i class="fa fa-book fa-fw"></i><span class="ml-1">Resurser</span>
+                                        </p>
+                                      </a>
+                                    </div>
+
+                                    <div class="modal fade" [attr.id]="'resourcesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'resourcesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="resourcesModalLabel-r{{i}}c{{j}}-{{k}}">
+                                              Resurser
+                                              <br />
+                                              <small>{{activity.name}}</small>
+                                            </h5>
+                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <h6>
+                                              <small>Resurser saknas för denna aktivitet.</small>
+                                            </h6>
+
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
+                                        <p>
+                                          <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-eye-slash' : 'fa-eye'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
+                                        </p>
+                                      </a>
+                                    </div>
+                                  </div>
+
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                    </ng-container>
+                        </td>
+                      </ng-container>
 
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
 
-      </ng-container>
-    </tbody>
-  </table>
-</div>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>

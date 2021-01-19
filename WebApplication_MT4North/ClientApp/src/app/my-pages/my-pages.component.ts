@@ -8,5 +8,24 @@ import { RouterModule } from '@angular/router';
 })
 
 export class MyPagesComponent {
+  isFirstStepModal = true;
+  emailList = [];
 
+  changeToInviteMembers() {
+    this.isFirstStepModal = false;
+  }
+
+  resetModal() {
+    this.isFirstStepModal = true;
+    this.emailList = [];
+  }
+
+  addMember(emailAdress: string) {
+    console.log(emailAdress);
+    this.emailList.push(emailAdress);
+  }
+
+  removeMember(emailAdress: string) {
+    this.emailList.splice(0,1);
+  }
 }

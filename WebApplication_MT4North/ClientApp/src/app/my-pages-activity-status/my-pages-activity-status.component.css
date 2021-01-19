@@ -3,6 +3,70 @@ html {
   overflow-x: hidden;
 }
 
+button.closeModal {
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+}
+
+.dateInput {
+  display: table-cell;
+  vertical-align: middle;
+  height: 10px;
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+.closeModal {
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .2;
+  margin-right: 20px;
+}
+
+.alert p {
+  font-size: 16px;
+}
+
+.alert > p, .alert > ul {
+  margin-bottom: 0;
+}
+
+.alert a {
+  color: #00aeef;
+  font-size: 16px;
+}
+
+.alert {
+  margin-bottom: 0;
+  text-align: center;
+  padding: 8px;
+  color: #fff;
+  background: #1c1c1c;
+  border-color: #000;
+}
+
 .panel-heading label {
   display: block;
   margin-left: 18px;
@@ -51,7 +115,6 @@ input[type="checkbox"] {
 
 .hiddenRow {
   padding: 0 !important;
-  background-color: #eeeeee;
   font-size: 13px;
 }
 
@@ -94,6 +157,7 @@ ul, ol {
 .panel-group .panel-group .panel-heading + .panel-collapse > .panel-body {
   border-radius: 2px;
   border: 0;
+  color: inherit;
 }
 
   .panel-group .panel-heading + .panel-collapse > .panel-body {
@@ -107,7 +171,6 @@ ul, ol {
 
     .panel-group .panel-heading a {
       display: block;
-      color: black;
       padding: 15px;
       text-decoration: none;
       position: relative;
@@ -141,7 +204,7 @@ ul, ol {
   }
 
   .panel-group .panel-body {
-    padding: 15px;
+    /*padding: 15px;*/
   }
 
   .panel-group .panel {
@@ -293,8 +356,8 @@ th.triangle {
 .im-theme {
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 30px;
-  height: 1.2em;
+  /*width: 30px;
+  height: 1.2em;*/
   white-space: nowrap;
 }
 
@@ -335,6 +398,12 @@ a.im-checkbox {
   color: #f77780;
 }
 
+/*
+.card.im-theme-0 {
+  background-color: #feeff0;
+}
+    */
+
 .im-checkbox.im-theme-0 {
   background: #faa7ad;
 }
@@ -342,6 +411,11 @@ a.im-checkbox {
 .panel-body.im-theme-0 {
   background: white !important;
 }
+
+.panel-footer.im-theme-0 {
+  background: #faa7ad !important;
+}
+
 
 .red {
     background: red !important;
@@ -351,6 +425,7 @@ a.im-checkbox {
    background-color: #faa7ad  !important;
    }
    /*THEME 2*/
+
 .im-inner-table.im-theme-1 {
   background: #fef7f5 !important;
 }
@@ -604,10 +679,6 @@ a.im-checkbox {
   padding: 0 !important;
 }
 
-.accordion-body {
-  background: #f2f2f2;
-}
-
 .hiddenRow {
   background: white !important;
 }
@@ -626,10 +697,6 @@ table {
   border: none;
 }
 
-td, tbody {
-  border: none !important;
-  border-top: 1px solid lightgray !important;
-}
 
 .im-inner-table {
   border: 1px solid lightgray !important;
@@ -644,6 +711,11 @@ td, tbody {
 .hover {
   background: #fffff2;
 }
+
+.white-text {
+    color: white;
+}
+
 /*background-color: rgba(255, 255, 255, 0.5);  }*/
 .btn-group {
   white-space: nowrap;
@@ -679,10 +751,6 @@ td, tbody {
 .progress-bar {
 }
 
-body, .hiddenRow {
-  background: #f4f5f7 !important;
-}
-
 .accordion-toggle {
   background: white;
 }
@@ -700,6 +768,23 @@ body, .hiddenRow {
   opacity: 1 !important;
 }
 
+.im-toolbar {
+  background: #f8f9fa !important;
+}
+
+#searchButton {
+    border: 1px solid lightgray;
+}
+
+#historyBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#historyCalendar {
+  height: 80%;
+}
 .excluded {
   background: lightgray !important;
   opacity: 0.5 !important;
@@ -709,6 +794,126 @@ body, .hiddenRow {
   font-size: 12px;
 }
 
-  .im-include-btn:hover {
-    cursor: pointer;
+.im-include-btn:hover {
+  cursor: pointer;
+}
+
+.btn p {
+  float:left;
+}
+
+.btn-static {
+  pointer-events: none !important;
+}
+
+.btn-im-date {
+    background-color: black !important;
+}
+
+.activity-function-btn:hover, .icon-btn:hover {
+  color: dimgrey !important;
+}
+
+/*
+#historyCalendar {
+  background: #343a40 !important;
+  color: white;
+}
+
+
+#historyCalendar[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+*/
+
+input.rounded {
+  border: 1px solid #ccc;
+  /* Safari 5, Chrome support border-radius without vendor prefix.
+   * FF 3.0/3.5/3.6, Mobile Safari 4.0.4 require vendor prefix.
+   * No support in Safari 3/4, IE 6/7/8, Opera 10.0.
+   */
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /* Chrome, FF 4.0 support box-shadow without vendor prefix.
+   * Safari 3/4/5 and FF 3.5/3.6 require vendor prefix.
+   * No support in FF 3.0, IE 6/7/8, Opera 10.0, iPhone 3.
+   * change the offsets, blur and color to suit your design.
+   */
+  -moz-box-shadow: 0px;
+  -webkit-box-shadow: 0px;
+  box-shadow: 0px;
+  /* using a bigger font for demo purposes so the box isn't too small */
+  /* with a big radius/font there needs to be padding left and right
+   * otherwise the text is too close to the radius.
+   * on a smaller radius/font it may not be necessary
+   */
+  padding: 4px 7px;
+  /* only needed for webkit browsers which show a rectangular outline;
+   * others do not do outline when radius used.
+   * android browser still displays a big outline
+   */
+  outline: 0;
+  /* this is needed for iOS devices otherwise a shadow/line appears at the
+   * top of the input. depending on the ratio of radius to height it will
+   * go all the way across the full width of the input and look really messy.
+   * ensure the radius is no more than half the full height of the input, 
+   * and the following is set, and everything will render well in iOS.
+   */
+  -webkit-appearance: none;
+}
+
+  input.rounded:focus {
+    /* supported IE8+ and all other browsers tested.
+   * optional, but gives the input focues when selected.
+   * change to a color that suits your design.
+   */
+    border-color: blue;
+  }
+
+
+
+
+  @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+      /* Hide table headers (but not display: none;, for accessibility) */
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+    td {
+      /* Behave  like a "row" */
+      position: relative;
+    }
+
+    .im-inner-col {
+      border: none;
+      border-bottom: 1px solid lightgray !important;
+    }
+
+    td:before {
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    .im-theme {
+      text-align: left;
+      border-right: 1px solid lightgray;
+    }
+
+    .im-inner-table {
+      border-bottom: none !important;
+    }
   }

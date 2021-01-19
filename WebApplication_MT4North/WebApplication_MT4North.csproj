@@ -57,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
     <None Remove="ClientApp\src\app\models\activity.model.ts" />
     <None Remove="ClientApp\src\app\models\common.ts" />
     <None Remove="ClientApp\src\app\models\enumToArrayPipe.ts" />
@@ -64,6 +65,7 @@
     <None Remove="ClientApp\src\app\models\theme.model.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity-status\my-pages-activity-status.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity\my-pages-activity.component.ts" />
+    <None Remove="ClientApp\src\app\my-pages-members\my-pages-members.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-project\my-pages-project.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-start\my-pages-start.component.ts" />
     <None Remove="ClientApp\src\app\my-pages\my-pages.component.ts" />

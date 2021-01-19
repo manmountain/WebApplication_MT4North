@@ -1,0 +1,12 @@
+body {
+
+}
+
+.body-height {
+  min-height: 700px;
+}
+.bk7-homebody-helabg {
+  background: #c2e59c;
+  background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);
+  background: linear-gradient(to right, #64b3f4, #c2e59c);
+}

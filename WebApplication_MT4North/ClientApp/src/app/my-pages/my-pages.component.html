@@ -1,0 +1,108 @@
+<!-- Vertical navbar -->
+<div class="container-fluid mt-0">
+  <div class="vertical-nav bg-white mt-0" id="sidebar">
+    <div class="py-4 px-3 mb-4 bg-light mt-0">
+      <div class="media d-flex align-items-center">
+        <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+        <div class="media-body">
+          <h4 class="m-0">Jason Doe</h4>
+          <p class="font-weight-light text-muted mb-0">Web developer</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg">
+      <!--
+      <div class="row">
+        <div class="col-lg">
+          <p class="text-gray font-weight-bold text-uppercase float-left">PROJECTS</p>
+          <p class="float-right"><span class="fa fa-plus-circle"></span></p>
+        </div>
+      </div>
+      -->
+        <div class="accordion mb-2" id="accordionExample">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  <span><i class="fa fa-user"></i> Konto</span>
+                  <i class="fa fa-chevron-down toggle"></i>
+                </a>
+              </h2>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" >
+              <div class="card-body">
+                <ul class="list-group">
+                  <li class="list-group-item" [routerLink]="['./start']"><i class="fa fa-pencil"></i> Redigera</li>
+                  <li class="list-group-item"><a href="#"><i class="fa fa-key"></i> Ändra lösenord</a></li>
+                  <li class="list-group-item"><a href="#" class="text-danger"><i class="fa fa-trash"></i> Ta bort konto</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <span><i class="fa fa-briefcase"></i> Projekt</span>
+                  <i class="fa fa-chevron-down toggle rotate"></i>
+                </a>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body">
+                <ul class="list-group">
+                  <li class="list-group-item" [routerLink]="['./projects/activity-status']">Projekt 1 <span class="badge badge-pill badge-primary">20</span></li>
+                  <li class="list-group-item"><a href="#">Projekt 2</a></li>
+                  <li class="list-group-item"><a href="#"><i class="fa fa-plus"></i> Lägg till</a></li>
+                </ul>
+                 <!--
+                <button type="button" class="btn btn-default btn-sm">
+                  <span class="fa fa-plus-circle"></span> Lägg till nytt projekt
+                </button>
+                -->
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingFour">
+              <h2 class="mb-0">
+                <a data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <span><i class="fa fa-cog"></i> Inställningar</span>
+                  <i class="fa fa-chevron-down toggle"></i>
+                </a>
+              </h2>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+              <div class="card-body">
+                <ul class="list-group">
+                  <li class="list-group-item"><a href="#"><i class="fa fa-bell"></i> Ställ in notifieringar</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingFive">
+              <h2 class="mb-0"><a href="#"><i class="fa fa-power-off"></i> Logga ut</a></h2>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <!-- End vertical navbar -->
+  <!-- Page content holder -->
+  <div class="page-content pt-5" id="content">
+    <!-- Toggle button -->
+    <div class="row">
+      <div class="col- pl-3">
+        <button id="sidebarCollapse" type="button" class="btn btn-light bg-white rounded-pill shadow-sm mb-4"><i class="fa fa-bars"></i></button>
+      </div>
+      <!-- Demo content -->
+      <div class="col pr-5">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <!--<app-my-pages-start></app-my-pages-start>-->
+
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<p class=" text-black mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+
+<div class="row mr-4">
+  <table class="table ml-3 m-0" id="t01" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
+
+    <!-- TABLE HEADER (PHASES) -->
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
+        </th>
+        <ng-container *ngFor="let phase of phases | enumToArray">
+          <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase}}</th>
+        </ng-container>
+      </tr>
+    </thead>
+
+    <tbody>
+      <!-- THEME ROWS -->
+      <ng-container *ngFor="let theme of themes; let i = index">
+
+        <!-- MAIN ROW -->
+        <tr data-toggle="collapse" [attr.data-target]="'#collapsedRow'+i" aria-expanded="false" class="accordion-toggle parent im-theme-{{i}}" id="parent-{{i}}" title="Klicka för att expandera/kollapsa">
+          <!-- FIRST COLUMN (THEME NAME) -->
+          <td class="im-theme noselect align-middle">
+            <span class="fa-stack fa-2x float-left im-theme-icon">
+              <i class="fa fa-circle fa-stack-2x float-left im-theme-{{i}}"></i>
+              <i class="fa fa-cog fa-stack-1x fa-inverse float-left"></i>
+            </span><span class="align-middle im-theme-text ml-2">{{theme.name}}</span>
+          </td>
+
+          <!-- PROGRESS BARS -->
+          <ng-container *ngFor="let phase of phases | enumToArray; let l = index">
+            <td colspan="1" class="align-middle">
+              <div class="progress">
+                <div id="row{{i}}col{{l}}-progress" class="progress-bar progress-bar-striped im-theme-{{i}}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+
+        <!-- SECONDARY (COLLAPSABLE) ROW -->
+        <tr class="child-parent-{{i}} sticky im-theme-{{i}} exlude-from-sortable">
+          <td colspan="12" class="hiddenRow">
+            <div class="accordion-body collapse container-fluid pl-0 pr-0" id="collapsedRow{{i}}">
+              <table class="table table-striped borderless im-inner-table im-theme-{{i}}">
+                <tbody>
+                  <tr class="exlude-from-sortable">
+                    <td class="col-xs-1 im-inner-col im-inner-col-first">
+                    </td>
+
+                    <!-- ACTIVITES -->
+                    <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
+                      <td class="col-xs-1 im-cell im-inner-col">
+                        <div *ngFor="let activity of (theme.activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h3 class="panel-title">
+                                <a class="im-checkbox collapsed im-theme-{{i}}" id="checkbox-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}">
+                                  <label>
+                                    <input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">
+                                    <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'"  ng-click="this.checked=!this.checked;" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)"> -->
+                                    {{activity.name}}
+                                  </label>
+                                </a>
+                              </h3>
+                            </div>
+                            <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
+                              <div class="panel-body im-theme-{{i}}">
+                                <p>
+                                  {{activity.description}}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+
+      </ng-container>
+    </tbody>
+  </table>
+</div>

@@ -7,7 +7,7 @@
         <i class="fa" [ngClass]="(isFullscreen === true) ? 'fa-compress' : 'fa-expand'"></i>
       </button>
       <div class="im-toolbar ml-2 mr-2" id="historyBar">
-        <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{maxDate}}"/>
+        <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{maxDate}}" />
       </div>
       <!--<button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
     <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
@@ -47,7 +47,33 @@
       </div>
       <div class="w-100 btn btn-light btn-static">
       </div>
-      <button type="button" class="btn btn-light float-right" onmousedown="event.preventDefault()">Återställ</button>
+      <button type="button" class="btn btn-light float-right" onmousedown="event.preventDefault()" data-toggle="modal" data-target="#resetModal">Återställ</button>
+
+      <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="resetModal">
+                Återställ
+              </h5>
+              <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h6 class="text-wrap">
+                Är du säker på att du vill återställa projektets aktiviteter?
+              </h6>
+                <p>Alla statusförändringar och anteckningar kommer att raderas permanent.</p>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Nej, avbryt</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Ja, återställ</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   </div>

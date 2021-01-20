@@ -11,7 +11,7 @@
             Projekt 1
           </td>
           <td class="w-25">
-            <button class="btn btn-secondary btn-sm float-right">Ändra</button>
+            <button class="btn btn-primary btn-sm float-right">Ändra</button>
           </td>
         </tr>
         <tr>
@@ -22,34 +22,60 @@
             Beskrivning
           </td>
           <td class="w-25">
-            <button class="btn btn-secondary btn-sm float-right">Ändra</button>
+            <button class="btn btn-primary btn-sm float-right">Ändra</button>
           </td>
         </tr>
 
         <!--
-  <tr>
+      <tr>
 
-    <td>
-      <span class="d-inline-block" style="white-space:nowrap"><i class="fa fa-bell fa-fw"></i><b> Påminnelser</b></span>
-    </td>
-    <td class="settingDescription">
-      Få påminnelser via mail när aktiviteter som inte slutförts närmar sig deadline.
-    </td>
-    <td>
+        <td>
+          <span class="d-inline-block" style="white-space:nowrap"><i class="fa fa-bell fa-fw"></i><b> Påminnelser</b></span>
+        </td>
+        <td class="settingDescription">
+          Få påminnelser via mail när aktiviteter som inte slutförts närmar sig deadline.
+        </td>
+        <td>
 
-      <div class="custom-control custom-switch float-left">
-        <input type="checkbox" class="custom-control-input custom-switch-md" id="customSwitch1">
-        <label class="custom-control-label" for="customSwitch1"></label>
-      </div>
-    </td>
+          <div class="custom-control custom-switch float-left">
+            <input type="checkbox" class="custom-control-input custom-switch-md" id="customSwitch1">
+            <label class="custom-control-label" for="customSwitch1"></label>
+          </div>
+        </td>
 
-  </tr>
-  -->
+      </tr>
+      -->
       </tbody>
     </table>
     <hr />
-    <button class="btn btn-danger btn-sm float-right mr-3">Ta bort projekt</button>
+    <button class="btn btn-danger btn-sm float-right mr-3">Ta bort projektet</button>
+    <button type="button" class="btn btn-secondary btn-sm float-right mr-2" onmousedown="event.preventDefault()" data-toggle="modal" data-target="#resetModal">Nollställ projektet</button>
 
+    <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="resetModal">
+              Nollställ projekt
+            </h5>
+            <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h6 class="text-wrap">
+              Är du säker på att du vill nollställa projektet?
+            </h6>
+            <p>Alla statusförändringar, anteckningar och händelser kommer att raderas permanent. Projektmedlemmarna kommer att vara kvar.<br /><br />Åtgärden går inte att ångra.</p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Nej, avbryt</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Ja, nollställ projektet</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

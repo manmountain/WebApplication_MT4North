@@ -19,7 +19,6 @@ export class MyPagesActivityStatusComponent {
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
   selectedDate = new Date().toISOString().split('T')[0];
-  maxDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
 
   constructor(private viewService: ViewService) {
@@ -27,7 +26,6 @@ export class MyPagesActivityStatusComponent {
 
   ngOnInit() {
     //console.log("initiating");
-
     let technicalDevelopmentTheme = new Theme("Teknikutveckling", "Beskrivning");
     let activity1 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.CONCEPTUALIZATION, false);
     let activity2 = new Activity("Genomför kravanalys", "Genomför en kravanalys för konceptet. Finns standarder att förhålla sig till?", Phase.CONCEPTUALIZATION, true);
@@ -113,9 +111,8 @@ export class MyPagesActivityStatusComponent {
     this.activityElements.toArray().forEach(val => { if (val.nativeElement.getAttribute('aria-expanded') === "true") { val.nativeElement.click() } });
   }
 
-  setMaxDate() {
-    console.log(new Date().toISOString().split("T")[0]);
-    return new Date().toISOString().split("T")[0];
+  getMaxDate() {
+    return new Date().toISOString().split('T')[0];
   }
 
   toggleExpandView() {

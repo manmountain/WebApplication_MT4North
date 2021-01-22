@@ -166,27 +166,25 @@ li:focus {
 */
 
 @media (max-width: 768px) {
-
-
-    /*
-  #sidebar {
+  #sidebar.active {
     margin-left: -17rem;
   }
 
-    #sidebar.active {
+    #sidebar {
       margin-left: 0;
     }
 
-  #content {
+
+  #content.active {
     width: 100%;
     margin: 0;
   }
 
-    #content.active {
-      margin-left: 17rem;
-      width: calc(100% - 17rem);
-    }
-        */
+  #content {
+    margin-left: 9rem;
+    width: 100%;
+  }
+        
 }
         
 

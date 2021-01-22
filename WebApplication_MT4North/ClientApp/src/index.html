@@ -51,6 +51,13 @@
     $('#sidebarCollapse').on('click', function () {
       $('#sidebar, #content').toggleClass('active');
     });
+
+    $('#show-sidebar').on('click', function () {
+      $('#sidebar, #content').removeClass('active');
+    });
+    $('#close-sidebar').on('click', function () {
+      $('#sidebar, #content').addClass('active');
+    });
   });
 </script>
 
@@ -63,4 +70,13 @@ $(document).ready(function(){
 		$(this).parent(".card").find(".toggle").removeClass("rotate");
 	});
 });
+
+  $("#close-sidebar").click(function () {
+    $(".page-wrapper").removeClass("toggled");
+  });
+  $("#show-sidebar").click(function () {
+    $(".page-wrapper").addClass("toggled");
+  });
+
+
 </script>

@@ -1,7 +1,7 @@
 <!--<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>-->
 
 <div class="row ml-0 mt-4 mb-2">
-  <div class="col m-0 p-0  d-none d-md-inline im-toolbar">
+  <div class="col m-0 p-0  d-none d-md-inline im-toolbar mr-4">
     <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" (click)="toggleExpandView()" data-toggle="tooltip" data-placement="bottom" title="{{isFullscreen == true ? 'Stäng fullskärmsläge' : 'Öppna fullskärmsläge'}}">
         <i class="fa" [ngClass]="(isFullscreen === true) ? 'fa-compress' : 'fa-expand'"></i>
@@ -51,7 +51,7 @@
     </div>
   </div>
   </div>
-  <div class="row mr-4">
+  <div class="row mr-3">
     <table class="table ml-3 m-0" id="t01" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
 
       <!-- TABLE HEADER (PHASES) -->

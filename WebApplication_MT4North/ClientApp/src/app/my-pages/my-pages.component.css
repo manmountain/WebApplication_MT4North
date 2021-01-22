@@ -135,7 +135,40 @@ li:focus {
     color: blue;
 }
 
+#show-sidebar,
+#close-sidebar {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+#show-sidebar {
+  position: fixed;
+  left: 0;
+  top: 60px;
+  border-radius: 0 4px 4px 0px;
+  width: 35px;
+  transition-delay: 0.3s;
+}
+
+#close-sidebar {
+  cursor: pointer;
+  color: #424e5d;
+  opacity: 0.7;
+}
+
+/*
+#content.active #show-sidebar {
+  left: -40px;
+}
+*/
+
 @media (max-width: 768px) {
+
+
+    /*
   #sidebar {
     margin-left: -17rem;
   }
@@ -153,7 +186,10 @@ li:focus {
       margin-left: 17rem;
       width: calc(100% - 17rem);
     }
+        */
 }
+        
+
 
 /*
 *

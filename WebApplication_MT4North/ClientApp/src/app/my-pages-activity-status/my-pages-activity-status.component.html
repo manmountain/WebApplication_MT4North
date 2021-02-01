@@ -13,7 +13,7 @@
     <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
   </button>-->
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
-        <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild"></i>
+        <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild" (click)="makeScreenshot()"></i>
       </button>
       <div class="btn-group" role="group">
         <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
@@ -52,7 +52,7 @@
   </div>
   </div>
   <div class="row mr-3">
-    <table class="table ml-3 m-0" id="t01" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
+    <table #imTableView class="table ml-3 m-0"  [ngClass]="{'animate': isScreenshotting === true}" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
 
       <!-- TABLE HEADER (PHASES) -->
       <thead class="thead-dark">
@@ -326,4 +326,9 @@
         </ng-container>
       </tbody>
     </table>
+  </div>
+
+  <div id="download">
+    <img style="background: red" #canvas>
+    <a style="background: red" #downloadLink></a>
   </div>

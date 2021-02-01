@@ -1,9 +1,10 @@
-import { Component, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Theme } from "../models/theme.model";
 import { Activity } from "../models/activity.model";
 import { Phase } from "../models/common";
 import { Status } from "../models/common";
 import { ViewService } from "../view.service";
+import html2canvas from 'html2canvas';
 
 //import { Console } from 'console';
 
@@ -16,8 +17,13 @@ import { ViewService } from "../view.service";
 export class MyPagesActivityStatusComponent {
   phases = Phase;
   themes: Theme[] = [];
+  isScreenshotting: boolean = false;
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
+  @ViewChild('imTableView', { static: false }) imTableView: ElementRef;
+  @ViewChild('canvas', { static: false }) canvas: ElementRef;
+  @ViewChild('downloadLink', { static: false }) downloadLink: ElementRef;
+
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
 
@@ -155,5 +161,24 @@ export class MyPagesActivityStatusComponent {
     } else if (docWithBrowsersExitFunctions.msExitFullscreen) { /* IE/Edge */
       docWithBrowsersExitFunctions.msExitFullscreen();
     }
+  }
+
+  makeScreenshot() {
+    this.isScreenshotting = true;
+
+    this.collapseAll();
+
+    html2canvas(this.imTableView.nativeElement).then(canvas => {
+      /*this.canvas.nativeElement.src = canvas.toDataURL();*/
+      this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
+      this.downloadLink.nativeElement.download = 'project-name-' + this.selectedDate +'.png';
+      this.downloadLink.nativeElement.click();
+      this.isScreenshotting = false;
+      console.log('screenshot created');
+    });
+
+    /*this.imTableView.nativeElement.removeClass += " animate";*/
+
+
   }
 }

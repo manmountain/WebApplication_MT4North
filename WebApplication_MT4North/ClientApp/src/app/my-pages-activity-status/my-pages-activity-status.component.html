@@ -37,6 +37,24 @@
           <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
         </div>
       </div>
+      <div class="btn-group" role="group">
+        <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
+          <i class="fas fa-eye-slash fa-fw"></i>
+          Dölj...
+        </button>
+        <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
+          <div class="dropdown-item" onmousedown="event.preventDefault()">
+            <label for="hideExcludedCheckbox">
+              <input #hideExcludedCheckbox type="checkbox" class="mr-1" id="hideExcludedCheckbox" name="hideExcluded" value="hideExcluded" [checked]="hideExcluded" (change)="onHideExcludedChanged(hideExcludedCheckbox.checked)">Exkluderade aktiviteter
+            </label>
+          </div>
+          <div class="dropdown-item">
+            <label for="hideFinishedCheckbox">
+              <input #hideFinishedCheckbox type="checkbox" class="mr-1" id="hideFinishedCheckbox" name="hideFinished" value="hideFinished" [checked]="hideFinished" (change)="onHideFinishedChanged(hideFinishedCheckbox.checked)">Avslutade aktiviteter
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center im-toolbar" id="searchBar">
         <input type="text" class="form-control form-control-sm" placeholder="Sök...">
         <div class="input-group-append">
@@ -116,7 +134,7 @@
                       <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
                         <td class="col-xs-1 im-cell im-inner-col">
                           <div *ngFor="let activity of (theme.activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" [style.display]="activity.isExcluded == true && hideExcluded == true || activity.status == 'checked' && hideFinished == true ? 'none' : 'block'">
                               <div class="panel-heading">
                                 <h3 class="panel-title">
                                   <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isExcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">

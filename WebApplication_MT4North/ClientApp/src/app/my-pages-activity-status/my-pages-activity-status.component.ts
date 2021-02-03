@@ -17,6 +17,8 @@ import html2canvas from 'html2canvas';
 export class MyPagesActivityStatusComponent {
   phases = Phase;
   themes: Theme[] = [];
+  hideExcluded: boolean = false;
+  hideFinished: boolean = false;
   isScreenshotting: boolean = false;
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
@@ -63,6 +65,14 @@ export class MyPagesActivityStatusComponent {
 
   containsOngoingAcitvities(theme: Theme, phase: Phase): boolean {
     return theme.activities.filter(x => x.phase == phase && x.status == Status.ONGOING && x.isExcluded == false).length > 0;
+  }
+
+  onHideExcludedChanged(value: boolean) {
+    this.hideExcluded = value;
+  }
+
+  onHideFinishedChanged(value: boolean) {
+    this.hideFinished = value;
   }
 
   checkStatus(activity: Activity) {

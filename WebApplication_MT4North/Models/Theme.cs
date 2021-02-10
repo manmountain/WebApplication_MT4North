@@ -10,6 +10,8 @@ namespace WebApplication_MT4North.Models
         public Theme()
         {
             Activities = new HashSet<Activity>();
+            BaseActivityInfos = new HashSet<BaseActivityInfo>();
+            CustomActivityInfos = new HashSet<CustomActivityInfo>();
         }
 
         public int ThemeId { get; set; }
@@ -19,5 +21,7 @@ namespace WebApplication_MT4North.Models
 
         public virtual InnovationModel InnovationModel { get; set; }
         public virtual ICollection<Activity> Activities { get; set; }
+        public virtual ICollection<BaseActivityInfo> BaseActivityInfos { get; set; }
+        public virtual ICollection<CustomActivityInfo> CustomActivityInfos { get; set; }
     }
 }

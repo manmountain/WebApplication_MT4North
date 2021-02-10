@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using WebApplication_MT4North.Models;
-
 
 namespace WebApplication_MT4North
 {
@@ -30,7 +28,8 @@ namespace WebApplication_MT4North
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddDbContext<CUSERSKAJO59SOURCEREPOSWEBAPPLICATION_MT4NORTHWEBAPPLICATION_MT4NORTHMODELSMEDTECHINNOVATIONMODEL_V2MDFContext>(options => options.UseSqlServer(Configuration.GetConnectionString("medtechinnovationmodel_v2")));
+            /*
+            services.AddDbContext<CUSERSKAJO59SOURCEREPOSWEBAPPLICATION_MT4NORTHWEBAPPLICATION_MT4NORTHMODELSMEDTECHINNOVATIONMODEL_V2MDFContext>(options => options.UseSqlServer(Configuration.GetConnectionString("medtechinnovationmodel_v2")));*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

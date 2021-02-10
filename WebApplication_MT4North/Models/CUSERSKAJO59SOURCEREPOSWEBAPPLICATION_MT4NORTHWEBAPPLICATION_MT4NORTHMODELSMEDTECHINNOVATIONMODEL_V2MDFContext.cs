@@ -18,6 +18,8 @@ namespace WebApplication_MT4North.Models
         }
 
         public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<BaseActivityInfo> BaseActivityInfos { get; set; }
+        public virtual DbSet<CustomActivityInfo> CustomActivityInfos { get; set; }
         public virtual DbSet<InnovationModel> InnovationModels { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
@@ -25,7 +27,6 @@ namespace WebApplication_MT4North.Models
         public virtual DbSet<RegisteredUserProject> RegisteredUserProjects { get; set; }
         public virtual DbSet<Theme> Themes { get; set; }
 
-        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -34,7 +35,6 @@ namespace WebApplication_MT4North.Models
                 optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\kajo59\\Source\\Repos\\WebApplication_MT4North\\WebApplication_MT4North\\Models\\medtechinnovationmodel_v2.mdf;Integrated Security=True;Trusted_Connection=False;");
             }
         }
-        */
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,8 @@ namespace WebApplication_MT4North.Models
 
                 entity.Property(e => e.ActivityId).HasColumnName("activity_id");
 
+                entity.Property(e => e.BaseInfoId).HasColumnName("base_info_id");
+
                 entity.Property(e => e.DeadlineDate)
                     .HasColumnType("datetime")
                     .HasColumnName("deadline_date");
@@ -55,11 +57,6 @@ namespace WebApplication_MT4North.Models
                 entity.Property(e => e.FinishDate)
                     .HasColumnType("datetime")
                     .HasColumnName("finish_date");
-
-                entity.Property(e => e.IsBaseActivity)
-                    .IsRequired()
-                    .HasColumnName("is_base_activity")
-                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.IsExcluded).HasColumnName("is_excluded");
 
@@ -71,6 +68,8 @@ namespace WebApplication_MT4North.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("phase");
+
+                entity.Property(e => e.ProjectId).HasColumnName("project_id");
 
                 entity.Property(e => e.Resources).HasColumnName("resources");
 
@@ -86,24 +85,96 @@ namespace WebApplication_MT4North.Models
 
                 entity.Property(e => e.ThemeId).HasColumnName("theme_id");
 
+                entity.HasOne(d => d.BaseInfo)
+                    .WithMany(p => p.Activities)
+                    .HasForeignKey(d => d.BaseInfoId)
+                    .HasConstraintName("FK_activity_base_activity_info");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.Activities)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_activity_project");
+
                 entity.HasOne(d => d.Theme)
                     .WithMany(p => p.Activities)
                     .HasForeignKey(d => d.ThemeId)
                     .HasConstraintName("FK_activity_theme");
             });
 
+            modelBuilder.Entity<BaseActivityInfo>(entity =>
+            {
+                entity.HasKey(e => e.BaseInfoId);
+
+                entity.ToTable("base_activity_info");
+
+                entity.Property(e => e.BaseInfoId).HasColumnName("base_info_id");
+
+                entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Phase)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("phase");
+
+                entity.Property(e => e.ThemeId).HasColumnName("theme_id");
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.BaseActivityInfos)
+                    .HasForeignKey(d => d.ThemeId)
+                    .HasConstraintName("FK_base_activity_info_theme");
+            });
+
+            modelBuilder.Entity<CustomActivityInfo>(entity =>
+            {
+                entity.HasKey(e => e.CustomInfoId)
+                    .HasName("PK_custom_activity");
+
+                entity.ToTable("custom_activity_info");
+
+                entity.Property(e => e.CustomInfoId).HasColumnName("custom_info_id");
+
+                entity.Property(e => e.ActivityId).HasColumnName("activity_id");
+
+                entity.Property(e => e.Description).HasColumnName("description");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Phase)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("phase");
+
+                entity.Property(e => e.ThemeId).HasColumnName("theme_id");
+
+                entity.HasOne(d => d.Activity)
+                    .WithMany(p => p.CustomActivityInfos)
+                    .HasForeignKey(d => d.ActivityId)
+                    .HasConstraintName("FK_custom_activity_info_activity");
+
+                entity.HasOne(d => d.Theme)
+                    .WithMany(p => p.CustomActivityInfos)
+                    .HasForeignKey(d => d.ThemeId)
+                    .HasConstraintName("FK_custom_activity_info_theme");
+            });
+
             modelBuilder.Entity<InnovationModel>(entity =>
             {
                 entity.ToTable("innovation_model");
 
-                entity.Property(e => e.InnovationModelId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("innovation_model_id");
+                entity.Property(e => e.InnovationModelId).HasColumnName("innovation_model_id");
 
-                entity.HasOne(d => d.InnovationModelNavigation)
-                    .WithOne(p => p.InnovationModel)
-                    .HasForeignKey<InnovationModel>(d => d.InnovationModelId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.Property(e => e.ProjectId).HasColumnName("project_id");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.InnovationModels)
+                    .HasForeignKey(d => d.ProjectId)
                     .HasConstraintName("FK_innovation_model_project");
             });
 
@@ -128,11 +199,13 @@ namespace WebApplication_MT4North.Models
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.Notes)
                     .HasForeignKey(d => d.ActivityId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_note_activity");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Notes)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_note_registered_user");
             });
 
@@ -214,13 +287,11 @@ namespace WebApplication_MT4North.Models
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.RegisteredUserProjects)
                     .HasForeignKey(d => d.ProjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_project_member_project");
 
                 entity.HasOne(d => d.RegisteredUser)
                     .WithMany(p => p.RegisteredUserProjects)
                     .HasForeignKey(d => d.RegisteredUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_project_member_registered_user");
             });
 

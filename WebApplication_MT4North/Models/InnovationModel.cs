@@ -13,8 +13,9 @@ namespace WebApplication_MT4North.Models
         }
 
         public int InnovationModelId { get; set; }
+        public int ProjectId { get; set; }
 
-        public virtual Project InnovationModelNavigation { get; set; }
+        public virtual Project Project { get; set; }
         public virtual ICollection<Theme> Themes { get; set; }
     }
 }

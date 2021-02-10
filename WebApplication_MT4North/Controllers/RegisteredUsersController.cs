@@ -21,7 +21,6 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/RegisteredUsers
-        [Route("~/api/GetAllRegisteredUsers")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RegisteredUser>>> GetRegisteredUsers()
         {
@@ -29,7 +28,6 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/RegisteredUsers/5
-        [Route("~/api/GetRegisteredUser")]
         [HttpGet("{id}")]
         public async Task<ActionResult<RegisteredUser>> GetRegisteredUser(int id)
         {
@@ -46,7 +44,6 @@ namespace WebApplication_MT4North.Controllers
         // PUT: api/RegisteredUsers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Route("~/api/UpdateRegisteredUser")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRegisteredUser(int id, RegisteredUser registeredUser)
         {
@@ -79,7 +76,6 @@ namespace WebApplication_MT4North.Controllers
         // POST: api/RegisteredUsers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Route("~/api/AddRegisteredUser")]
         [HttpPost]
         public async Task<ActionResult<RegisteredUser>> PostRegisteredUser(RegisteredUser registeredUser)
         {
@@ -90,7 +86,6 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/RegisteredUsers/5
-        [Route("~/api/DeleteRegisteredUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RegisteredUser>> DeleteRegisteredUser(int id)
         {

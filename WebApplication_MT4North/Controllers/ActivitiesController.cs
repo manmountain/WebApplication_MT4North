@@ -21,7 +21,6 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/Activities
-        [Route("~/api/GetAllActivities")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Activity>>> GetActivities()
         {
@@ -29,7 +28,6 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/Activities/5
-        [Route("~/api/GetActivity")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Activity>> GetActivity(int id)
         {
@@ -46,7 +44,6 @@ namespace WebApplication_MT4North.Controllers
         // PUT: api/Activities/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Route("~/api/UpdateActivity")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutActivity(int id, Activity activity)
         {
@@ -79,7 +76,6 @@ namespace WebApplication_MT4North.Controllers
         // POST: api/Activities
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Route("~/api/AddActivity")]
         [HttpPost]
         public async Task<ActionResult<Activity>> PostActivity(Activity activity)
         {
@@ -90,7 +86,6 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/Activities/5
-        [Route("~/api/DeleteActivity")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Activity>> DeleteActivity(int id)
         {

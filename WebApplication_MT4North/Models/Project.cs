@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace WebApplication_MT4North.Models
 {
-    public class Project
+    public partial class Project
     {
-        public int RegisteredUserId { get; set; }
-        public int RegisteredUserId { get; set; }
-        public int RegisteredUserId { get; set; }
-        public int RegisteredUserId { get; set; }
+        public Project()
+        {
+            RegisteredUserProjects = new HashSet<RegisteredUserProject>();
+        }
 
+        public int ProjectId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public virtual InnovationModel InnovationModel { get; set; }
+        public virtual ICollection<RegisteredUserProject> RegisteredUserProjects { get; set; }
     }
 }

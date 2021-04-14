@@ -30,8 +30,14 @@ schemes:
 - "https"
 - "http"
 paths:
-
-  /user/login:
+    /user/projects/{findById}:
+    /project/{findById}:
+    /activity/{findById}:
+    /note/{findById}:
+    /baseActivityInfo/{findById}:
+    /customActivityInfo/{findById}:
+    /theme/{findById}:
+    /user/login:
     get:
       tags:
       - "user"

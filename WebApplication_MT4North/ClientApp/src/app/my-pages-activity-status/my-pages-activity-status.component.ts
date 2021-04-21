@@ -4,7 +4,7 @@ import { Activity } from "../models/activity.model";
 import { Phase } from "../models/common";
 import { Status } from "../models/common";
 import { ViewService } from "../view.service";
-import html2canvas from 'html2canvas';
+//import html2canvas from 'html2canvas';
 
 //import { Console } from 'console';
 
@@ -178,15 +178,16 @@ export class MyPagesActivityStatusComponent {
 
     this.collapseAll();
 
+    /*
     html2canvas(this.imTableView.nativeElement).then(canvas => {
-      /*this.canvas.nativeElement.src = canvas.toDataURL();*/
+      //this.canvas.nativeElement.src = canvas.toDataURL();
       this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
       this.downloadLink.nativeElement.download = 'project-name-' + this.selectedDate +'.png';
       this.downloadLink.nativeElement.click();
       this.isScreenshotting = false;
       console.log('screenshot created');
     });
-
+    */
     /*this.imTableView.nativeElement.removeClass += " animate";*/
 
 

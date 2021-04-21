@@ -99,6 +99,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.spec.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="ClientApp\src\assets\images\img1.jpg">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

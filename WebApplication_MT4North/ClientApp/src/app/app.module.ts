@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -24,10 +24,11 @@ import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pa
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
 import { MatchesPhasePipe } from './models/matchesPhasePipe'; 
 import { EnumToArrayPipe } from './models/enumToArrayPipe';
-import { RegisteredUsersComponent } from './registered-users/registered-users.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'register', component: RegisterComponent },
   { path: 'counter', component: CounterComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   { path: 'login', component: LoginComponent },
@@ -87,12 +88,13 @@ const routes: Routes = [
     MyPagesProjectSettingsComponent,
     MatchesPhasePipe,
     EnumToArrayPipe,
-    RegisteredUsersComponent
+    RegisterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
    // ConnectionServiceModule,
     RouterModule.forRoot(routes)
     

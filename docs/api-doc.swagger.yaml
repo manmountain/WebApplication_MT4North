@@ -1,0 +1,440 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Medtech Innovation Model"
+  termsOfService: "http://domain.io/terms/"
+  contact:
+    email: "apiteam@domain.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.domain.io"
+basePath: "/v1"
+tags:
+- name: "activity"
+  description: "Everything about your activities"
+- name: "model"
+  description: "Everything about the innovation models"
+- name: "note"
+  description: "Everything about notes"
+- name: "project"
+  description: "Everything about projects"  
+- name: "user"
+  description: "Everything about user"
+- name: "userProject"
+  description: "Everything about user projects"
+- name: "theme"
+  description: "Everything about themes"
+schemes:
+- "https"
+- "http"
+paths:
+    /user/projects/{findById}:
+    /project/{findById}:
+    /activity/{findById}:
+    /note/{findById}:
+    /baseActivityInfo/{findById}:
+    /customActivityInfo/{findById}:
+    /theme/{findById}:
+    /user/login:
+    get:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        "400":
+          description: "Invalid username/password supplied"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+  /user/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user name"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/RegisteredUser"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/RegisteredUser"
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Activity:
+    type: "object"
+    properties:
+      activityId:
+        type: "integer"
+        format: "int64"
+      themeId:
+        type: "integer"
+        format: "int64"
+      excluded:
+        type: "boolean"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      phase:
+        type: "string"
+      status:
+        type: "string"
+      startdate:
+        type: "string"
+        format: "date-time"
+      finishdate:
+        type: "string"
+        format: "date-string"
+      deadline:
+        type: "string"
+        format: "date-time"
+      resources:
+        type: "string"
+      projectId:
+        type: "integer"
+        format: "int64"
+      baseInfoId:
+        type: "integer"
+        format: "int64"
+  BaseActivityInfo:
+    type: "object"
+    properties:
+      baseActivityInfoId:
+        type: "integer"
+        format: "int64"
+      themeId:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      phase:
+        type: "string"
+      activities:
+        type: "array"
+        xml:
+          name: "Activities"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/Activity"  
+  CustomActivityInfo:
+    type: "object"
+    properties:
+      customActivityInfoId:
+        type: "integer"
+        format: "int64"
+      themeId:
+        type: "integer"
+        format: "int64"
+      activityId:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      phase:
+        type: "string"  
+  InnovationModel:
+    type: "object"
+    properties:
+      innovationModelId:
+        type: "integer"
+        format: "int64"
+      projectId:
+        type: "integer"
+        format: "int64"
+      themes:
+        type: "array"
+        xml:
+          name: "Themes"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/Theme"
+  Note:
+    type: "object"
+    properties:
+      noteId:
+        type: "integer"
+        format: "int64"
+      activityId:
+        type: "integer"
+        format: "int64"
+      userId:
+        type: "integer"
+        format: "int64"
+      timestamp:
+        type: "string"
+        format: "date-time"
+      text:
+        type: "string"
+    xml:
+      name: "Note"
+  Project:
+    type: "object"
+    properties:
+      projectId:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      activities:
+        type: "array"
+        xml:
+          name: "Activity"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/Activity"
+      innovationModels:
+        type: "array"
+        xml:
+          name: "InnovationModel"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/InnovationModel"
+      registeredUserProjects:
+        type: "array"
+        xml:
+          name: "RegisteredUserProject"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/RegisteredUserProject"
+    xml:
+      name: "Projects"
+  RegisteredUser:
+    type: "object"
+    properties:
+      RegisteredUserId:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      password:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      sex:
+        type: "string"
+        description: "sex"
+        enum:
+        - "female"
+        - "male"
+        - "other"
+      email:
+        type: "string"
+      companyName:
+        type: "string"
+      companySize:
+        type: "integer"
+      country:
+        type: "string"
+      profilePicture:
+        type: "string"
+      userType:
+        type: "string"
+        enum:
+          - "sitetadmin"
+          - "projectadmin"
+          - "user"
+      userRole:
+        type: "string"
+        enum:
+          - "aaa"
+          - "bbb"
+          - "ccc"
+    xml:
+      name: "RegisteredUser"
+  RegisteredUserProject:      
+    type: "object"
+    properties:
+      registeredUserProjectId:
+        type: "integer"
+        format: "int64"
+      role:
+        type: "string"
+      rights:
+        type: "string"
+        enum:
+          - "aaa"
+          - "bbb"
+          - "ccc"
+      projectid:
+        type: "integer"
+        format: "int64"
+      registeredUserId:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "RegisteredUserProject"
+  Theme:
+    type: "object"
+    properties:
+      ThemeId:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      InnovationModelId:
+        type: "integer"
+        format: "int64"
+      Activities:
+        type: "array"
+        xml:
+          name: "Activity"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/Activity"
+      BaseActivityInfos:
+        type: "array"
+        xml:
+          name: "BaseActivityInfo"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/BaseActivityInfo"
+      CustomActivityInfos:
+        type: "array"
+        xml:
+          name: "CustomActivityInfo"
+          wrapped: true
+        items:
+          type: "object"
+          $ref: "#/definitions/CustomActivityInfo"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

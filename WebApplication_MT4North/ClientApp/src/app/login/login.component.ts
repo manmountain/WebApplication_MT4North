@@ -1,5 +1,12 @@
 import { sharedStylesheetJitUrl } from '@angular/compiler';
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
+
+export class Student {
+  public name: string;
+  public email: string;
+  public password: string;
+  public subjects: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -8,11 +15,9 @@ import { Component} from '@angular/core';
  
 })
 export class LoginComponent {
+  model = new Student();
 
-   public currentCount = 1000;
-
-  public decrementCount() {
-    this.currentCount--;
-  } 
-    
+  submit(data) {
+    console.log(data.value)
+  }
 }

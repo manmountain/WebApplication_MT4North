@@ -23,6 +23,9 @@ export class RegisterComponent implements OnInit {
     'Finance'
   ];
 
+
+  ngOnInit() { }
+
   constructor() { }
 
   submit(data) {

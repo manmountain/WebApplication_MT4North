@@ -1,50 +1,86 @@
-<div class="container p-5 mb-2 mt-5 bg-info text-dark bk7-homebody-helabg body-height" >
-  
-  <div class="row-6 p-5 mt-1">
+<div class="container p-5 mb-2 mt-5t">
 
-    <!--<div class="col-lg-4"></div>-->
-    
-    <div class="col-lg-4 container">
-      <div class="form-group">
-        <h4>Logga in siden</h4>
-        <p>Här Kommer Logga in.. Angular component.</p>
+  <div class="container mt-5" style="max-width: 550px;">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">
+          Logga in
+        </h4>
+        <form #myForm="ngForm" (ngSubmit)="submit(myForm)">
+          <!--
+          <div class="form-group">
+            <label>Namn</label>
+            <input type="text"
+                   class="form-control"
+                   name="name"
+                   [(ngModel)]="model.name"
+                   #name="ngModel"
+                   [ngClass]="{ 'is-invalid': myForm.submitted && name.invalid }"
+                   required>
+            -->
+          <!-- Error -->
+          <!--
+                  <div class="text-danger mt-1" *ngIf="myForm.submitted && name.invalid">
+                    <p *ngIf="name.errors.required">Name value is required.</p>
+                  </div>
+          </div>
+          -->
 
-        <!--
-          <p>Current count: <strong>{{ currentCount }}</strong></p>
-          <button (click)="decrementCounter()">Decrement</button>
-         -->
+          <div class="form-group">
+            <label>E-post</label>
+            <input type="email"
+                   class="form-control"
+                   name="email"
+                   [(ngModel)]="model.email"
+                   #email="ngModel"
+                   [ngClass]="{ 'is-invalid': myForm.submitted && email.invalid }"
+                   required>
 
+            <!-- Error -->
+            <div *ngIf="myForm.submitted && email.invalid" class="invalid-feedback">
+              <div *ngIf="email.errors.required">Ange e-postadress.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Lösenord</label>
+            <input type="password"
+                   class="form-control"
+                   name="password"
+                   [(ngModel)]="model.password"
+                   #password="ngModel"
+                   [ngClass]="{ 'is-invalid': myForm.submitted && password.invalid }"
+                   minlength="6"
+                   required>
+
+            <!-- Error -->
+            <div *ngIf="myForm.submitted && password.invalid" class="invalid-feedback">
+              <div *ngIf="password.errors.required">Ange lösenord.</div>
+            </div>
+          </div>
+
+          <!--
+          <div class="form-group">
+            <label>Subjects</label>
+            <select class="form-control" name="subjects" [(ngModel)]="subjects">
+              <option value="">Choose value</option>
+              <option *ngFor="let subject of Subjects" [value]="subject">
+                {{subject}}
+              </option>
+            </select>
+          </div>
+
+                      -->
+          <div class="form-group">
+            <button class="btn btn-primary btn-block">Logga in</button>
+          </div>
+        </form>
       </div>
-    </div>    
-    
-    <div class="col-lg-4 container">
-      <form class="p-3 mb-2 text-white form_login container-fluid">
-      <div class="form-group">
-        <label for="exampleInputEmail1">E-post Adress:</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-       <!-- <small id="emailHelp" class="form-text text-white">We'll never share your email with anyone else.</small>-->
-      </div>
-      <div class="form-group">
-       <label for="exampleInputPassword1">Lösnord:</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
-      </div>
-      <div class="form-group form-check">
-        <!-- <input type="checkbox" class="form-check-input" id="exampleCheck1">
-             <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-      </form>  
     </div>
-
-    <div class="col-lg-4 container">
-
-
-    </div>
-
+    <p class="text-secondary text-center mt-2">Saknar du ett konto? <a class="nav-link-default" [routerLink]="['/register']">Registrera dig</a></p>
   </div>
-
-
-
-
-
 </div>
+
+
+
+

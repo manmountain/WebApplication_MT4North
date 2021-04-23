@@ -1,79 +1,88 @@
 <div class="container p-5 mb-2 mt-5t">
 
-  <div class="row p-5 mt-1">
-    <div class="container mt-5" style="max-width: 550px;">
-
-    <form #myForm="ngForm" (ngSubmit)="submit(myForm)">
-      <div class="form-group">
-        <label>Förnamn</label>
-        <input type="text"
-               class="form-control"
-               name="name"
-               [(ngModel)]="model.name"
-               #name="ngModel"
-               [ngClass]="{ 'is-invalid': myForm.submitted && name.invalid }"
-               required>
-
-        <!-- Error -->
-        <div class="text-danger mt-1" *ngIf="myForm.submitted && name.invalid">
-          <p *ngIf="name.errors.required">Name value is required.</p>
+  <div class="container mt-5" style="max-width: 550px;">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">
+          Skapa ett konto
+        </h4>
+        <form #myForm="ngForm" (ngSubmit)="submit(myForm)">
+          <!--
+        <div class="form-group">
+          <label>Namn</label>
+          <input type="text"
+                 class="form-control"
+                 name="name"
+                 [(ngModel)]="model.name"
+                 #name="ngModel"
+                 [ngClass]="{ 'is-invalid': myForm.submitted && name.invalid }"
+                 required>
+          -->
+          <!-- Error -->
+          <!--
+                <div class="text-danger mt-1" *ngIf="myForm.submitted && name.invalid">
+                  <p *ngIf="name.errors.required">Name value is required.</p>
+                </div>
         </div>
-      </div>
+        -->
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email"
-               class="form-control"
-               name="email"
-               [(ngModel)]="model.email"
-               #email="ngModel"
-               [ngClass]="{ 'is-invalid': myForm.submitted && email.invalid }"
-               required>
+          <div class="form-group">
+            <label>E-post</label>
+            <input type="email"
+                   class="form-control"
+                   name="email"
+                   [(ngModel)]="model.email"
+                   #email="ngModel"
+                   [ngClass]="{ 'is-invalid': myForm.submitted && email.invalid }"
+                   required>
 
-        <!-- Error -->
-        <div *ngIf="myForm.submitted && email.invalid" class="invalid-feedback">
-          <div *ngIf="email.errors.required">Email is required.</div>
-          <div *ngIf="email.errors.email">Please provide valid email.</div>
+            <!-- Error -->
+            <div *ngIf="myForm.submitted && email.invalid" class="invalid-feedback">
+              <div *ngIf="email.errors.required">E-post är obligatoriskt.</div>
+              <div *ngIf="email.errors.email">Skriv in en giltig e-postadress.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Lösenord</label>
+            <input type="password"
+                   class="form-control"
+                   name="password"
+                   [(ngModel)]="model.password"
+                   #password="ngModel"
+                   [ngClass]="{ 'is-invalid': myForm.submitted && password.invalid }"
+                   minlength="6"
+                   required>
+
+            <!-- Error -->
+            <div *ngIf="myForm.submitted && password.invalid" class="invalid-feedback">
+              <div *ngIf="password.errors.required">Ange ett starkt lösenord.</div>
+              <div *ngIf="password.errors.minlength">Minst 6 tecken krävs.</div>
+            </div>
+          </div>
+
+          <!--
+        <div class="form-group">
+          <label>Subjects</label>
+          <select class="form-control" name="subjects" [(ngModel)]="subjects">
+            <option value="">Choose value</option>
+            <option *ngFor="let subject of Subjects" [value]="subject">
+              {{subject}}
+            </option>
+          </select>
         </div>
+
+                    -->
+          <div class="form-group">
+            <button class="btn btn-primary btn-block">Registrera</button>
+          </div>
+        </form>
       </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password"
-               class="form-control"
-               name="password"
-               [(ngModel)]="model.password"
-               #password="ngModel"
-               [ngClass]="{ 'is-invalid': myForm.submitted && password.invalid }"
-               minlength="6"
-               required>
-
-        <!-- Error -->
-        <div *ngIf="myForm.submitted && password.invalid" class="invalid-feedback">
-          <div *ngIf="password.errors.required">Set a strong password.</div>
-          <div *ngIf="password.errors.minlength">Minimum 6 characters required.</div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Subjects</label>
-        <select class="form-control" name="subjects" [(ngModel)]="subjects">
-          <option value="">Choose value</option>
-          <option *ngFor="let subject of Subjects" [value]="subject">
-            {{subject}}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <button class="btn btn-primary btn-block">Submit</button>
-      </div>
-    </form>
-
-  </div>
-  </div>
-
-
-
-
+    </div>
+    <p class="text-secondary text-center mt-2">Har du redan ett konto? <a class="nav-link-default" [routerLink]="['/login']">Logga in</a></p>
 </div>
+  </div>
+
+
+
+

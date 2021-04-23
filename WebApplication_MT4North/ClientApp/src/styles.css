@@ -46,6 +46,15 @@ a.nav-link.active {
   color: black;
 }
 
+a.nav-link-default {
+  color: #0000EE;
+}
+
+  a.nav-link-default.active {
+    color: #0000EE;
+  }
+
+
 .alert {
   margin-bottom: 0;
   text-align: center;

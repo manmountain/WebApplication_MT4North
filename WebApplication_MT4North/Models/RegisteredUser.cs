@@ -18,7 +18,7 @@ namespace WebApplication_MT4North.Models
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string EmailAdress { get; set; }
+        public string EmailAdress { get; set; } //TODO: rename adress (swedish) to address (english)!
         public string Sex { get; set; }
 
         public virtual ICollection<Note> Notes { get; set; }

@@ -8,17 +8,20 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
+    "BackEnd_MT4North": {
+      "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "WebApplication_MT4North": {
+    "FrontEnd_MT4North": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5000",
+      "launchUrl": "my-pages/projects/activity-status",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

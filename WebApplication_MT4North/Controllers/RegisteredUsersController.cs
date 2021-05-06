@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +14,15 @@ namespace WebApplication_MT4North.Controllers
     [ApiController]
     public class RegisteredUsersController : ControllerBase
     {
-        private readonly CUSERSKAJO59SOURCEREPOSWEBAPPLICATION_MT4NORTHWEBAPPLICATION_MT4NORTHMODELSMEDTECHINNOVATIONMODEL_V2MDFContext _context;
+        private readonly MT4NorthContext _context;
 
-        public RegisteredUsersController(CUSERSKAJO59SOURCEREPOSWEBAPPLICATION_MT4NORTHWEBAPPLICATION_MT4NORTHMODELSMEDTECHINNOVATIONMODEL_V2MDFContext context)
+        public RegisteredUsersController(MT4NorthContext context)
         {
             _context = context;
         }
 
         // GET: api/RegisteredUsers
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RegisteredUser>>> GetRegisteredUsers()
         {

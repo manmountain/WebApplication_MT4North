@@ -11,6 +11,7 @@
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
     <UserSecretsId>c30ef148-c2ab-41c7-a230-eda6d874aedf</UserSecretsId>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -75,17 +76,18 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
-    <None Remove="ClientApp\src\app\models\activity.model.ts" />
-    <None Remove="ClientApp\src\app\models\common.ts" />
-    <None Remove="ClientApp\src\app\models\enumToArrayPipe.ts" />
-    <None Remove="ClientApp\src\app\models\matchesPhasePipe.ts" />
-    <None Remove="ClientApp\src\app\models\theme.model.ts" />
+    <None Remove="ClientApp\src\app\_models\activity.model.ts" />
+    <None Remove="ClientApp\src\app\_models\common.ts" />
+    <None Remove="ClientApp\src\app\_models\enumToArrayPipe.ts" />
+    <None Remove="ClientApp\src\app\_models\matchesPhasePipe.ts" />
+    <None Remove="ClientApp\src\app\_models\theme.model.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity-status\my-pages-activity-status.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity\my-pages-activity.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-members\my-pages-members.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-project\my-pages-project.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-start\my-pages-start.component.ts" />
     <None Remove="ClientApp\src\app\my-pages\my-pages.component.ts" />
+    <None Remove="ClientApp\src\app\_models\user.model.ts" />
     <None Remove="ClientApp\src\assets\images\img1.jpg" />
     <None Remove="ClientApp\src\assets\images\img2.jpg" />
     <None Remove="ClientApp\src\assets\images\img3.jpg" />
@@ -105,8 +107,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\app\home\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\login\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.spec.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_helpers\auth.guard.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_helpers\error.interceptor.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_helpers\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_helpers\jwt.interceptor.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_models\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\authentication.service.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\user.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -168,7 +180,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Update="ClientApp\src\app\models\activity.model.ts">
+    <None Update="ClientApp\src\app\_models\common - Copy.js.map">
+      <DependentUpon>common.js.map</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\src\app\_models\activity.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

@@ -1,9 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Theme } from "../models/theme.model";
-import { Activity } from "../models/activity.model";
-import { Phase } from "../models/common";
-import { Status } from "../models/common";
-import { ViewService } from "../view.service";
+import { Theme, Activity, Phase, Status } from "../_models";
+import { ViewService } from "../_services";
 //import html2canvas from 'html2canvas';
 
 //import { Console } from 'console';

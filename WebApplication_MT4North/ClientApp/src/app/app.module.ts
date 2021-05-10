@@ -12,7 +12,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './login';
 import { FooterComponent } from './footer/footer.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MyPagesComponent } from './my-pages/my-pages.component';
@@ -22,12 +22,13 @@ import { MyPagesStartComponent } from './my-pages-start/my-pages-start.component
 import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.component';
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
-import { MatchesPhasePipe } from './models/matchesPhasePipe'; 
-import { EnumToArrayPipe } from './models/enumToArrayPipe';
+import { MatchesPhasePipe, EnumToArrayPipe } from './_models';
+import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { RegisterComponent } from './register/register.component';
+import { AuthGuard } from './_helpers';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'counter', component: CounterComponent },
   { path: 'fetch-data', component: FetchDataComponent },
@@ -37,6 +38,7 @@ const routes: Routes = [
   {
     path: 'my-pages',
     component: MyPagesComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'start',
@@ -99,7 +101,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes)
     
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

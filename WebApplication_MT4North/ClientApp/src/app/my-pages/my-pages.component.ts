@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ViewService } from "../view.service";
+import { ViewService } from "../_services";
 
 
 @Component({

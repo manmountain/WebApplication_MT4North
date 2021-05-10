@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewService } from "../view.service";
+import { ViewService } from "../_services";
 
 @Component({
   selector: 'app-my-pages-project',

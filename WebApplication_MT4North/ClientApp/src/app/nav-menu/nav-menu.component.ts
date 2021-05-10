@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { ViewService } from "../view.service";
+import { Router } from '@angular/router';
+
+import { ViewService, AuthenticationService } from "../_services";
+import { User } from '../_models';
 
 @Component({
   selector: 'app-nav-menu',
@@ -9,8 +12,13 @@ import { ViewService } from "../view.service";
 
 
 export class NavMenuComponent {
-  constructor(private viewService: ViewService) {
+  constructor(
+    private viewService: ViewService,
+    private router: Router,
+    private authenticationService: AuthenticationService) {
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
+  currentUser: User;
 
   isExpanded = false;
 
@@ -24,5 +32,11 @@ export class NavMenuComponent {
 
   isFullscreen() {
     return this.viewService.isFullscreen;
+  }
+
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
   }
 }

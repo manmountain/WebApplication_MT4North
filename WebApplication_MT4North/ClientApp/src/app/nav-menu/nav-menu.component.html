@@ -19,10 +19,16 @@
         <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
           <li class="">
             <ul class="navbar navbar-nav p-0">
-              <li class="nav-item" [routerLinkActive]="['link-active']">
+              <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']">
                 <a class="nav-link text-dark" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span>Registrera</a>
               </li>
-              <li class="nav-item" [routerLinkActive]="['link-active']">
+              <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+                <a class="nav-link text-dark" [routerLink]="['/my-pages/start']"><span class="glyphicon glyphicon-log-in"></span>Mina sidor</a>
+              </li>
+              <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+                <a class="nav-link text-dark" [routerLink]="['/']"(click)="logout()"><span class="glyphicon glyphicon-log-in"></span>Logga ut</a>
+              </li>
+              <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']">
                 <a class="nav-link text-dark" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
               </li>
             </ul>

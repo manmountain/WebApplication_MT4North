@@ -1,85 +1,112 @@
 <div class="container p-5 mb-2 mt-5t">
-
-  <div class="container mt-5" style="max-width: 550px;">
+  <div class="col-md-6 offset-md-3 mt-5">
     <div class="card">
+      <h4 class="card-header">Logga in</h4>
       <div class="card-body">
-        <h4 class="card-title text-center">
-          Logga in
-        </h4>
-        <form #myForm="ngForm" (ngSubmit)="submit(myForm)">
-          <!--
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label>Namn</label>
-            <input type="text"
-                   class="form-control"
-                   name="name"
-                   [(ngModel)]="model.name"
-                   #name="ngModel"
-                   [ngClass]="{ 'is-invalid': myForm.submitted && name.invalid }"
-                   required>
-            -->
-          <!-- Error -->
-          <!--
-                  <div class="text-danger mt-1" *ngIf="myForm.submitted && name.invalid">
-                    <p *ngIf="name.errors.required">Name value is required.</p>
-                  </div>
-          </div>
-          -->
-
-          <div class="form-group">
-            <label>E-post</label>
-            <input type="email"
-                   class="form-control"
-                   name="email"
-                   [(ngModel)]="model.email"
-                   #email="ngModel"
-                   [ngClass]="{ 'is-invalid': myForm.submitted && email.invalid }"
-                   required>
-
-            <!-- Error -->
-            <div *ngIf="myForm.submitted && email.invalid" class="invalid-feedback">
-              <div *ngIf="email.errors.required">Ange e-postadress.</div>
+            <label for="username">E-postadress</label>
+            <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+              <div *ngIf="f.username.errors.required">E-postadress krävs</div>
             </div>
           </div>
-
           <div class="form-group">
-            <label>Lösenord</label>
-            <input type="password"
-                   class="form-control"
-                   name="password"
-                   [(ngModel)]="model.password"
-                   #password="ngModel"
-                   [ngClass]="{ 'is-invalid': myForm.submitted && password.invalid }"
-                   minlength="6"
-                   required>
-
-            <!-- Error -->
-            <div *ngIf="myForm.submitted && password.invalid" class="invalid-feedback">
-              <div *ngIf="password.errors.required">Ange lösenord.</div>
+            <label for="password">Lösenord</label>
+            <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+              <div *ngIf="f.password.errors.required">Lösenord krävs</div>
             </div>
           </div>
-
-          <!--
-          <div class="form-group">
-            <label>Subjects</label>
-            <select class="form-control" name="subjects" [(ngModel)]="subjects">
-              <option value="">Choose value</option>
-              <option *ngFor="let subject of Subjects" [value]="subject">
-                {{subject}}
-              </option>
-            </select>
-          </div>
-
-                      -->
-          <div class="form-group">
-            <button class="btn btn-primary btn-block">Logga in</button>
-          </div>
+          <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Logga in
+          </button>
+          <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </form>
       </div>
     </div>
-    <p class="text-secondary text-center mt-2">Saknar du ett konto? <a class="nav-link-default" [routerLink]="['/register']">Registrera dig</a></p>
   </div>
-</div>
+  </div>
+
+  <!--<div class="container p-5 mb-2 mt-5t">
+
+    <div class="container mt-5" style="max-width: 550px;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-center">
+            Logga in
+          </h4>
+          <form #myForm="ngForm" (ngSubmit)="submit(myForm)">-->
+  <!--
+  <div class="form-group">
+    <label>Namn</label>
+    <input type="text"
+           class="form-control"
+           name="name"
+           [(ngModel)]="model.name"
+           #name="ngModel"
+           [ngClass]="{ 'is-invalid': myForm.submitted && name.invalid }"
+           required>
+    -->
+  <!-- Error -->
+  <!--
+          <div class="text-danger mt-1" *ngIf="myForm.submitted && name.invalid">
+            <p *ngIf="name.errors.required">Name value is required.</p>
+          </div>
+  </div>
+  -->
+  <!--<div class="form-group">
+    <label>E-post</label>
+    <input type="email"
+           class="form-control"
+           name="email"
+           [(ngModel)]="model.email"
+           #email="ngModel"
+           [ngClass]="{ 'is-invalid': myForm.submitted && email.invalid }"
+           required>-->
+  <!-- Error -->
+  <!--<div *ngIf="myForm.submitted && email.invalid" class="invalid-feedback">
+      <div *ngIf="email.errors.required">Ange e-postadress.</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Lösenord</label>
+    <input type="password"
+           class="form-control"
+           name="password"
+           [(ngModel)]="model.password"
+           #password="ngModel"
+           [ngClass]="{ 'is-invalid': myForm.submitted && password.invalid }"
+           minlength="6"
+           required>-->
+  <!-- Error -->
+  <!--<div *ngIf="myForm.submitted && password.invalid" class="invalid-feedback">
+      <div *ngIf="password.errors.required">Ange lösenord.</div>
+    </div>
+  </div>-->
+  <!--
+  <div class="form-group">
+    <label>Subjects</label>
+    <select class="form-control" name="subjects" [(ngModel)]="subjects">
+      <option value="">Choose value</option>
+      <option *ngFor="let subject of Subjects" [value]="subject">
+        {{subject}}
+      </option>
+    </select>
+  </div>
+
+              -->
+  <!--<div class="form-group">
+              <button class="btn btn-primary btn-block">Logga in</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <p class="text-secondary text-center mt-2">Saknar du ett konto? <a class="nav-link-default" [routerLink]="['/register']">Registrera dig</a></p>
+    </div>
+  </div>-->
 
 
 

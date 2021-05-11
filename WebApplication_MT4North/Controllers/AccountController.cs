@@ -147,6 +147,7 @@ namespace WebApplication_MT4North.Controllers
 
             var roles = await _userManager.GetRolesAsync(existingUser);
             var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name,  request.Email)); //FIXME: needed?!
             claims.Add(new Claim(ClaimTypes.Email, request.Email));
             foreach(var role in roles)
             {

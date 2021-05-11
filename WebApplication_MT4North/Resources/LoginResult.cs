@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 //using WebApplication_MT4North.Services;
 
-namespace WebApplication_MT4North.Controllers
+namespace WebApplication_MT4North.Resources
 {
     public class LoginResult
     {
@@ -10,7 +10,7 @@ namespace WebApplication_MT4North.Controllers
         public string UserName { get; set; }
 
         [JsonPropertyName("email")]
-        public string Email { get; internal set; }
+        public string Email { get; set; }
 
         [JsonPropertyName("roles")]
         public List<string> Roles { get; set; }

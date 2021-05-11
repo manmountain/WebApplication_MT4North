@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication_MT4North", "WebApplication_MT4North\WebApplication_MT4North.csproj", "{36B0F579-7574-4609-ABF7-8D0AB186D028}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication_MT4North.IntegrationTests", "WebApplication_MT4North.IntegrationTests\WebApplication_MT4North.IntegrationTests.csproj", "{CC31DD4C-6211-4F38-8199-D67CD3E676BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{36B0F579-7574-4609-ABF7-8D0AB186D028}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36B0F579-7574-4609-ABF7-8D0AB186D028}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36B0F579-7574-4609-ABF7-8D0AB186D028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC31DD4C-6211-4F38-8199-D67CD3E676BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC31DD4C-6211-4F38-8199-D67CD3E676BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC31DD4C-6211-4F38-8199-D67CD3E676BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC31DD4C-6211-4F38-8199-D67CD3E676BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

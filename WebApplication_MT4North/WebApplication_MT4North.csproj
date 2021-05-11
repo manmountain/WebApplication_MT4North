@@ -183,6 +183,9 @@
     <None Update="ClientApp\src\app\_models\common - Copy.js.map">
       <DependentUpon>common.js.map</DependentUpon>
     </None>
+    <None Update="Models\medtechinnovationmodel_v3.mdf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

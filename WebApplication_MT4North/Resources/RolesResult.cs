@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace WebApplication_MT4North.Controllers
+namespace WebApplication_MT4North.Resources
 {
     public class RolesResult
     {

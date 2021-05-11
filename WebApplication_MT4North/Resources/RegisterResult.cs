@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 //using WebApplication_MT4North.Services;
 
-namespace WebApplication_MT4North.Controllers
+namespace WebApplication_MT4North.Resources
 {
     public class RegisterResult
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using WebApplication_MT4North.Infrastructure;
-using WebApplication_MT4North.Services;
+//using WebApplication_MT4North.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using WebApplication_MT4North.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication_MT4North
 {
@@ -60,7 +61,18 @@ namespace WebApplication_MT4North
             });
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
-            services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IUserService, UserService>(); //REMOVEME: FIXME:
+            services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1d);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+            })
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<MT4NorthContext>();
 
             services.AddSwaggerGen(c =>
             {
@@ -114,7 +126,7 @@ namespace WebApplication_MT4North
                 {
                     c.SwaggerEndpoint("./v1/swagger.json", "MT4North Innovation API");
                     c.DocumentTitle = "MT4North Innovation API";
-                //c.RoutePrefix = string.Empty;
+                    //c.RoutePrefix = string.Empty;
                 });
             }
 

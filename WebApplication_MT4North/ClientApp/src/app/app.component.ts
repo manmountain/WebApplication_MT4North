@@ -11,14 +11,14 @@ import { User } from './_models';
 })
 export class AppComponent {
 
-  //currentUser: User;
+  currentUser: User;
 
-  //constructor(
-  //  private router: Router,
-  //  private authenticationService: AuthenticationService
-  //) {
-  //  this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
-  //}
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+  }
 
   //logout() {
   //  this.authenticationService.logout();

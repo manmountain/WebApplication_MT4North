@@ -75,11 +75,11 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     NavMenuComponent,
+    FooterComponent,
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
     LoginComponent,
-    FooterComponent,
     ContactUsComponent,
     MyPagesComponent,
     MyPagesStartComponent,

@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { User } from '../_models';
-import { UserService, AuthenticationService } from '../_services';
+import { UserService, AccountService } from '../_services';
 
 @Component({
   templateUrl: 'home.component.html',

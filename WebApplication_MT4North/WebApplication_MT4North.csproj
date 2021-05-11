@@ -116,7 +116,7 @@
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\jwt.interceptor.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_models\index.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\_services\authentication.service.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\account.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\user.service.ts" />
   </ItemGroup>

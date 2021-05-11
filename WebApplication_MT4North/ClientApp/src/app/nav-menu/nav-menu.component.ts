@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ViewService, AuthenticationService } from "../_services";
+import { ViewService, AccountService } from "../_services";
 import { HostListener } from '@angular/core';
 
 import { User } from '../_models';
@@ -17,7 +17,7 @@ export class NavMenuComponent {
   constructor(
     private viewService: ViewService,
     private router: Router,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AccountService) {
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
   currentUser: User;

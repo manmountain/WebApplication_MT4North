@@ -60,6 +60,14 @@ namespace WebApplication_MT4North.Controllers
 }
 
 {
+  "username": "test@test.io",
+  "email": "test@test.io",
+  "password": "S3cr3t#P4ssw0rd",
+  "firstname": "Test",
+  "lastname": "Testsson"
+}
+
+{
     "email": "user@mt4north.io",
     "password": "S3cr3t#P4ssw0rd"
 }
@@ -92,9 +100,17 @@ namespace WebApplication_MT4North.Controllers
             var username = request.Email;
             var newUser = new IdentityUser() { Email = request.Email, UserName = username };
             var userCreated = await _userManager.CreateAsync(newUser, request.Password);
+            if (!userCreated.Succeeded)
+            {
+                return BadRequest(new ErrorResult
+                {
+                    Message = "Error creating user with email: " + request.Email + " and username: " + request.UserName,
+                    Errors = userCreated.Errors.Select(x => x.Description).ToList()
+            });
+            }
+
             var roleResult = await _userManager.AddToRoleAsync(newUser, "BasicUser");
             var roles = await _userManager.GetRolesAsync(newUser);
-      
             if (userCreated.Succeeded && roleResult.Succeeded)
             {
                 return Ok(new RegisterResult
@@ -106,12 +122,10 @@ namespace WebApplication_MT4North.Controllers
                 });
             }
 
-            var errors = userCreated.Errors.Select(x => x.Description).ToList();
-            errors.AddRange(roleResult.Errors.Select(x => x.Description).ToList());
             return BadRequest(new ErrorResult
             {
                 Message = "Error creating user with email: "+request.Email+" and username: "+request.UserName,
-                Errors = errors
+                Errors = roleResult.Errors.Select(x => x.Description).ToList()
             });
         }
 
@@ -389,9 +403,50 @@ namespace WebApplication_MT4North.Controllers
             });
         }
 
+        [HttpDelete("user")]
+        public async Task<ActionResult> DeleteUserAsync()
+        {
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            if (string.IsNullOrWhiteSpace(userEmail))
+            {
+                return BadRequest(new ErrorResult
+                {
+                    Message = "Email cant be empty",
+                    Errors = new List<string>()
+                });
+            }
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                //return BadRequest("Can't find user to delete");
+                return BadRequest(new ErrorResult
+                {
+                    Message = "Can't find user with email: " + userEmail + " to delete",
+                    Errors = new List<string>()
+                });
+            }
+            var deleteResult = await _userManager.DeleteAsync(user);
+            if (deleteResult.Succeeded)
+            {
+                return Ok(new StatusResult
+                {
+                    Message = "User " + userEmail + " deleted"
+                });
+            }
+            else
+            {
+                var errors = deleteResult.Errors.Select(x => x.Description).ToList();
+                return BadRequest(new ErrorResult
+                {
+                    Message = "Error deleting user with email: " + userEmail,
+                    Errors = errors
+                });
+            }
+        }
+
         [HttpDelete("user/{userEmail}")]
         [Authorize(Roles = "AdminUser")]
-        public async Task<ActionResult> DeleteUserAsync(string userEmail)
+        public async Task<ActionResult> DeleteUserByEmailAsync(string userEmail)
         {
             var email = userEmail;
             if(string.IsNullOrWhiteSpace(email))
@@ -441,21 +496,21 @@ namespace WebApplication_MT4North.Controllers
             });
         }
 
-        [HttpPost("roles")]
+        [HttpPost("roles/{roleName}")]
         [Authorize(Roles = "AdminUser")]
         //[AllowAnonymous]
-        public async Task<IActionResult> CreateRole([FromBody] RoleRequest request)
+        public async Task<IActionResult> CreateRole(string roleName/*[FromBody] RoleRequest request*/)
         {
-            if (string.IsNullOrWhiteSpace(request.RoleName))
+            // FIXME: Can it happen?! :/
+            if (string.IsNullOrWhiteSpace(roleName/*request.RoleName*/))
             {
                 return BadRequest("Role name should be provided.");
             }
 
             var newRole = new IdentityRole
             {
-                Name = request.RoleName
+                Name = roleName //request.RoleName
             };
-
             var roleResult = await _roleManager.CreateAsync(newRole);
 
             if (roleResult.Succeeded)
@@ -463,24 +518,24 @@ namespace WebApplication_MT4North.Controllers
                 //return Ok();
                 return Ok(new StatusResult
                 {
-                    Message = "Role " + request.RoleName + " created"
+                    Message = "Role " + roleName/*request.RoleName*/ + " created"
                 });
             }
-
             return Problem(roleResult.Errors.First().Description, null, 500);
         }
 
-        [HttpDelete("roles")]
+        [HttpDelete("roles/{roleName}")]
         [Authorize(Roles = "AdminUser")]
         //[AllowAnonymous]
-        public async Task<IActionResult> DeleteRole([FromBody] RoleRequest request)
+        public async Task<IActionResult> DeleteRole(string roleName/*[FromBody] RoleRequest request*/)
         {
-            if (string.IsNullOrWhiteSpace(request.RoleName))
+            // FIXME: Can it happen?! :/
+            if (string.IsNullOrWhiteSpace(/*request.RoleName*/roleName))
             {
                 return BadRequest("Role name should be provided.");
             }
 
-            var role = _roleManager.Roles.SingleOrDefault(r => r.NormalizedName == request.RoleName.ToUpper());
+            var role = _roleManager.Roles.SingleOrDefault(r => r.NormalizedName == /*request.RoleName*/roleName.ToUpper());
             var roleResult = await _roleManager.DeleteAsync(role);
 
             if (roleResult.Succeeded)
@@ -488,7 +543,7 @@ namespace WebApplication_MT4North.Controllers
                 //return Ok();
                 return Ok(new StatusResult
                 {
-                    Message = "Role " + request.RoleName + " deleted"
+                    Message = "Role " + roleName/*request.RoleName*/ + " deleted"
                 });
             }
 

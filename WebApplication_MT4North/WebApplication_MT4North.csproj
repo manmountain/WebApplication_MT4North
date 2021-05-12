@@ -76,7 +76,9 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
+    <None Remove="ClientApp\src\app\_components\alert.component.ts" />
     <None Remove="ClientApp\src\app\_models\activity.model.ts" />
+    <None Remove="ClientApp\src\app\_models\alert.ts" />
     <None Remove="ClientApp\src\app\_models\common.ts" />
     <None Remove="ClientApp\src\app\_models\enumToArrayPipe.ts" />
     <None Remove="ClientApp\src\app\_models\matchesPhasePipe.ts" />
@@ -111,12 +113,14 @@
     <TypeScriptCompile Remove="ClientApp\src\app\login\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.spec.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_components\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\auth.guard.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\error.interceptor.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\jwt.interceptor.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_models\index.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\_services\authentication.service.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\account.service.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\alert.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\user.service.ts" />
   </ItemGroup>

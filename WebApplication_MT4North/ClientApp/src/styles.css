@@ -1,14 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
-a {
+
+/*a {
   color: #0366d6;
+}*/
+html {
+  scroll-behavior: smooth;
+}
+
+im-background-color {
+  background: #336699 !important;
+}
+
+.im-text-color-primary {
+  color: #336699;
+}
+
+.im-link-primary {
+   color: #8ed694;
+}
+
+.im-link-secondary {
+  color: white;
+}
+
+.im-btn-primary {
+  background: #8ed694;
 }
 
 code {
   color: #e01a76;
 }
-
 button:active {
   outline: none !important;
 }

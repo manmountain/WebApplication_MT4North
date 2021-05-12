@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ViewService, AuthenticationService } from "../_services";
+import { ViewService, AccountService } from "../_services";
+import { HostListener } from '@angular/core';
+
 import { User } from '../_models';
 
 @Component({
@@ -15,7 +17,7 @@ export class NavMenuComponent {
   constructor(
     private viewService: ViewService,
     private router: Router,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AccountService) {
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
   currentUser: User;
@@ -38,5 +40,16 @@ export class NavMenuComponent {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
+  }
+
+  @HostListener('window:scroll', ['$event'])
+
+  onWindowScroll() {
+    let element = document.querySelector('.navbar') as HTMLElement;
+    if (window.pageYOffset > element.clientHeight) {
+      element.classList.add('navbar-inverse');
+    } else {
+      element.classList.remove('navbar-inverse');
+    }
   }
 }

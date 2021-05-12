@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = void 0;
 exports.environment = {
     production: false,
-    apiUrl: 'http://localhost:5000'
+    apiUrl: 'http://localhost:5000/api'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as

@@ -13,6 +13,9 @@ im-background-color {
   background: #336699 !important;
 }
 
+.im-text-color-primary {
+  color: #336699;
+}
 
 .im-link-primary {
    color: #8ed694;

@@ -28,6 +28,9 @@ html {
 navbar {
   background: #336699;
 }
+header {
+  margin-bottom: 50px !important;
+}
 .nav-text-align{
   
 }

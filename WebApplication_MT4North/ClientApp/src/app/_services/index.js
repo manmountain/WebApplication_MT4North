@@ -13,4 +13,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./account.service"), exports);
 __exportStar(require("./user.service"), exports);
 __exportStar(require("./view.service"), exports);
+__exportStar(require("./alert.service"), exports);
 //# sourceMappingURL=index.js.map

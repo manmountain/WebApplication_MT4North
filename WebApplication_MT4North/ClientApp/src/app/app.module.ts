@@ -10,6 +10,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
+import { AlertComponent } from './_components';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './login';
@@ -23,9 +24,8 @@ import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.com
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
 import { MatchesPhasePipe, EnumToArrayPipe } from './_models';
-import { JwtInterceptor, ErrorInterceptor } from './_helpers';
+import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
 import { RegisterComponent } from './register/register.component';
-import { AuthGuard } from './_helpers';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -90,7 +90,8 @@ const routes: Routes = [
     MyPagesProjectSettingsComponent,
     MatchesPhasePipe,
     EnumToArrayPipe,
-    RegisterComponent
+    RegisterComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using WebApplication_MT4North.Resources;
 using System.Linq;
 using System.Collections.Generic;
+using WebApplication_MT4North.Models;
 
 namespace WebApplication_MT4North.Controllers
 {
@@ -25,12 +26,12 @@ namespace WebApplication_MT4North.Controllers
         private readonly ILogger<AccountController> _logger;
         //private readonly IUserService _userService;
         private readonly IJwtAuthManager _jwtAuthManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(
             ILogger<AccountController> logger,
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             //IUserService userService,
             IJwtAuthManager jwtAuthManager)
@@ -42,42 +43,18 @@ namespace WebApplication_MT4North.Controllers
             _jwtAuthManager = jwtAuthManager;
         }
 
-        /*
+/*
+Seeded development users
 {
-    "username": "user@mt4north.io",
-    "email": "user@mt4north.io",
-    "password": "S3cr3t#P4ssw0rd",
-    "firstname": "Us",
-    "lastname": "Er"
+    "email": "user@localhost",
+    "password": "P@ssw0rd1!"
 }
 
 {
-  "username": "admin@mt4north.io",
-  "email": "admin@mt4north.io",
-  "password": "S3cr3t#P4ssw0rd",
-  "firstname": "Ad",
-  "lastname": "Min"
+  "email": "admin@localhost",
+  "password": "P@ssw0rd1!"
 }
-
-{
-  "username": "test@test.io",
-  "email": "test@test.io",
-  "password": "S3cr3t#P4ssw0rd",
-  "firstname": "Test",
-  "lastname": "Testsson"
-}
-
-{
-    "email": "user@mt4north.io",
-    "password": "S3cr3t#P4ssw0rd"
-}
-
-{
-  "email": "admin@mt4north.io",
-  "password": "S3cr3t#P4ssw0rd"
-}
-        */
-
+*/
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -98,7 +75,14 @@ namespace WebApplication_MT4North.Controllers
             }
 
             var username = request.Email;
-            var newUser = new IdentityUser() { Email = request.Email, UserName = username };
+            var newUser = new ApplicationUser()
+            {
+                Email = request.Email,
+                UserName = username,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = request.Gender
+            };
             var userCreated = await _userManager.CreateAsync(newUser, request.Password);
             if (!userCreated.Succeeded)
             {
@@ -174,6 +158,9 @@ namespace WebApplication_MT4North.Controllers
             {
                 UserName = existingUser.UserName,
                 Email = existingUser.Email,
+                FirstName = existingUser.FirstName,
+                LastName = existingUser.LastName,
+                Gender = existingUser.Gender,
                 Roles = roles.ToList<string>(),
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
@@ -230,16 +217,15 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user); //??
 
             return Ok(new UserResult
             {
-                //UserName = user.UserName,
+                UserName = user.UserName,
                 Email = user.Email,
-                //Roles = (List<string>)roles,
-                FirstName = "TODO",
-                LastName = "TODO",
-                Gender = "TODO"
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Gender = user.Gender
             });
         }
 
@@ -293,21 +279,17 @@ namespace WebApplication_MT4North.Controllers
                 user.Email = request.Email;
                 user.UserName = request.Email;
             }
-            if (!string.IsNullOrWhiteSpace(request.Email))
-            {
-                user.Email = request.Email;
-            }
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
-                //user.FirstName = request.FirstName;
+                user.FirstName = request.FirstName;
             }
             if (!string.IsNullOrWhiteSpace(request.LastName))
             {
-                //user.EmaLastNameil = request.LastName;
+                user.LastName = request.LastName;
             }
             if (!string.IsNullOrWhiteSpace(request.Gender))
             {
-                //user.Gender = request.Gender;
+                user.Gender = request.Gender;
             }
             //
             var updateResult = await _userManager.UpdateAsync(user);
@@ -316,10 +298,11 @@ namespace WebApplication_MT4North.Controllers
             {
                 return Ok(new UserResult
                 {
+                    UserName = user.UserName,
                     Email = user.Email,
-                    FirstName = "TODO",
-                    LastName = "TODO",
-                    Gender = "TODO"
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Gender = user.Gender
                 });
             }
 
@@ -348,15 +331,15 @@ namespace WebApplication_MT4North.Controllers
             }
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
-                //user.FirstName = request.FirstName;
+                user.FirstName = request.FirstName;
             }
             if (!string.IsNullOrWhiteSpace(request.LastName))
             {
-                //user.EmaLastNameil = request.LastName;
+                user.LastName = request.LastName;
             }
             if (!string.IsNullOrWhiteSpace(request.Gender))
             {
-                //user.Gender = request.Gender;
+                user.Gender = request.Gender;
             }
             //
             var updateResult = await _userManager.UpdateAsync(user);
@@ -365,10 +348,11 @@ namespace WebApplication_MT4North.Controllers
             {
                 return Ok(new UserResult
                 {
+                    UserName = user.UserName,
                     Email = user.Email,
-                    FirstName = "TODO",
-                    LastName = "TODO",
-                    Gender = "TODO"
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Gender = user.Gender
                 });
             }
 

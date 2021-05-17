@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace WebApplication_MT4North.Models
 {
-    public partial class MT4NorthContext : IdentityDbContext
+    public partial class MT4NorthContext : IdentityDbContext<ApplicationUser>
     {
         public MT4NorthContext()
         {
@@ -42,6 +42,7 @@ namespace WebApplication_MT4North.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.HasAnnotation("Relational:Collation", "Finnish_Swedish_CI_AS");
 
             modelBuilder.Entity<Activity>(entity =>
@@ -322,6 +323,7 @@ namespace WebApplication_MT4North.Models
 
 
             // Identity Start
+            /*
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
@@ -576,7 +578,7 @@ namespace WebApplication_MT4North.Models
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
-            });
+            });*/
             // Identity End
 
             OnModelCreatingPartial(modelBuilder);

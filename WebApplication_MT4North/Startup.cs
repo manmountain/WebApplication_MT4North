@@ -62,7 +62,7 @@ namespace WebApplication_MT4North
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
             //services.AddScoped<IUserService, UserService>(); //REMOVEME: FIXME:
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequiredLength = 8;

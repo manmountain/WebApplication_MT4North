@@ -37,7 +37,7 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var credentials = new LoginRequest
             {
-                Email = "admin@mt4north.io",
+                Email = "admin@localhost",
                 Password = "invalidPassword"
             };
             var response = await _httpClient.PostAsync("api/account/login",
@@ -82,11 +82,6 @@ namespace WebApplication_MT4North.IntegrationTests
         [TestMethod]
         public async Task ShouldBeAbleToRegistrateUpdateAndDeleteUser()
         {
-            /*var credentials = new RegisterRequest
-            {
-                Email = "testuser@mt4north.io",
-                Password = "T3st#P4ssw0rd"
-            };*/
             var credentials = new RegisterRequest
             {
                 UserName = "testuser@mt4north.io",
@@ -144,6 +139,23 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, newLoginResponse.StatusCode);
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, newLoginResult.AccessToken);
+
+            // 5. Update User info
+            var userUpdate = new UserRequest
+            {
+                FirstName = "Upd",
+                LastName = "Ated"
+            };
+            var updateUserResponse = await _httpClient.PutAsync("api/account/user",
+                new StringContent(JsonSerializer.Serialize(userUpdate), Encoding.UTF8, MediaTypeNames.Application.Json));
+            Assert.AreEqual(HttpStatusCode.OK, updatePasswordResponse.StatusCode);
+
+            var updatedUserResponseContent = await updateUserResponse.Content.ReadAsStringAsync();
+            var updatedUserResult = JsonSerializer.Deserialize<UserResult>(updatedUserResponseContent);
+
+            Assert.AreEqual(updatedUserResult.FirstName, "Upd");
+            Assert.AreEqual(updatedUserResult.LastName,  "Ated");
+
             /*logoutResponse = await _httpClient.PostAsync("api/account/logout", null);
             Assert.AreEqual(HttpStatusCode.OK, logoutResponse.StatusCode);
             _httpClient.DefaultRequestHeaders.Authorization = null;*/
@@ -172,7 +184,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, logoutResponse.StatusCode);
             _httpClient.DefaultRequestHeaders.Authorization = null;*/
 
-            // 5. Delete User
+            // 6. Delete User
             var deleteResponse = await _httpClient.DeleteAsync("api/account/user/");
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
         }
@@ -197,8 +209,8 @@ namespace WebApplication_MT4North.IntegrationTests
 
             var adminCredentials = new RegisterRequest
             {
-                Email = "admin@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
             };
 
             // 2. Login as admin and delete it
@@ -221,8 +233,8 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var adminCredentials = new RegisterRequest
             {
-                Email = "admin@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
             };
 
             // 1. Login as admin and delete a user that does not exist
@@ -246,8 +258,8 @@ namespace WebApplication_MT4North.IntegrationTests
             
             var basicCredentials = new RegisterRequest
             {
-                Email = "user@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "user@localhost",
+                Password = "P@ssw0rd1!"
             };
 
             // Login as a basic user and try to delete a user (admin user in this case)
@@ -265,7 +277,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(loginResult.RefreshToken));
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, loginResult.AccessToken);
-            var deleteResponse = await _httpClient.DeleteAsync("api/account/user/admin@mt4north.io");
+            var deleteResponse = await _httpClient.DeleteAsync("api/account/user/admin@localhost");
             Assert.AreEqual(HttpStatusCode.Forbidden, deleteResponse.StatusCode);
         }
 
@@ -275,8 +287,8 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var adminCredentials = new RegisterRequest
             {
-                Email = "admin@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
             };
             var newRoleName = "TestUser";
             // 1. Login as admin
@@ -351,8 +363,8 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var basicCredentials = new RegisterRequest
             {
-                Email = "user@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "user@localhost",
+                Password = "P@ssw0rd1!"
             };
             var newRoleName = "TestUser";
             // 1. Login as admin
@@ -392,8 +404,8 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var credentials = new LoginRequest
             {
-                Email = "admin@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
             };
             var loginResponse = await _httpClient.PostAsync("api/account/login",
                 new StringContent(JsonSerializer.Serialize(credentials), Encoding.UTF8, MediaTypeNames.Application.Json));
@@ -404,7 +416,7 @@ namespace WebApplication_MT4North.IntegrationTests
 
             Assert.AreEqual(credentials.Email, loginResult.Email);
             //Assert.IsNull(loginResult.OriginalUserName); //REMOVEME:
-            var roles = new List<string>(new string[] { "BasicUser", "AdminUser" });
+            var roles = new List<string>(new string[] { /*"BasicUser",*/ "AdminUser" });
             CollectionAssert.AreEqual(roles, loginResult.Roles); 
             Assert.IsFalse(string.IsNullOrWhiteSpace(loginResult.AccessToken));
             Assert.IsFalse(string.IsNullOrWhiteSpace(loginResult.RefreshToken));
@@ -414,8 +426,8 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(credentials.Email, principal.Identity.Name);
             var claimRoles = principal.FindAll(ClaimTypes.Role); //FindFirst(ClaimTypes.Role);
             var v = claimRoles.ElementAt(0);
-            Assert.AreEqual("BasicUser", claimRoles.ElementAt(0).Value); // principal.FindFirst(ClaimTypes.Role).Value);
-            Assert.AreEqual("AdminUser", claimRoles.ElementAt(1).Value);
+            Assert.AreEqual("AdminUser", principal.FindFirst(ClaimTypes.Role).Value);
+            //Assert.AreEqual("AdminUser", claimRoles.ElementAt(0).Value);
             Assert.IsNotNull(jwtSecurityToken);
         }
 
@@ -424,8 +436,8 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var credentials = new LoginRequest
             {
-                Email = "admin@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
             };
             var loginResponse = await _httpClient.PostAsync("api/account/login",
                 new StringContent(JsonSerializer.Serialize(credentials), Encoding.UTF8, MediaTypeNames.Application.Json));
@@ -444,7 +456,7 @@ namespace WebApplication_MT4North.IntegrationTests
         [TestMethod]
         public async Task ShouldCorrectlyRefreshToken()
         {
-            const string userName = "admin@mt4north.io";
+            const string userName = "admin@localhost";
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,userName),
@@ -474,7 +486,7 @@ namespace WebApplication_MT4North.IntegrationTests
         [TestMethod]
         public async Task ShouldNotAllowToRefreshTokenWhenRefreshTokenIsExpired()
         {
-            const string userName = "admin@mt4north.io";
+            const string userName = "admin@localhost";
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,userName),
@@ -502,8 +514,8 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var credentials = new LoginRequest
             {
-                Email = "admin@mt4north.io",
-                Password = "S3cr3t#P4ssw0rd"
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
             };
             // login
             var loginResponse = await _httpClient.PostAsync("api/account/login",

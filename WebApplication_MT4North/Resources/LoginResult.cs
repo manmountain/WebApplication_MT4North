@@ -12,17 +12,26 @@ namespace WebApplication_MT4North.Resources
         [JsonPropertyName("email")]
         public string Email { get; set; }
 
+        [JsonPropertyName("firstname")]
+        public string FirstName { get; set; }
+
+        [JsonPropertyName("lastname")]
+        public string LastName { get; set; }
+
+        [JsonPropertyName("gender")]
+        public string Gender { get; set; }
+
         [JsonPropertyName("roles")]
         public List<string> Roles { get; set; }
 
-        [JsonPropertyName("originalUserName")]
-        public string OriginalUserName { get; set; }
+        /*[JsonPropertyName("originalUserName")]
+        public string OriginalUserName { get; set; }*/
 
         [JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }
 
         [JsonPropertyName("refreshToken")]
         public string RefreshToken { get; set; }
-
+        
     }
 }

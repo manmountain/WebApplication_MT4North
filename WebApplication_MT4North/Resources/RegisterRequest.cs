@@ -21,5 +21,8 @@ namespace WebApplication_MT4North.Resources
 
         [JsonPropertyName("lastname")]
         public string LastName { get; set; }
+
+        [JsonPropertyName("gender")]
+        public string Gender { get; set; }
     }
 }

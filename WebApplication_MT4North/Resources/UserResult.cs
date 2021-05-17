@@ -5,6 +5,9 @@ namespace WebApplication_MT4North.Resources
 {
     public class UserResult
     {
+        [JsonPropertyName("username")]
+        public string UserName { get; set; }
+
         [JsonPropertyName("email")]
         public string Email { get; set; }
 

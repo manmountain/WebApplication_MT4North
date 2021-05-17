@@ -75,6 +75,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210514093855_Extend_IdentityUser.cs" />
+    <Compile Remove="Migrations\20210514093855_Extend_IdentityUser.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
     <None Remove="ClientApp\src\app\_components\alert.component.ts" />
     <None Remove="ClientApp\src\app\_models\activity.model.ts" />

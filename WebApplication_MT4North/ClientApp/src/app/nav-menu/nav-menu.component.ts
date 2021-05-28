@@ -17,8 +17,8 @@ export class NavMenuComponent {
   constructor(
     private viewService: ViewService,
     private router: Router,
-    private authenticationService: AccountService) {
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    private accountService: AccountService) {
+    this.accountService.currentUser.subscribe(x => this.currentUser = x);
   }
   currentUser: User;
 
@@ -38,7 +38,7 @@ export class NavMenuComponent {
 
 
   logout() {
-    this.authenticationService.logout();
+    this.accountService.logout();
     this.router.navigate(['/login']);
   }
 

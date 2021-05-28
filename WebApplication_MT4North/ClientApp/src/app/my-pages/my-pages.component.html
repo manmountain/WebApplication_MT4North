@@ -11,7 +11,7 @@
       <div class="media d-flex align-items-center">
        <!-- <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
         <div class="media-body">
-          <h4 class="m-0">{{currentUser?.email}}</h4>
+          <h4 class="m-0">{{currentUser?.firstname}} {{currentUser?.lastname}}</h4>
           <p class="font-weight-light text-muted mb-0">Organisation</p>
         </div>
       </div>
@@ -44,7 +44,7 @@
           <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
               <ul class="list-group">
-                <li class="list-group-item" [routerLink]="['./start']"><i class="fa fa-pencil"></i> Redigera</li>
+                <li class="list-group-item" [routerLink]="['./edit-account']"><i class="fa fa-pencil"></i> Redigera</li>
                 <li class="list-group-item"><a href="#"><i class="fa fa-key"></i> Ändra lösenord</a></li>
                 <li class="list-group-item"><a href="#" class="text-danger"><i class="fa fa-trash"></i> Ta bort konto</a></li>
               </ul>

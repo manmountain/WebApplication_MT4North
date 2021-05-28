@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '../_services';
 
 @Component({ templateUrl: 'login.component.html' })
+
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
@@ -33,7 +34,7 @@ export class LoginComponent implements OnInit {
     });
 
     // get return url from route parameters or default to '/'
-      this.router.navigate(['/my-pages/start']);
+    this.router.navigate(['/my-pages/start']);
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/my-pages/start';
   }
 

@@ -23,6 +23,7 @@ import { MyPagesStartComponent } from './my-pages-start/my-pages-start.component
 import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.component';
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
+import { MyPagesEditAccountComponent } from './my-pages-edit-account';
 import { MatchesPhasePipe, EnumToArrayPipe } from './_models';
 import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
 import { RegisterComponent } from './register/register.component';
@@ -65,6 +66,10 @@ const routes: Routes = [
             component: MyPagesProjectSettingsComponent
           }
         ]
+      },
+      {
+        path: 'edit-account',
+        component: MyPagesEditAccountComponent
       }
     ]
   }
@@ -88,6 +93,7 @@ const routes: Routes = [
     MyPagesActivityComponent,
     MyPagesMembersComponent,
     MyPagesProjectSettingsComponent,
+    MyPagesEditAccountComponent,
     MatchesPhasePipe,
     EnumToArrayPipe,
     RegisterComponent,

@@ -12,24 +12,24 @@
       </button>
       <div class="collapse navbar-collapse" id="exCollapsingNavbar">
         <ul class="nav navbar-nav smooth-scroll">
-          <li class="nav-item"><a href="#" class="nav-link">Hem</a></li>
-          <li class="nav-item"><a href="#about" class="nav-link">Om oss</a></li>
+          <li class="nav-item" [ngClass]="{'active': (selectedNavItem == 'Home') }" (click)="makeActive('Home')"><a href="#home" class="nav-link">Hem</a></li>
+          <li class="nav-item" [ngClass]="{'active': (selectedNavItem == 'About') }" (click)="makeActive('About')"><a href="#about" class="nav-link">Om</a></li>
           <!--<li class="nav-item"><a href="#" class="nav-link">Samarbetspartners</a></li>-->
-          <li class="nav-item"><a href="#contact" class="nav-link">Kontakt</a></li>
+          <li class="nav-item" [ngClass]="{'active': (selectedNavItem == 'Contact') }" (click)="makeActive('Contact')"><a href="#contact" class="nav-link">Kontakt</a></li>
         </ul>
         <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
           <li class="">
             <ul class="navbar navbar-nav p-0">
-              <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+              <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']" [ngClass]="{'active': (selectedNavItem == 'MyPages') }" (click)="makeActive('MyPages')">
                 <a class="nav-link" [routerLink]="['/my-pages/start']"><span class="glyphicon glyphicon-log-in"></span>Mina sidor</a>
               </li>
-              <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+              <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']" [ngClass]="{'active': (selectedNavItem == 'LogOut') }" (click)="makeActive('LogOut')">
                 <a class="nav-link" [routerLink]="['/']"(click)="logout()"><span class="glyphicon glyphicon-log-in"></span>Logga ut</a>
               </li>
-              <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+              <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']" [ngClass]="{'active': (selectedNavItem == 'LogIn') }" (click)="makeActive('LogIn')">
                 <a class="nav-link" [routerLink]="['/login']"><span class="glyphicon glyphicon-log-in"></span>Logga in</a>
               </li>
-              <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+              <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']" [ngClass]="{'active': (selectedNavItem == 'Register') }" (click)="makeActive('Register')">
                 <a class="btn btn-sm im-btn-primary" [routerLink]="['/register']"><span class="glyphicon glyphicon-user"></span>Registrera</a>
               </li>
             </ul>

@@ -48,6 +48,10 @@ header {
   padding-bottom: 0px;
 }
 
+.nav-item.active {
+  border-bottom: 3px solid #8ed694;
+}
+
 .navbar-center{
     position:absolute;
     left:50%;
@@ -56,6 +60,12 @@ header {
 
 .nav-link {
     color: white;
+}
+
+.nav-item:focus {
+  margin-bottom: -3px;
+  border-bottom: 3px #108DE7 solid;
+  font-weight: bold;
 }
 
 html,

@@ -1,4 +1,9 @@
-#intro {
+#home {
   background: #336699 !important;
   overflow: hidden;
 }
+
+section {
+  scroll-margin-top: 75px;
+}
+

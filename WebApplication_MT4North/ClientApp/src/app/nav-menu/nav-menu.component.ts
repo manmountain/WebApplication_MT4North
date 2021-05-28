@@ -14,6 +14,8 @@ import { User } from '../_models';
 
 
 export class NavMenuComponent {
+  selectedNavItem = "Home";
+
   constructor(
     private viewService: ViewService,
     private router: Router,
@@ -36,6 +38,9 @@ export class NavMenuComponent {
     return this.viewService.isFullscreen;
   }
 
+  makeActive(navItem: string) {
+    this.selectedNavItem = navItem;
+  }
 
   logout() {
     this.accountService.logout();

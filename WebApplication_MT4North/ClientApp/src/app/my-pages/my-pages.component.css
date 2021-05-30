@@ -107,13 +107,17 @@ li:focus {
   font-weight: 500;
 }
 
+.card-header {
+    cursor: pointer;
+}
+
   .accordion .list-group-item:hover {
-    background: #007bff;
+    background: #f2f2f2;
   }
 
     .accordion .list-group-item:hover a {
-      color: #fff !important;
-    }
+/*      color: #fff !important;
+*/    }
 
     .accordion .list-group-item:hover .badge {
       background: #fff;

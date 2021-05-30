@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <h4 class="display-8 text-black-50 pl-0">Redigera konto</h4>
+    <p class=" text-black mb-3">Här kan du göra ändringar i ditt konto och ta reda på vad andra användare kan se om dig. Om du vill veta mer kan du läsa vår <a href="#">Sekretesspolicy</a>.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="firstname">Förnamn</label><div class="info-text float-right text-black-50 align-bottom">
+          <i class="fa fa-globe"></i> Alltid synligt <span class="tooltiptext">Synligt och sökbart för alla användare.</span>
+        </div>
+        <input type="text" formControlName="firstname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }"/>
+        <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
+          <div *ngIf="f.firstname.errors.required">Förnamn är obligatoriskt</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lastname">Efternamn</label>
+        <div class="info-text float-right text-black-50">
+          <i class="fa fa-globe"></i> Alltid synligt <span class="tooltiptext">Synligt och sökbart för alla användare.</span>
+        </div>
+        <input type="text" formControlName="lastname" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastname.errors }"/>
+        <div *ngIf="submitted && f.lastname.errors" class="invalid-feedback">
+          <div *ngIf="f.lastname.errors.required">Efternamn är obligatoriskt</div>
+        </div>
+      </div>
+      <!--<div class="form-group">
+      <label for="username">Användarnamn</label>
+      <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+      <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+        <div *ngIf="f.username.errors.required">Användarnamn är obligatoriskt</div>
+      </div>
+    </div>-->
+      <div class="form-group">
+        <label for="email">E-postadress</label>
+        <div class="info-text float-right text-black-50">
+          <i class="fa fa-lock"></i> Alltid dold <span class="tooltiptext">Alltid dold och ej sökbar.</span>
+        </div>
+        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <div *ngIf="f.email.errors.required">E-postadress är obligatoriskt</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button [disabled]="loading || !form.dirty" class="btn im-btn-primary">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Spara
+        </button>
+      </div>
+    </form>
+    <alert></alert>
+  </div>
+</div>

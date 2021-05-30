@@ -11,7 +11,7 @@
       <div class="media d-flex align-items-center">
        <!-- <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
         <div class="media-body">
-          <h4 class="m-0">Jason Doe</h4>
+          <h4 class="m-0">{{currentUser?.firstname}} {{currentUser?.lastname}}</h4>
           <p class="font-weight-light text-muted mb-0">Organisation</p>
         </div>
       </div>
@@ -33,9 +33,9 @@
     -->
       <div class="accordion mb-2" id="accordionExample">
         <div class="card">
-          <div class="card-header" id="headingOne">
+          <div class="card-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" id="headingOne">
             <h2 class="mb-0">
-              <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              <a >
                 <span><i class="fa fa-user"></i> Konto</span>
                 <i class="fa fa-chevron-down toggle"></i>
               </a>
@@ -44,17 +44,17 @@
           <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
               <ul class="list-group">
-                <li class="list-group-item" [routerLink]="['./start']"><i class="fa fa-pencil"></i> Redigera</li>
-                <li class="list-group-item"><a href="#"><i class="fa fa-key"></i> Ändra lösenord</a></li>
-                <li class="list-group-item"><a href="#" class="text-danger"><i class="fa fa-trash"></i> Ta bort konto</a></li>
+                <li class="btn text-left list-group-item" [routerLink]="['./edit-account']"><i class="fa fa-pencil"></i> Redigera</li>
+                <li class="btn text-left list-group-item"><a href="#"><i class="fa fa-key"></i> Ändra lösenord</a></li>
+                <li class="btn text-left list-group-item"><a href="#" class="text-danger"><i class="fa fa-trash"></i> Ta bort konto</a></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="card-header" id="headingTwo">
+          <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"S>
             <h2 class="mb-0">
-              <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              <a>
                 <span><i class="fa fa-briefcase"></i> Projekt</span>
                 <i class="fa fa-chevron-down toggle rotate"></i>
               </a>
@@ -71,9 +71,9 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-header" id="headingFour">
+          <div class="card-header" id="headingFour" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
             <h2 class="mb-0">
-              <a data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              <a>
                 <span><i class="fa fa-cog"></i> Inställningar</span>
                 <i class="fa fa-chevron-down toggle"></i>
               </a>
@@ -82,7 +82,7 @@
           <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
             <div class="card-body">
               <ul class="list-group">
-                <li class="list-group-item"><a href="#"><i class="fa fa-bell"></i> Ställ in notifieringar</a></li>
+                <li class="btn text-left list-group-item"><a href="#"><i class="fa fa-bell"></i> Ställ in notifieringar</a></li>
               </ul>
             </div>
           </div>

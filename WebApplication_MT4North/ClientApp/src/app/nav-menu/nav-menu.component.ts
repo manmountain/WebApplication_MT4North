@@ -14,11 +14,13 @@ import { User } from '../_models';
 
 
 export class NavMenuComponent {
+  selectedNavItem = "Home";
+
   constructor(
     private viewService: ViewService,
     private router: Router,
-    private authenticationService: AccountService) {
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    private accountService: AccountService) {
+    this.accountService.currentUser.subscribe(x => this.currentUser = x);
   }
   currentUser: User;
 
@@ -36,9 +38,12 @@ export class NavMenuComponent {
     return this.viewService.isFullscreen;
   }
 
+  makeActive(navItem: string) {
+    this.selectedNavItem = navItem;
+  }
 
   logout() {
-    this.authenticationService.logout();
+    this.accountService.logout();
     this.router.navigate(['/login']);
   }
 

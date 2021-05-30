@@ -11,10 +11,12 @@ export class AccountService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
-    constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-        this.currentUser = this.currentUserSubject.asObservable();
-    }
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
+    console.log('created currentUser: ', this.currentUserValue);
+
+  }
 
     public get currentUserValue(): User {
         return this.currentUserSubject.value;
@@ -24,16 +26,12 @@ export class AccountService {
           return this.http.post<any>(`${environment.apiUrl}/Account/login`, { email, password })
               .pipe(map(user => {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  console.log('login/ user: ');
-                  console.log(user);
+                
                   localStorage.setItem('currentUser', JSON.stringify(user));
-                  this.currentUserSubject.next(user);
-                  this.currentUser = this.currentUserSubject.asObservable();
+                this.currentUserSubject.next(user);
                   return user;
               }));
-  }
-
-
+      }
 
     logout() {
         // remove user from local storage to log user out
@@ -47,10 +45,31 @@ export class AccountService {
 
     getAll() {
       return this.http.get<User[]>(`${environment.apiUrl}/users`);
-    }
+    } 
+
+  getCurrentUser() {
+    console.log('testar');
+      return this.http.get<User>(`${environment.apiUrl}/Account/user`);
+  }
 
     getById(id: string) {
       return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+  }
+
+  update(params) {
+    //console.log(params);
+      return this.http.put(`${environment.apiUrl}/Account/user`, params)
+        .pipe(map(x => {
+           {
+            // update local storage
+            const user = { ...this.currentUserValue, ...params };
+            localStorage.setItem('user', JSON.stringify(user));
+
+            // publish updated user to subscribers
+            this.currentUserSubject.next(user);
+          }
+          return x;
+        }));
     }
 
     //update(id, params) {

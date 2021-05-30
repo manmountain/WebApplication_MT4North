@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { AccountService } from '@app/_services';
 
 @Component({
   selector: 'app-my-pages-start',
@@ -8,5 +8,10 @@ import { RouterModule } from '@angular/router';
 })
 
 export class MyPagesStartComponent {
-
+  currentUser = null;
+  constructor(
+    private accountService: AccountService
+  ) {
+    this.currentUser = accountService.currentUserValue;
+  }
 }

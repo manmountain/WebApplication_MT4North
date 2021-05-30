@@ -14,6 +14,6 @@ namespace WebApplication_MT4North.Models
         public string Text { get; set; }
 
         public virtual Activity Activity { get; set; }
-        public virtual RegisteredUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

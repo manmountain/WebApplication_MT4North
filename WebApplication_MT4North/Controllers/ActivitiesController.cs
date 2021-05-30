@@ -26,7 +26,12 @@ namespace WebApplication_MT4North.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Activity>>> GetActivities()
         {
-            return await _context.Activities.ToListAsync();
+            var activities = await _context.Activities.ToListAsync();
+            foreach(var activity in activities)
+            {
+                _context.CustomActivityInfos.Where(c => c.ActivityId == activity.ActivityId);
+            }
+            return activities;
         }
 
         // GET: api/Activities/5

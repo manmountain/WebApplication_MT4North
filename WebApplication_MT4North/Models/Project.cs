@@ -7,7 +7,7 @@ namespace WebApplication_MT4North.Models
 {
     public partial class Project
     {
-        public Project()
+        /*public Project()
         {
             Activities = new HashSet<Activity>();
             InnovationModels = new HashSet<InnovationModel>();
@@ -20,6 +20,10 @@ namespace WebApplication_MT4North.Models
 
         public virtual ICollection<Activity> Activities { get; set; }
         public virtual ICollection<InnovationModel> InnovationModels { get; set; }
-        public virtual ICollection<RegisteredUserProject> RegisteredUserProjects { get; set; }
+        public virtual ICollection<RegisteredUserProject> RegisteredUserProjects { get; set; }*/
+
+        public int ProjectId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

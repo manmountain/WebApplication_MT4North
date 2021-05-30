@@ -81,7 +81,7 @@ namespace WebApplication_MT4North
                 var securityScheme = new OpenApiSecurityScheme
                 {
                     Name = "JWT Authentication",
-                    Description = "Enter JWT Bearer token **_only_**",
+                    Description = "Enter JWT Bearer token **_only_**", //TODO
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer", // must be lower case

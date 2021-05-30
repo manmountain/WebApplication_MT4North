@@ -15,8 +15,7 @@ namespace WebApplication_MT4North.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.14")
-                .HasAnnotation("Relational:Collation", "Finnish_Swedish_CI_AS")
+                .HasAnnotation("ProductVersion", "3.1.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -159,63 +158,34 @@ namespace WebApplication_MT4North.Migrations
                 {
                     b.Property<int>("ActivityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("activity_id")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("BaseInfoId")
-                        .HasColumnName("base_info_id")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeadlineDate")
-                        .HasColumnName("deadline_date")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .HasColumnName("description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FinishDate")
-                        .HasColumnName("finish_date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsExcluded")
-                        .HasColumnName("is_excluded")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phase")
-                        .IsRequired()
-                        .HasColumnName("phase")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
                     b.Property<int>("ProjectId")
-                        .HasColumnName("project_id")
                         .HasColumnType("int");
 
                     b.Property<string>("Resources")
-                        .HasColumnName("resources")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartDate")
-                        .HasColumnName("start_date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("status")
-                        .HasColumnType("nvarchar(50)")
-                        .HasDefaultValueSql("('Ej påbörjad')")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ThemeId")
-                        .HasColumnName("theme_id")
                         .HasColumnType("int");
 
                     b.HasKey("ActivityId");
@@ -226,7 +196,7 @@ namespace WebApplication_MT4North.Migrations
 
                     b.HasIndex("ThemeId");
 
-                    b.ToTable("activity");
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.ApplicationUser", b =>
@@ -237,8 +207,14 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -280,6 +256,9 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -289,6 +268,12 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("UserRole")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -305,280 +290,154 @@ namespace WebApplication_MT4North.Migrations
 
             modelBuilder.Entity("WebApplication_MT4North.Models.BaseActivityInfo", b =>
                 {
-                    b.Property<int>("BaseInfoId")
+                    b.Property<int>("BaseActivityInfoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("base_info_id")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnName("description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phase")
-                        .IsRequired()
-                        .HasColumnName("phase")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ThemeId")
-                        .HasColumnName("theme_id")
                         .HasColumnType("int");
 
-                    b.HasKey("BaseInfoId");
+                    b.HasKey("BaseActivityInfoId");
 
                     b.HasIndex("ThemeId");
 
-                    b.ToTable("base_activity_info");
+                    b.ToTable("BaseActivityInfos");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.CustomActivityInfo", b =>
                 {
-                    b.Property<int>("CustomInfoId")
+                    b.Property<int>("CustomActivityInfoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("custom_info_id")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ActivityId")
-                        .HasColumnName("activity_id")
+                    b.Property<int?>("ActivityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnName("description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phase")
-                        .IsRequired()
-                        .HasColumnName("phase")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ThemeId")
-                        .HasColumnName("theme_id")
                         .HasColumnType("int");
 
-                    b.HasKey("CustomInfoId")
-                        .HasName("PK_custom_activity");
+                    b.HasKey("CustomActivityInfoId");
 
                     b.HasIndex("ActivityId");
 
                     b.HasIndex("ThemeId");
 
-                    b.ToTable("custom_activity_info");
-                });
-
-            modelBuilder.Entity("WebApplication_MT4North.Models.InnovationModel", b =>
-                {
-                    b.Property<int>("InnovationModelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("innovation_model_id")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnName("project_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("InnovationModelId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("innovation_model");
+                    b.ToTable("CustomActivityInfos");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.Note", b =>
                 {
                     b.Property<int>("NoteId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("note_id")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("ActivityId")
-                        .HasColumnName("activity_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnName("text")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TimeStamp")
-                        .HasColumnName("time_stamp")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("UserId")
-                        .HasColumnName("user_id")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("NoteId");
 
                     b.HasIndex("ActivityId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId1");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("note");
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.Project", b =>
                 {
                     b.Property<int>("ProjectId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("project_id")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnName("description")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectId");
 
-                    b.ToTable("project");
-                });
-
-            modelBuilder.Entity("WebApplication_MT4North.Models.RegisteredUser", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("user_id")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("EmailAdress")
-                        .IsRequired()
-                        .HasColumnName("email_adress")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnName("first_name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnName("last_name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Password")
-                        .HasColumnName("password")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Sex")
-                        .IsRequired()
-                        .HasColumnName("sex")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("UserName")
-                        .HasColumnName("user_name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("UserId")
-                        .HasName("PK_registered_user_1");
-
-                    b.ToTable("registered_user");
-                });
-
-            modelBuilder.Entity("WebApplication_MT4North.Models.RegisteredUserProject", b =>
-                {
-                    b.Property<int>("RegisteredUserProjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("registered_user_project_id")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnName("project_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegisteredUserId")
-                        .HasColumnName("registered_user_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Rights")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("rights")
-                        .HasColumnType("varchar(50)")
-                        .HasDefaultValueSql("('Read and write')")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Role")
-                        .HasColumnName("role")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("RegisteredUserProjectId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("RegisteredUserId");
-
-                    b.ToTable("registered_user_project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.Theme", b =>
                 {
                     b.Property<int>("ThemeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("theme_id")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnName("description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InnovationModelId")
-                        .HasColumnName("innovation_model__id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("name")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ThemeId");
 
-                    b.HasIndex("InnovationModelId");
+                    b.ToTable("Themes");
+                });
 
-                    b.ToTable("theme");
+            modelBuilder.Entity("WebApplication_MT4North.Models.UserProject", b =>
+                {
+                    b.Property<int>("UserProjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Rights")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -635,101 +494,60 @@ namespace WebApplication_MT4North.Migrations
             modelBuilder.Entity("WebApplication_MT4North.Models.Activity", b =>
                 {
                     b.HasOne("WebApplication_MT4North.Models.BaseActivityInfo", "BaseInfo")
-                        .WithMany("Activities")
-                        .HasForeignKey("BaseInfoId")
-                        .HasConstraintName("FK_activity_base_activity_info");
+                        .WithMany()
+                        .HasForeignKey("BaseInfoId");
 
                     b.HasOne("WebApplication_MT4North.Models.Project", "Project")
-                        .WithMany("Activities")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
-                        .HasConstraintName("FK_activity_project")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
+                    b.HasOne("WebApplication_MT4North.Models.Theme", null)
                         .WithMany("Activities")
-                        .HasForeignKey("ThemeId")
-                        .HasConstraintName("FK_activity_theme");
+                        .HasForeignKey("ThemeId");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.BaseActivityInfo", b =>
                 {
                     b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
                         .WithMany("BaseActivityInfos")
-                        .HasForeignKey("ThemeId")
-                        .HasConstraintName("FK_base_activity_info_theme");
+                        .HasForeignKey("ThemeId");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.CustomActivityInfo", b =>
                 {
-                    b.HasOne("WebApplication_MT4North.Models.Activity", "Activity")
+                    b.HasOne("WebApplication_MT4North.Models.Activity", null)
                         .WithMany("CustomActivityInfos")
-                        .HasForeignKey("ActivityId")
-                        .HasConstraintName("FK_custom_activity_info_activity")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ActivityId");
 
                     b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
                         .WithMany("CustomActivityInfos")
-                        .HasForeignKey("ThemeId")
-                        .HasConstraintName("FK_custom_activity_info_theme");
-                });
-
-            modelBuilder.Entity("WebApplication_MT4North.Models.InnovationModel", b =>
-                {
-                    b.HasOne("WebApplication_MT4North.Models.Project", "Project")
-                        .WithMany("InnovationModels")
-                        .HasForeignKey("ProjectId")
-                        .HasConstraintName("FK_innovation_model_project")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ThemeId");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.Note", b =>
                 {
                     b.HasOne("WebApplication_MT4North.Models.Activity", "Activity")
                         .WithMany("Notes")
-                        .HasForeignKey("ActivityId")
-                        .HasConstraintName("FK_note_activity")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ActivityId");
 
-                    b.HasOne("WebApplication_MT4North.Models.ApplicationUser", null)
-                        .WithMany("Notes")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("WebApplication_MT4North.Models.RegisteredUser", "User")
-                        .WithMany("Notes")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_note_registered_user")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("WebApplication_MT4North.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("WebApplication_MT4North.Models.RegisteredUserProject", b =>
+            modelBuilder.Entity("WebApplication_MT4North.Models.UserProject", b =>
                 {
-                    b.HasOne("WebApplication_MT4North.Models.ApplicationUser", null)
-                        .WithMany("RegisteredUserProjects")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("WebApplication_MT4North.Models.Project", "Project")
-                        .WithMany("RegisteredUserProjects")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
-                        .HasConstraintName("FK_project_member_project")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication_MT4North.Models.RegisteredUser", "RegisteredUser")
-                        .WithMany("RegisteredUserProjects")
-                        .HasForeignKey("RegisteredUserId")
-                        .HasConstraintName("FK_project_member_registered_user")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApplication_MT4North.Models.Theme", b =>
-                {
-                    b.HasOne("WebApplication_MT4North.Models.InnovationModel", "InnovationModel")
-                        .WithMany("Themes")
-                        .HasForeignKey("InnovationModelId")
-                        .HasConstraintName("FK_theme_innovation_model");
+                    b.HasOne("WebApplication_MT4North.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

@@ -189,6 +189,39 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, deleteResponse.StatusCode);
         }
 
+        [TestMethod]
+        public async Task ShouldNotBeAbleToUpdateEmailToExisting()
+        {
+            var adminCredentials = new RegisterRequest
+            {
+                Email = "admin@localhost",
+                Password = "P@ssw0rd1!"
+            };
+            var userCredentials = new RegisterRequest
+            {
+                Email = "user1@localhost",
+                Password = "P@ssw0rd1!"
+            };
+            var loginResponse = await _httpClient.PostAsync("api/account/login",
+                new StringContent(JsonSerializer.Serialize(userCredentials), Encoding.UTF8, MediaTypeNames.Application.Json));
+            Assert.AreEqual(HttpStatusCode.OK, loginResponse.StatusCode);
+
+            var loginResponseContent = await loginResponse.Content.ReadAsStringAsync();
+            var loginResult = JsonSerializer.Deserialize<LoginResult>(loginResponseContent);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, loginResult.AccessToken);
+
+            var userUpdate = new UserRequest
+            {
+                Email = adminCredentials.Email
+            };
+            var updateUserResponse = await _httpClient.PutAsync("api/account/user",
+                new StringContent(JsonSerializer.Serialize(userUpdate), Encoding.UTF8, MediaTypeNames.Application.Json));
+            Assert.AreEqual(HttpStatusCode.BadRequest, updateUserResponse.StatusCode);
+
+            //var updatedUserResponseContent = await updateUserResponse.Content.ReadAsStringAsync();
+            //var updatedUserResult = JsonSerializer.Deserialize<UserResult>(updatedUserResponseContent);
+        }
+
         //TODO
         [TestMethod]
         public async Task ShouldBeAbleToDeleteUserAsAdmin()
@@ -258,7 +291,7 @@ namespace WebApplication_MT4North.IntegrationTests
             
             var basicCredentials = new RegisterRequest
             {
-                Email = "user@localhost",
+                Email = "user1@localhost",
                 Password = "P@ssw0rd1!"
             };
 
@@ -363,7 +396,7 @@ namespace WebApplication_MT4North.IntegrationTests
         {
             var basicCredentials = new RegisterRequest
             {
-                Email = "user@localhost",
+                Email = "user1@localhost",
                 Password = "P@ssw0rd1!"
             };
             var newRoleName = "TestUser";

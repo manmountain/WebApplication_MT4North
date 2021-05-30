@@ -21,15 +21,16 @@ namespace WebApplication_MT4North
             using (var scope = host.Services.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
+                var context = serviceProvider.GetService<MT4NorthContext>();
                 try
                 {
                     var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                    DatabaseInitializer.SeedData(userManager, roleManager);
+                    var dbi = new DatabaseInitializer();
+                    dbi.SeedDataAsync(context, userManager, roleManager);
                 }
                 catch (Exception ex)
                 {
-                    //Debug.WriteLine(ex.Message);
                 }
             }
             host.Run();

@@ -33,28 +33,14 @@ namespace WebApplication_MT4North.Controllers
             ILogger<AccountController> logger,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            //IUserService userService,
             IJwtAuthManager jwtAuthManager)
         {
             _logger = logger;
             _userManager = userManager;
             _roleManager = roleManager;
-            //_userService = userService;
             _jwtAuthManager = jwtAuthManager;
         }
 
-/*
-Seeded development users
-{
-    "email": "user@localhost",
-    "password": "P@ssw0rd1!"
-}
-
-{
-  "email": "admin@localhost",
-  "password": "P@ssw0rd1!"
-}
-*/
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -145,7 +131,7 @@ Seeded development users
 
             var roles = await _userManager.GetRolesAsync(existingUser);
             var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name,  request.Email)); //FIXME: needed?!
+            claims.Add(new Claim(ClaimTypes.Name,  request.Email));
             claims.Add(new Claim(ClaimTypes.Email, request.Email));
             foreach(var role in roles)
             {
@@ -154,14 +140,20 @@ Seeded development users
 
             var jwtResult = _jwtAuthManager.GenerateTokens(request.Email, claims.ToArray<Claim>(), DateTime.Now);
             _logger.LogInformation($"User [{request.Email}] logged in the system.");
+            var img = (existingUser.Gender == "Kvinna") ? ("") : ("");
             return Ok(new LoginResult
             {
+                // TODO: Only return AccessToken and RefreshToken
                 UserName = existingUser.UserName,
                 Email = existingUser.Email,
                 FirstName = existingUser.FirstName,
                 LastName = existingUser.LastName,
                 Gender = existingUser.Gender,
+                CompanyName = existingUser.CompanyName,
+                Country = existingUser.Country,
+                ProfilePicture = existingUser.ProfilePicture,
                 Roles = roles.ToList<string>(),
+                //UsertYPE & uSERrOLE ? TODO:
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -211,59 +203,22 @@ Seeded development users
             }
         }
 
+        // GET: api/Account/User
         [HttpGet("user")]
         [Authorize]
-        public async Task<ActionResult> GetCurrentUserAsync()
+        public async Task<ActionResult<ApplicationUser>> GetCurrentUserAsync()
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            var roles = await _userManager.GetRolesAsync(user); //??
+            var roles = await _userManager.GetRolesAsync(user);
 
-            return Ok(new UserResult
+            if (user == null)
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Gender = user.Gender
-            });
+                return NotFound();
+            }
+
+            return Ok(user);
         }
-
-        // REMOVEME: FIXME: TODO:
-        // only users with role AdminUser can acces path
-        /*[HttpGet("user2")]
-        [Authorize(Roles = "AdminUser")]
-        public async Task<ActionResult> GetCurrentUser2Async()
-        {
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            var roles = await _userManager.GetRolesAsync(user);
-
-            return Ok(new LoginResult
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                Roles = (List<string>)roles,
-            });
-        }*/
-
-        // REMOVEME: FIXME: TODO:
-        // only users with role BasicUser can acces path 
-        /*[HttpGet("user3")]
-        [Authorize(Roles = "BasicUser")]
-        public async Task<ActionResult> GetCurrentUser3Async()
-        {
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            var roles = await _userManager.GetRolesAsync(user);
-
-            return Ok(new LoginResult
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                Roles = (List<string>)roles,
-            });
-        }*/
 
         [HttpPut("user")]
         [Authorize]
@@ -272,9 +227,9 @@ Seeded development users
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
             //var roles = await _userManager.GetRolesAsync(user);
-            
             if (!string.IsNullOrWhiteSpace(request.Email))
             {
+                //TODO: Can a user A change email to the same email as another user? ...
                 //var result = await _userManager.ChangeEmailAsync(user, request.Email);
                 user.Email = request.Email;
                 user.UserName = request.Email;

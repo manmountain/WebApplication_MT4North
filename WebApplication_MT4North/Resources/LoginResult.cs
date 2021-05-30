@@ -21,11 +21,17 @@ namespace WebApplication_MT4North.Resources
         [JsonPropertyName("gender")]
         public string Gender { get; set; }
 
+        [JsonPropertyName("companyname")] 
+        public string CompanyName { get; set; }
+
+        [JsonPropertyName("country")]
+        public string Country { get; set; }
+
+        [JsonPropertyName("profilepicture")]
+        public string ProfilePicture { get; set; }
+
         [JsonPropertyName("roles")]
         public List<string> Roles { get; set; }
-
-        /*[JsonPropertyName("originalUserName")]
-        public string OriginalUserName { get; set; }*/
 
         [JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }

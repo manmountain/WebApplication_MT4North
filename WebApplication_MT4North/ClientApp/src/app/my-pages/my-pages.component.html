@@ -63,8 +63,9 @@
           <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
             <div class="card-body">
               <ul class="list-group">
-                <li class="btn text-left list-group-item" [routerLink]="['./projects/activity-status']"><a>Projekt 1</a> <!--<span class="badge badge-pill badge-primary">20</span>--></li>
-                <li class="btn text-left list-group-item"><a>Projekt 2</a></li>
+                <ng-container *ngFor="let project of projects; let i = index">
+                  <li class="btn text-left list-group-item" [routerLink]="['./projects/activity-status']"><a>{{project.name}}</a> <!--<span class="badge badge-pill badge-primary">20</span>--></li>
+                </ng-container>
               </ul>
               <button class="btn w-100 text-left" id="addBtn" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Lägg till</span></button>
             </div>

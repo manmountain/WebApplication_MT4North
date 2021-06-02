@@ -11,6 +11,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./user.model"), exports);
+__exportStar(require("./project.model"), exports);
 __exportStar(require("./activity.model"), exports);
 __exportStar(require("./theme.model"), exports);
 __exportStar(require("./common"), exports);

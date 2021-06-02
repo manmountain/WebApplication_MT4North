@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ViewService } from "../_services";
-import { AccountService } from '@app/_services';
-import { User } from '../_models';
+import { AlertService, AccountService, ProjectService } from '@app/_services';
+import { User, Project } from '../_models';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-pages',
@@ -13,12 +14,28 @@ export class MyPagesComponent {
   isFirstStepModal = true;
   emailList = [];
   currentUser: User;
+  projects: Project[];
+  error = '';
 
   constructor(
     private viewService: ViewService,
-    private accountService: AccountService
+    private alertService: AlertService,
+    private accountService: AccountService,
+    private projectService: ProjectService
   ) {
     this.accountService.currentUser.subscribe(x => { this.currentUser = x; console.log('subscribe user: ', this.currentUser); }, e => console.log(JSON.stringify(e)));
+    this.projectService.getProjects()
+      .pipe(first())
+      .subscribe(
+        data => { },
+
+        error => {
+          this.error = error;
+          this.alertService.error(error);
+        });
+    this.projectService.projects.subscribe(x => this.projects = x);
+    console.log("projects in my-pages: ", this.projects[0].name);
+
  }
 
   isFullscreen() {

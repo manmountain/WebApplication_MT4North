@@ -31,7 +31,7 @@ namespace WebApplication_MT4North.Controllers
         {
             _logger = logger;
             _context = context;
-            _userManager = userManager;;
+            _userManager = userManager;
         }
 
 
@@ -46,7 +46,8 @@ namespace WebApplication_MT4North.Controllers
             if (user != null)
             {
                 // fetch all user-projects where the user is a member
-                var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
+                //var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
+                var userProjects = await _context.UserProjects.Where(p => p.UserId == user.Id).ToListAsync<UserProject>();
                 // fetch projects from userProjects
                 var projects = new List<Project>();
                 foreach (var userProject in userProjects)
@@ -91,10 +92,26 @@ namespace WebApplication_MT4North.Controllers
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
         {
+            // Fetch current user
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            // Save project
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
+            
+            // Create a userProject with the current user as owner
             // TODO: Kolla om användarna existerar?
             // TODO: Det borde skapas upp UserProject för användaren som skapar upp projektet
+            var userProject = new UserProject();
+            userProject.Project = project;
+            userProject.User = user;
+            userProject.Role = "Projektägare";
+            userProject.Rights = "RW";
+            // Save user-project
+            _context.UserProjects.Add(userProject);
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction("PostProject", new { project.ProjectId }, project);
         }
 

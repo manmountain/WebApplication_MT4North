@@ -12,7 +12,7 @@ namespace WebApplication_MT4North.Models
         public string Rights { get; set; }
         
         public int ProjectId { get; set; }
-        //public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public virtual Project Project { get; set; }
         public virtual ApplicationUser User { get; set; }

@@ -49,11 +49,10 @@ namespace WebApplication_MT4North.Controllers
                 foreach(var userProject in userProjects)
                 {
                     _context.Projects.FirstOrDefault(p => p.ProjectId == userProject.ProjectId);
+                    //_context.Users.FirstOrDefault(u => u.Id == userProject.User.Id);
                 }
-
                 return Ok(userProjects);
             }
-
             return NotFound();
         }
 
@@ -66,7 +65,22 @@ namespace WebApplication_MT4North.Controllers
             {
                 _context.Projects.FirstOrDefault(p => p.ProjectId == userProject.ProjectId);
             }
+            return Ok(userProjects);
+        }
 
+        [Authorize()]
+        [HttpGet("Project/{projectId}")]
+        public async Task<ActionResult> GetAllForProject(int projectId)
+        {
+            // fetch all user-projects for project with id projectId 
+            var userProjects = await _context.UserProjects.Where(p => p.Project.ProjectId == projectId).ToListAsync<UserProject>();
+            foreach (var userProject in userProjects)
+            {
+                await _context.Projects.Where(p => p.ProjectId == userProject.ProjectId).ToListAsync<Project>();
+                await _context.Users.Where(u => u.Id == userProject.UserId).ToListAsync<ApplicationUser>();
+            }
+
+            // return found user-projects
             return Ok(userProjects);
         }
 

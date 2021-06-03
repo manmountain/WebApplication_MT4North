@@ -97,6 +97,7 @@
     <None Remove="ClientApp\src\app\my-pages-start\my-pages-start.component.ts" />
     <None Remove="ClientApp\src\app\my-pages\my-pages.component.ts" />
     <None Remove="ClientApp\src\app\_models\user.model.ts" />
+    <None Remove="ClientApp\src\app\_models\userProject.model.ts" />
     <None Remove="ClientApp\src\assets\images\img1.jpg" />
     <None Remove="ClientApp\src\assets\images\img2.jpg" />
     <None Remove="ClientApp\src\assets\images\img3.jpg" />
@@ -195,6 +196,9 @@
   <ItemGroup>
     <None Update="ClientApp\src\app\_models\common - Copy.js.map">
       <DependentUpon>common.js.map</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\app\_models\userProject - Copy.js">
+      <DependentUpon>userProject.model.js</DependentUpon>
     </None>
     <None Update="Models\medtechinnovationmodel_v3.mdf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

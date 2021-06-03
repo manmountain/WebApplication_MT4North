@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ViewService, AlertService, ProjectService } from '@app/_services';
-import { User, Project } from '../_models';
+import { ViewService, ProjectService } from '@app/_services';
+import { UserProject } from '../_models';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -10,26 +10,14 @@ import { first } from 'rxjs/operators';
 })
 
 export class MyPagesProjectComponent {
-  currentUser: User;
-  project: Project;
-  error = '';
+  userProjects: UserProject[];
 
   constructor(
-    private alertService: AlertService,
     private viewService: ViewService,
     private projectService: ProjectService
   ) {
-    //this.projectService.getProjects()
-    //  .pipe(first())
-    //  .subscribe(
-    //    data => { },
 
-    //    error => {
-    //      this.error = error;
-    //      this.alertService.error(error);
-    //    });
-    //this.projectService.projects.subscribe(x => this.project = x);
-
+    this.projectService.selectedProject.subscribe(x => this.userProjects = x);
   }
 
   isFullscreen() {

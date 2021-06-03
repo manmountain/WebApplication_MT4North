@@ -1,6 +1,6 @@
 <div [style.display]="isFullscreen() ? 'none' : 'block'">
-  <h4 class="display-8 text-black-50 pl-0">Projekt 1</h4>
-  <p class=" text-black mb-3">Beskrivning.</p>
+  <h4 class="display-8 text-black-50 pl-0">{{userProjects[0]?.project.name}}</h4>
+  <p class=" text-black mb-3">{{userProjects[0]?.project.description}}</p>
 
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" [routerLink]="['./activity-status']">

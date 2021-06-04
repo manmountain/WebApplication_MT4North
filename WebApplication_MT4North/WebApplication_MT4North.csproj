@@ -184,7 +184,6 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\app\admin\" />
     <Folder Include="Infrastructure\" />
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\lib\images\" />
   </ItemGroup>
 

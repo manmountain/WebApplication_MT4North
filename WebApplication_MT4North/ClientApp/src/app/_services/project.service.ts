@@ -26,7 +26,7 @@ export class ProjectService {
     return this.projectSubjects.value;
   }
 
-  public get selectedProjectValue(): UserProject {
+  public get selectedProjectValue(): UserProject[] {
     return this.selectedProjectSubject.value;
   }
 

@@ -34,9 +34,22 @@ export class MyPagesComponent {
           this.alertService.error(error);
         });
     this.projectService.projects.subscribe(x => this.projects = x);
-    console.log("projects in my-pages: ", this.projects[0].name);
+    //console.log("projects in my-pages: ", this.projects[0].name);
 
- }
+  }
+
+  selectProject(projectId: string) {
+    console.log('project id: ', projectId);
+    this.projectService.selectProject(projectId)
+      .pipe(first())
+      .subscribe(
+        data => { },
+
+        error => {
+          this.error = error;
+          this.alertService.error(error);
+        });
+  }
 
   isFullscreen() {
     return this.viewService.isFullscreen;

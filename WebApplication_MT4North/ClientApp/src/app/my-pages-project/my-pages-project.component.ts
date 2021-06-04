@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ViewService } from "../_services";
+import { ViewService, ProjectService } from '@app/_services';
+import { UserProject } from '../_models';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-pages-project',
@@ -8,7 +10,14 @@ import { ViewService } from "../_services";
 })
 
 export class MyPagesProjectComponent {
-  constructor(private viewService: ViewService) {
+  userProjects: UserProject[];
+
+  constructor(
+    private viewService: ViewService,
+    private projectService: ProjectService
+  ) {
+
+    this.projectService.selectedProject.subscribe(x => this.userProjects = x);
   }
 
   isFullscreen() {

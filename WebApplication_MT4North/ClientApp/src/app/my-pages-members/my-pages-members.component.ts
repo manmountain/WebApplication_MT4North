@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-//import { ConnectionService } from './connection.service';
-//import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-//import { Component, OnInit, HostListener } from '@angular/core';
+import { ProjectService } from '@app/_services';
+import { UserProject } from '../_models';
 
 
 @Component({
@@ -10,6 +9,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./my-pages-members.component.css']
 })
 export class MyPagesMembersComponent {
+  userProjects: UserProject[];
 
+  constructor(private projectService: ProjectService) {
 
+    this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+  }
 }

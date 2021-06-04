@@ -46,7 +46,7 @@ const routes: Routes = [
         component: MyPagesStartComponent
       },
       {
-        path: 'projects',
+        path: 'projects/:id',
         component: MyPagesProjectComponent,
         children: [
           {

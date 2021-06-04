@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-//import { ConnectionService } from './connection.service';
-//import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-//import { Component, OnInit, HostListener } from '@angular/core';
+import { AlertService, AccountService, ProjectService } from '@app/_services';
+import { User, Project } from '../_models';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -10,5 +10,26 @@ import { Component } from '@angular/core';
   styleUrls: ['./my-pages-project-settings.component.css']
 })
 export class MyPagesProjectSettingsComponent {
+  currentUser: User;
+  projects: Project[];
+  error = '';
 
+  constructor(
+    private alertService: AlertService,
+    private accountService: AccountService,
+    private projectService: ProjectService
+  ) {
+    this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
+    this.projectService.getProjects()
+      .pipe(first())
+      .subscribe(
+        data => { },
+
+        error => {
+          this.error = error;
+          this.alertService.error(error);
+        });
+    this.projectService.projects.subscribe(x => this.projects = x);
+
+  }
 }

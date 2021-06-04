@@ -36,58 +36,104 @@ namespace WebApplication_MT4North.Controllers
 
 
         // GET: api/Projects
+        /// <summary>
+        /// Get projects for current user
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// User's Projects
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [HttpGet()]
         [Authorize]
         public async Task<ActionResult> GetCurrentUserProjects()
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-
-            if (user != null)
+            
+            // fetch all user-projects where the user is a member
+            //var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
+            var userProjects = await _context.UserProjects.Where(p => p.UserId == user.Id && p.Status == UserProjectStatus.Accepted).ToListAsync<UserProject>();
+            // fetch projects from userProjects
+            var projects = new List<Project>();
+            foreach (var userProject in userProjects)
             {
-                // fetch all user-projects where the user is a member
-                //var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
-                var userProjects = await _context.UserProjects.Where(p => p.UserId == user.Id).ToListAsync<UserProject>();
-                // fetch projects from userProjects
-                var projects = new List<Project>();
-                foreach (var userProject in userProjects)
-                {
-                    var project = _context.Projects.FirstOrDefault(p => p.ProjectId == userProject.ProjectId);
-                    projects.Add(project);
-                }
-                // return the projects
-                return Ok(projects);
+                var project = _context.Projects.FirstOrDefault(p => p.ProjectId == userProject.ProjectId);
+                projects.Add(project);
             }
-            var errorResult = new ErrorResult();
-            errorResult.Message = "User not found";
-            return BadRequest(errorResult);
-            //return BadRequest(new ErrorResult({ Message = "User not found" });
+            // return projects
+            return Ok(projects);
         }
 
+        /*
         // GET: api/Projects/All
         [HttpGet("All")]
         [Authorize(Roles = "AdminUser")]
         public async Task<ActionResult> GetProjects()
         {
             return Ok(await _context.Projects.ToListAsync());
-        }
+        }*/
 
         // GET: api/Projects/{id}
+        /// <summary>
+        /// Get Project with id
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpGet("{id}")]
         public async Task<ActionResult<Project>> GetProject(int id)
         {
+            // Fetch current user
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            // Get the project
             var project = await _context.Projects.FindAsync(id);
+
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == project.ProjectId && p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R"));
+            if (callerUserProject == null)
+            {
+                // The user doesnt have READ rights to this project
+                return Unauthorized();
+            }
 
             if (project == null)
             {
                 return NotFound();
             }
 
-            return project;
+            return Ok(project);
         }
 
         // POST: api/Projects/
+        /// <summary>
+        /// Create a Project
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Created Project
+        /// </returns>
+        /// <response code="201">Created</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status201Created)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(Project project)
@@ -101,8 +147,6 @@ namespace WebApplication_MT4North.Controllers
             await _context.SaveChangesAsync();
             
             // Create a userProject with the current user as owner
-            // TODO: Kolla om användarna existerar?
-            // TODO: Det borde skapas upp UserProject för användaren som skapar upp projektet
             var userProject = new UserProject();
             userProject.Project = project;
             userProject.User = user;
@@ -118,10 +162,35 @@ namespace WebApplication_MT4North.Controllers
         // PUT: api/Projects/{id}
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Update a Project
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated Project
+        /// </returns>
+        /// <response code="204">OK No content</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProject(int id, Project project)
         {
+            // Check if the caller got the WRITE rights! Otherwise return Unauthorized
+            string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var caller = await _userManager.FindByEmailAsync(callerEmail);
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == project.ProjectId && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "W"));
+            if (callerUserProject == null)
+            {
+                // The caller doesnt have WRITE rights to this project
+                return Unauthorized();
+            }
+
             if (id != project.ProjectId)
             {
                 return BadRequest();
@@ -149,10 +218,35 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/Projects/{id}
+        /// <summary>
+        /// Delete a Project 
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Deleted Project
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Project>> DeleteProject(int id)
         {
+            // Check if the caller got the WRITE rights! Otherwise return Unauthorized
+            string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var caller = await _userManager.FindByEmailAsync(callerEmail);
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "W"));
+            if (callerUserProject == null)
+            {
+                // The caller doesnt have WRITE rights to this project
+                return Unauthorized();
+            }
+
             var project = await _context.Projects.FindAsync(id);
             if (project == null)
             {
@@ -162,7 +256,7 @@ namespace WebApplication_MT4North.Controllers
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 
-            return project;
+            return Ok(project);
         }
 
         private bool ProjectExists(int id)

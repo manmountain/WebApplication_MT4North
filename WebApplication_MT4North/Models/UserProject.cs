@@ -5,6 +5,13 @@ using System.Collections.Generic;
 
 namespace WebApplication_MT4North.Models
 {
+    public enum UserProjectStatus
+    {
+        Pending,
+        Accepted,
+        Rejected
+    }
+
     public partial class UserProject
     {
         public int UserProjectId { get; set; }
@@ -13,6 +20,8 @@ namespace WebApplication_MT4North.Models
         
         public int ProjectId { get; set; }
         public string UserId { get; set; }
+
+        public UserProjectStatus Status { get; set; }
 
         public virtual Project Project { get; set; }
         public virtual ApplicationUser User { get; set; }

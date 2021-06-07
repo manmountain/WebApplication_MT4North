@@ -254,7 +254,12 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
 
+            // Remove UserProjects for this project
+            var userprojects = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id);
+            _context.UserProjects.RemoveRange(userprojects);
+            // Remove project
             _context.Projects.Remove(project);
+            // Apply changes to database
             await _context.SaveChangesAsync();
 
             return Ok(project);

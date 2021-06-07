@@ -152,6 +152,7 @@ namespace WebApplication_MT4North.Controllers
             userProject.User = user;
             userProject.Role = "Projektägare";
             userProject.Rights = "RW";
+            userProject.Status = UserProjectStatus.Accepted;
             // Save user-project
             _context.UserProjects.Add(userProject);
             await _context.SaveChangesAsync();

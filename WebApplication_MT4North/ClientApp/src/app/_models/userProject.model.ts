@@ -7,5 +7,6 @@ export class UserProject {
   projectId: number;
   userId: number;
   user: User;
+  status: string;
   project: Project;
 }

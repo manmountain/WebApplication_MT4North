@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ViewService, ProjectService } from '@app/_services';
 import { UserProject } from '../_models';
 import { first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-my-pages-project',
@@ -9,15 +10,20 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./my-pages-project.component.css']
 })
 
-export class MyPagesProjectComponent {
+export class MyPagesProjectComponent implements OnDestroy {
   userProjects: UserProject[];
+  userProjectsSubscription: Subscription;
 
   constructor(
     private viewService: ViewService,
     private projectService: ProjectService
   ) {
 
-    this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+    this. userProjectsSubscription = this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+  }
+
+  ngOnDestroy() {
+    this.userProjectsSubscription.unsubscribe();
   }
 
   isFullscreen() {

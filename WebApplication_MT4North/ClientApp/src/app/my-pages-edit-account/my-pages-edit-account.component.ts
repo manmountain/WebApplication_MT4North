@@ -1,10 +1,11 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ViewService } from "../_services";
 import { AccountService, AlertService } from '@app/_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { User, Alert, AlertType } from '../_models';
+import { Subscription } from 'rxjs';;
 
 
 @Component({
@@ -13,11 +14,12 @@ import { User, Alert, AlertType } from '../_models';
   styleUrls: ['./my-pages-edit-account.component.css']
 })
 
-export class MyPagesEditAccountComponent {
+export class MyPagesEditAccountComponent implements OnDestroy {
   form: FormGroup;
   loading = false;
   submitted = false;
   currentUser: User;
+  accountSubscription = Subscription;
 
   constructor(
     private viewService: ViewService,
@@ -26,7 +28,7 @@ export class MyPagesEditAccountComponent {
     private formBuilder: FormBuilder,
 
   ) {
-    this.accountService.currentUser.subscribe(x => this.currentUser = x);
+    this.accountSubscription = this.accountService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   ngOnInit() {
@@ -36,6 +38,10 @@ export class MyPagesEditAccountComponent {
       email: [this.currentUser.email, [Validators.required, Validators.email]],
     });
 
+  }
+
+  ngOnDestroy() {
+    this.accountSubscription.unsubscribe();
   }
 
   isFullscreen() {

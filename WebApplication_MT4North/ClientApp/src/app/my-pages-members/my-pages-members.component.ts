@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ProjectService } from '@app/_services';
 import { UserProject } from '../_models';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -8,11 +9,16 @@ import { UserProject } from '../_models';
   templateUrl: './my-pages-members.component.html',
   styleUrls: ['./my-pages-members.component.css']
 })
-export class MyPagesMembersComponent {
+export class MyPagesMembersComponent implements OnDestroy {
   userProjects: UserProject[];
+  userProjectsSubscription: Subscription;
 
   constructor(private projectService: ProjectService) {
 
-    this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+    this.userProjectsSubscription = this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+  }
+
+  ngOnDestroy() {
+    this.userProjectsSubscription.unsubscribe();
   }
 }

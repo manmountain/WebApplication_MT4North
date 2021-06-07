@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ViewService } from "../_services";
 import { AlertService, AccountService, ProjectService } from '@app/_services';
 import { User, Project } from '../_models';
 import { first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-my-pages',
@@ -10,12 +11,14 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./my-pages.component.css']
 })
 
-export class MyPagesComponent {
+export class MyPagesComponent implements OnDestroy {
   isFirstStepModal = true;
   emailList = [];
   currentUser: User;
   projects: Project[];
   error = '';
+  accountSubscription: Subscription;
+  projectsSubscription: Subscription;
 
   constructor(
     private viewService: ViewService,
@@ -23,7 +26,7 @@ export class MyPagesComponent {
     private accountService: AccountService,
     private projectService: ProjectService
   ) {
-    this.accountService.currentUser.subscribe(x => { this.currentUser = x; console.log('subscribe user: ', this.currentUser); }, e => console.log(JSON.stringify(e)));
+    this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; console.log('subscribe user: ', this.currentUser); }, e => console.log(JSON.stringify(e)));
     this.projectService.getProjects()
       .pipe(first())
       .subscribe(
@@ -33,9 +36,14 @@ export class MyPagesComponent {
           this.error = error;
           this.alertService.error(error);
         });
-    this.projectService.projects.subscribe(x => this.projects = x);
+    this.projectsSubscription = this.projectService.projects.subscribe(x => this.projects = x);
     //console.log("projects in my-pages: ", this.projects[0].name);
 
+  }
+
+  ngOnDestroy() {
+    this.accountSubscription.unsubscribe();
+    this.projectsSubscription.unsubscribe();
   }
 
   selectProject(projectId: string) {

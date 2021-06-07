@@ -29,7 +29,7 @@ namespace WebApplication_MT4North.Models
         }
 
         private async void CreateProject(
-            MT4NorthContext context, string projectName, string projectDescription, ApplicationUser[] users, string[] userRights, string[] userRoles)
+            MT4NorthContext context, string projectName, string projectDescription, ApplicationUser[] users, string[] userRoles, string[] userRights)
         {
             if (context.Projects.Any(e => e.Name == projectName) != true)
             {
@@ -120,7 +120,8 @@ namespace WebApplication_MT4North.Models
                         Rights = userRights[m],
                         Role = userRoles[m],
                         User = user,
-                        Project = project
+                        Project = project,
+                        Status = UserProjectStatus.Accepted
                     };
                     context.UserProjects.Add(userProject);
                     m++;

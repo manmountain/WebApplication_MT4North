@@ -148,7 +148,8 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the READ rights for project with id projectId! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
-            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == projectId && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "R")); // TODO Enum non R-read RW-readwrite
+            // TODO Enum non R-read RW-readwrite
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == projectId && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "R"));
             if (callerUserProject == null)
             {
                 // The caller doesnt have READ rights to this project
@@ -190,14 +191,14 @@ namespace WebApplication_MT4North.Controllers
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
-        [HttpPost("{userId}/{projectId}/{role}/{permissions}")]
-        public async Task<ActionResult> InviteUserToProject(string email, int projectId, string role, string rights)
+        [HttpPost("{userEmail}/{projectId}/{role}/{permissions}")]
+        public async Task<ActionResult> InviteUserToProject(string userEmail, int projectId, string role, string permissions)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 var error = new ErrorResult();
-                error.Message = "User " + email + " not found";
+                error.Message = "User " + userEmail + " not found";
                 return NotFound(error);
             }
 
@@ -242,7 +243,7 @@ namespace WebApplication_MT4North.Controllers
                         statusText = "unknown";
                         break;
                 }
-                error.Message = "User " + email + " is already invited and the invitation is " + statusText + ".";
+                error.Message = "User " + userEmail + " is already invited and the invitation is " + statusText + ".";
                 //error.Errors = new List<string>();
                 return BadRequest(error);
             }
@@ -252,7 +253,7 @@ namespace WebApplication_MT4North.Controllers
             userProject.User = user;
             userProject.Project = project;
             userProject.Role = role;
-            userProject.Rights = rights;
+            userProject.Rights = permissions;
             userProject.Status = UserProjectStatus.Pending;
             // Store the user project
             _context.UserProjects.Add(userProject);

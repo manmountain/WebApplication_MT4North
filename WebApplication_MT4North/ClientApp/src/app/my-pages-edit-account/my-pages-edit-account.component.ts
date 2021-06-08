@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { User, Alert, AlertType } from '../_models';
-import { Subscription } from 'rxjs';;
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class MyPagesEditAccountComponent implements OnDestroy {
   loading = false;
   submitted = false;
   currentUser: User;
-  accountSubscription = Subscription;
+  accountSubscription: Subscription;
 
   constructor(
     private viewService: ViewService,
@@ -33,8 +33,8 @@ export class MyPagesEditAccountComponent implements OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      firstname: [this.currentUser.firstname, Validators.required],
-      lastname: [this.currentUser.lastname, Validators.required],
+      firstName: [this.currentUser.firstName, Validators.required],
+      lastName: [this.currentUser.lastName, Validators.required],
       email: [this.currentUser.email, [Validators.required, Validators.email]],
     });
 

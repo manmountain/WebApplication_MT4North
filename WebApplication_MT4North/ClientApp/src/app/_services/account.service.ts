@@ -14,7 +14,6 @@ export class AccountService {
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
-    console.log('created currentUser: ', this.currentUserValue);
 
   }
 
@@ -26,7 +25,7 @@ export class AccountService {
           return this.http.post<any>(`${environment.apiUrl}/Account/login`, { email, password })
               .pipe(map(user => {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
-                
+                  
                   localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
                   return user;
@@ -48,12 +47,23 @@ export class AccountService {
     } 
 
   getCurrentUser() {
-    console.log('testar');
-      return this.http.get<User>(`${environment.apiUrl}/Account/user`);
+    return this.http.get<User>(`${environment.apiUrl}/Account/user`).pipe(map(user => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      console.log('user name in getCurrentUser: ', user.firstname);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return user;
+    }));
   }
 
     getById(id: string) {
-      return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+      return this.http.get<User>(`${environment.apiUrl}/users/${id}`).pipe(map(user => {
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        console.log('TEST2');
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+        return user;
+      }));;
   }
 
   update(params) {

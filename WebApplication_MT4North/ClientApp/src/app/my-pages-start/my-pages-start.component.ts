@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AccountService } from '@app/_services';
+import { Subscription } from 'rxjs';
+import { User } from '../_models';
+import { first } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-my-pages-start',
@@ -7,11 +11,27 @@ import { AccountService } from '@app/_services';
   styleUrls: ['./my-pages-start.component.css']
 })
 
-export class MyPagesStartComponent {
-  currentUser = null;
+export class MyPagesStartComponent implements OnDestroy {
+  currentUser: User;
+  accountSubscription: Subscription;
+  error = '';
+
   constructor(
     private accountService: AccountService
   ) {
-    this.currentUser = accountService.currentUserValue;
+    this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
+    this.accountService.getCurrentUser()
+      .pipe(first())
+      .subscribe(
+        data => { },
+
+        error => {
+          this.error = error;
+          //this.alertService.error(error);
+        });
+  }
+
+  ngOnDestroy() {
+    this.accountSubscription.unsubscribe();
   }
 }

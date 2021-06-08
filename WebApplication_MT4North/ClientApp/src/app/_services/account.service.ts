@@ -4,29 +4,42 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { User } from '@app/_models';
+import { User, UserAuth } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+  public currentUser: Observable<User>;
+
+  private currentUserAuthSubject: BehaviorSubject<UserAuth>;
+  public currentUserAuth: Observable<UserAuth>;
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
 
+    this.currentUserAuthSubject = new BehaviorSubject<UserAuth>(JSON.parse(localStorage.getItem('currentUserAuth')));
+    this.currentUserAuth = this.currentUserAuthSubject.asObservable();
+
   }
 
     public get currentUserValue(): User {
         return this.currentUserSubject.value;
-    }
+  }
+
+  public get currentUserAuthValue(): UserAuth {
+    return this.currentUserAuthSubject.value;
+  }
   
     login(email: string, password: string) {
           return this.http.post<any>(`${environment.apiUrl}/Account/login`, { email, password })
               .pipe(map(user => {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                   
-                  localStorage.setItem('currentUser', JSON.stringify(user));
+                  localStorage.setItem('currentUserAuth', JSON.stringify(user));
+                this.currentUserAuthSubject.next(user);
+
+                localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
                   return user;
               }));
@@ -34,7 +47,10 @@ export class AccountService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+      localStorage.removeItem('currentUserAuth');
+      localStorage.removeItem('currentUser');
+        this.currentUserAuthSubject.next(null);
+
         this.currentUserSubject.next(null);
     }
 
@@ -49,7 +65,9 @@ export class AccountService {
   getCurrentUser() {
     return this.http.get<User>(`${environment.apiUrl}/Account/user`).pipe(map(user => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      console.log('user name in getCurrentUser: ', user.firstname);
+      //var token = currentUserValue.accessToken;
+      console.log('user id in getCurrentUser: ', user.id);
+      
       localStorage.setItem('currentUser', JSON.stringify(user));
       this.currentUserSubject.next(user);
       return user;

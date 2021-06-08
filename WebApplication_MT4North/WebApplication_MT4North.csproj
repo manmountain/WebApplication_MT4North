@@ -97,6 +97,7 @@
     <None Remove="ClientApp\src\app\my-pages-start\my-pages-start.component.ts" />
     <None Remove="ClientApp\src\app\my-pages\my-pages.component.ts" />
     <None Remove="ClientApp\src\app\_models\user.model.ts" />
+    <None Remove="ClientApp\src\app\_models\userAuth.model.ts" />
     <None Remove="ClientApp\src\app\_models\userProject.model.ts" />
     <None Remove="ClientApp\src\assets\images\img1.jpg" />
     <None Remove="ClientApp\src\assets\images\img2.jpg" />

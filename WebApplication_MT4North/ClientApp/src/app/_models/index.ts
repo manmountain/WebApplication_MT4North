@@ -1,4 +1,5 @@
 export * from './user.model';
+export * from './userAuth.model';
 export * from './userProject.model';
 export * from './project.model';
 export * from './activity.model';

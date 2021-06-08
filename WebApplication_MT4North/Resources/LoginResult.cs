@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-//using WebApplication_MT4North.Services;
 
 namespace WebApplication_MT4North.Resources
 {
@@ -12,22 +11,22 @@ namespace WebApplication_MT4North.Resources
         [JsonPropertyName("email")]
         public string Email { get; set; }
 
-        [JsonPropertyName("firstname")]
+        [JsonPropertyName("firstName")]
         public string FirstName { get; set; }
 
-        [JsonPropertyName("lastname")]
+        [JsonPropertyName("lastName")]
         public string LastName { get; set; }
 
         [JsonPropertyName("gender")]
         public string Gender { get; set; }
 
-        [JsonPropertyName("companyname")] 
+        [JsonPropertyName("companyName")] 
         public string CompanyName { get; set; }
 
         [JsonPropertyName("country")]
         public string Country { get; set; }
 
-        [JsonPropertyName("profilepicture")]
+        [JsonPropertyName("profilePicture")]
         public string ProfilePicture { get; set; }
 
         [JsonPropertyName("roles")]

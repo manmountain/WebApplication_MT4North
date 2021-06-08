@@ -260,7 +260,7 @@ namespace WebApplication_MT4North.Controllers
             await _context.SaveChangesAsync();
 
             //return Ok(userProject);
-            return CreatedAtRoute("UserProjects/Project/{projectId}", new { id = userProject.UserProjectId }, userProject);
+            return CreatedAtRoute("UserProjects/{userProject.UserProjectId}", new { id = userProject.UserProjectId }, userProject);
         }
         // PUT: api/UserProjects/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

@@ -9,7 +9,7 @@ namespace WebApplication_MT4North.Models
     {
         public int NoteId { get; set; }
         public int? ActivityId { get; set; }
-        public int? UserId { get; set; }
+        public string UserId { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Text { get; set; }
 

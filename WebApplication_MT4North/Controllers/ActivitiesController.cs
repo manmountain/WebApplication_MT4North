@@ -57,14 +57,14 @@ namespace WebApplication_MT4North.Controllers
             foreach (var activity in activities)
             {
                 var project = await _context.Projects.Where(p => p.ProjectId == activity.ProjectId).ToListAsync<Project>();
-                var customActivities = await _context.CustomActivityInfos.Where(c => c.ActivityId == activity.ActivityId).ToListAsync<CustomActivityInfo>();
+                //var customActivities = await _context.CustomActivityInfos.Where(c => c.ActivityId == activity.ActivityId).ToListAsync<CustomActivityInfo>();
                 /* System.Text.Json.JsonException:
                  * A possible object cycle was detected which is not supported. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32.
                 foreach (var customActivity in customActivities)
                 {
                     var themes = await _context.Themes.Where(t => t.ThemeId == customActivity.ThemeId).ToListAsync<Theme>();
                 }*/
-                var baseActivity = await _context.BaseActivityInfos.Where(b => b.BaseActivityInfoId == activity.BaseInfoId).ToListAsync<BaseActivityInfo>();
+                //var baseActivity = await _context.BaseActivityInfos.Where(b => b.BaseActivityInfoId == activity.BaseInfoId).ToListAsync<BaseActivityInfo>();
 
             }
             // Return the activites found
@@ -232,9 +232,10 @@ namespace WebApplication_MT4North.Controllers
 
 
 
-// GET  /api/Activities                                       all activitys for user
-// GET  /api/Activities/{id}                                  activity with ActivityId == id
-// PUT  /api/Activities/{id}                                  update activity with ActivityId == id
-// DEL  /api/Activities/{id}                                  delete activity with ActivityId == id
-// GET  /api/Activities/Project/{projectId}                   all activitys for project with ProjectId == projectId
-// POST /api/Activities/Project/{projectId}                   create an activitys for user in project with ProjectId == projectId
+// GET  /api/Activities                                             all activitys for user
+// GET  /api/Activities/{id}                                        activity with ActivityId == id
+// PUT  /api/Activities/{id}                                        update activity with ActivityId == id
+// DEL  /api/Activities/{id}                                        delete activity with ActivityId == id
+// GET  /api/Activities/Project/{projectId}                         all activitys for project with ProjectId == projectId
+// POST /api/Activities/Project/{projectId}/customActivity/{id}     create an activitys for user in project with ProjectId == projectId
+// POST /api/Activities/Project/{projectId}/baseActivity/{id}       create an activitys for user in project with ProjectId == projectId

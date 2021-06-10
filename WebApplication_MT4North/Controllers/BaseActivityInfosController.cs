@@ -48,7 +48,7 @@ namespace WebApplication_MT4North.Controllers
         // PUT: api/BaseActivityInfos/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize()]
+        [Authorize(Roles = "AdminUser")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBaseActivityInfo(int id, BaseActivityInfo baseActivityInfo)
         {
@@ -79,9 +79,9 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // POST: api/BaseActivityInfos
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for'
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize()]
+        [Authorize(Roles = "AdminUser")]
         [HttpPost]
         public async Task<ActionResult<BaseActivityInfo>> PosBaseActivityInfo(BaseActivityInfo baseActivityInfo)
         {
@@ -92,7 +92,7 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/BaseActivityInfos/5
-        [Authorize()]
+        [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<BaseActivityInfo>> DeleteBaseActivityInfo(int id)
         {

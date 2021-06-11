@@ -144,14 +144,14 @@ namespace WebApplication_MT4North.Controllers
             return Ok(new LoginResult
             {
                 // TODO: Only return AccessToken and RefreshToken
-                UserName = existingUser.UserName,
+                /*UserName = existingUser.UserName,
                 Email = existingUser.Email,
                 FirstName = existingUser.FirstName,
                 LastName = existingUser.LastName,
                 Gender = existingUser.Gender,
                 CompanyName = existingUser.CompanyName,
                 Country = existingUser.Country,
-                ProfilePicture = existingUser.ProfilePicture,
+                ProfilePicture = existingUser.ProfilePicture,*/
                 Roles = roles.ToList<string>(),
                 //UsertYPE & uSERrOLE ? TODO:
                 AccessToken = jwtResult.AccessToken,
@@ -191,7 +191,7 @@ namespace WebApplication_MT4North.Controllers
                 _logger.LogInformation($"User [{userName}] has refreshed JWT token.");
                 return Ok(new LoginResult
                 {
-                    UserName = userName,
+                    //UserName = userName,
                     //Roles = roles.ToList<string>(), //TODO: ?
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString

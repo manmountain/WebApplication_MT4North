@@ -104,7 +104,7 @@ namespace WebApplication_MT4North.IntegrationTests
             var loginResponseContent = await loginResponse.Content.ReadAsStringAsync();
             var loginResult = JsonSerializer.Deserialize<LoginResult>(loginResponseContent);
 
-            Assert.AreEqual(credentials.Email, loginResult.Email);
+            //Assert.AreEqual(credentials.Email, loginResult.Email);
             var roles = new List<string>(new string[] { "BasicUser" });
             CollectionAssert.AreEqual(roles, loginResult.Roles);
             Assert.IsFalse(string.IsNullOrWhiteSpace(loginResult.AccessToken));
@@ -447,7 +447,7 @@ namespace WebApplication_MT4North.IntegrationTests
             var loginResponseContent = await loginResponse.Content.ReadAsStringAsync();
             var loginResult = JsonSerializer.Deserialize<LoginResult>(loginResponseContent);
 
-            Assert.AreEqual(credentials.Email, loginResult.Email);
+            //Assert.AreEqual(credentials.Email, loginResult.Email);
             //Assert.IsNull(loginResult.OriginalUserName); //REMOVEME:
             var roles = new List<string>(new string[] { /*"BasicUser",*/ "AdminUser" });
             CollectionAssert.AreEqual(roles, loginResult.Roles); 

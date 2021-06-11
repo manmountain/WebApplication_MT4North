@@ -14,7 +14,7 @@ namespace WebApplication_MT4North.Models
         public string Phase { get; set; }
         public int? ActivityId { get; set; }
 
-        //public virtual Activity Activity { get; set; }
+        public virtual Activity Activity { get; set; }
         public virtual Theme Theme { get; set; }
     }
 }

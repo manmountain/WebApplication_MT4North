@@ -9,7 +9,6 @@ namespace WebApplication_MT4North.Models
     {
         public Activity()
         {
-            CustomActivityInfos = new HashSet<CustomActivityInfo>();
             Notes = new HashSet<Note>();
         }
 
@@ -22,10 +21,10 @@ namespace WebApplication_MT4North.Models
         public string Resources { get; set; }
         public int ProjectId { get; set; }
         public int? BaseInfoId { get; set; }
-
+        //public int? CustomActivityInfoId { get; set; }
         public virtual BaseActivityInfo BaseInfo { get; set; }
         public virtual Project Project { get; set; }
-        public virtual ICollection<CustomActivityInfo> CustomActivityInfos { get; set; }
+        //public virtual CustomActivityInfo CustomActivityInfo { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
     }
 }

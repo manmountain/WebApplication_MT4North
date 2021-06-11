@@ -48,7 +48,7 @@ namespace WebApplication_MT4North.Controllers
         // PUT: api/Themes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize()]
+        [Authorize(Roles = "AdminUser")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTheme(int id, Theme theme)
         {
@@ -81,7 +81,7 @@ namespace WebApplication_MT4North.Controllers
         // POST: api/Themes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize()]
+        [Authorize(Roles = "AdminUser")]
         [HttpPost]
         public async Task<ActionResult<Theme>> PosTheme(Theme theme)
         {
@@ -92,7 +92,7 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/Themes/5
-        [Authorize()]
+        [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Theme>> DeleteTheme(int id)
         {

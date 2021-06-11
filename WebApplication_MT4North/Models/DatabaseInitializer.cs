@@ -138,11 +138,11 @@ namespace WebApplication_MT4North.Models
                         IsExcluded = false,
                         Status = status[o],
                         BaseInfo = baseActivity,
-                        CustomActivityInfos = new List<CustomActivityInfo>(new CustomActivityInfo[]
+                        /*CustomActivityInfos = new List<CustomActivityInfo>(new CustomActivityInfo[]
                         {
                             _customActivitys[n],
                             _customActivitys[n+1]
-                        }),
+                        }),*/
                         StartDate = DateTime.Now,
                         FinishDate = DateTime.Now.AddDays(10),
                         DeadlineDate = DateTime.Now.AddDays(14),

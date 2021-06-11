@@ -5,7 +5,7 @@ namespace WebApplication_MT4North.Resources
 {
     public class LoginResult
     {
-        [JsonPropertyName("username")]
+        /*[JsonPropertyName("username")]
         public string UserName { get; set; }
 
         [JsonPropertyName("email")]
@@ -27,7 +27,7 @@ namespace WebApplication_MT4North.Resources
         public string Country { get; set; }
 
         [JsonPropertyName("profilePicture")]
-        public string ProfilePicture { get; set; }
+        public string ProfilePicture { get; set; }*/
 
         [JsonPropertyName("roles")]
         public List<string> Roles { get; set; }

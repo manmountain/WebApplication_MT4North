@@ -20,8 +20,7 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
   error = '';
   accountSubscription: Subscription;
   userProjectsSubscription: Subscription;
-  projectNameIsEditable = false;
-  projectDescriptionIsEditable = false;
+  editModeIsOn = false;
 
   constructor(
     private alertService: AlertService,
@@ -37,34 +36,35 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     console.log('**currentUser: ', this.currentUser);
     console.log('userProject: ', this.userProjects.filter(x => x.userId == this.currentUser.id));
 
-    this.hasRights = (this.userProjects.filter(x => x.userId == this.currentUser.id)[0].rights == 'RW');
-    console.log('user has RW rights: ', this.hasRights);
+
   }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
+      projectId: [this.userProjects[0].project.projectId],
       projectName: [this.userProjects[0].project.name, Validators.required],
       projectDescription: [this.userProjects[0].project.description, Validators.required],
     });
+    this.hasRights = (this.userProjects.filter(x => x.userId == this.currentUser.id)[0].rights == 'RW');
+    console.log('user has RW rights: ', this.hasRights);
   }
 
   ngOnDestroy() {
+    console.log('unsubscribing from observers in project settings');
     this.accountSubscription.unsubscribe();
     this.userProjectsSubscription.unsubscribe();
   }
 
-  editProjectName(param: boolean) {
-    this.projectNameIsEditable = param;
-  }
-
-  editProjectDescription(param: boolean) {
-    this.projectDescriptionIsEditable = param;
+  activateEditMode(param: boolean) {
+    this.editModeIsOn = param;
+    console.log('edit mode on? ', param);
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
   onSubmit() {
+    console.log('form submitted');
     this.submitted = true;
 
     // reset alerts on submit
@@ -74,6 +74,7 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     if (this.form.invalid) {
       return;
     }
+    console.log('form value: ', this.form.value);
 
     this.loading = true;
     this.projectService.update(this.form.value)

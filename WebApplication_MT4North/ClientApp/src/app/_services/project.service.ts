@@ -69,8 +69,20 @@ export class ProjectService {
   }
 
   update(params) {
-    //console.log(params);
-    return this.http.put(`${environment.apiUrl}/Project`, params);
+    console.log(params);
+    return this.http.put(`${environment.apiUrl}/Projects/${this.selectedProjectValue[0].projectId}`, params);
+    //  .pipe(map(x => {
+    //  {
+    //    console.log(x);
+    //    // update local storage
+    //    const project = { ...this.selectedProject, ...params };
+    //    localStorage.setItem('selectedProject', JSON.stringify(project));
+
+    //    // publish updated user to subscribers
+    //    this.selectedProjectSubject.next(project);
+    //  }
+    //  return x;
+    //}));
   }
 
   //update(id, params) {

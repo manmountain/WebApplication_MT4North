@@ -361,17 +361,14 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("NoteId");
 
                     b.HasIndex("ActivityId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notes");
                 });
@@ -520,8 +517,8 @@ namespace WebApplication_MT4North.Migrations
 
             modelBuilder.Entity("WebApplication_MT4North.Models.CustomActivityInfo", b =>
                 {
-                    b.HasOne("WebApplication_MT4North.Models.Activity", null)
-                        .WithMany("CustomActivityInfos")
+                    b.HasOne("WebApplication_MT4North.Models.Activity", "Activity")
+                        .WithMany()
                         .HasForeignKey("ActivityId");
 
                     b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
@@ -537,7 +534,7 @@ namespace WebApplication_MT4North.Migrations
 
                     b.HasOne("WebApplication_MT4North.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.UserProject", b =>

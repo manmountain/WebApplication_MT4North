@@ -93,7 +93,7 @@ namespace WebApplication_MT4North.Controllers
             // Check if user got R or RW permissions for the project the activity belongs to
             var userproject = await _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
                                                                 p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).ToListAsync<UserProject>();
-            if (userproject == null)
+            if (userproject.Count == 0)
             {
                 return Unauthorized();
             }

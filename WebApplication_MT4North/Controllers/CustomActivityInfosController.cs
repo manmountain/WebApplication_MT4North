@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebApplication_MT4North.Models;
 
 namespace WebApplication_MT4North.Controllers
@@ -15,18 +18,82 @@ namespace WebApplication_MT4North.Controllers
     public class CustomActivityInfosController : ControllerBase
     {
         private readonly MT4NorthContext _context;
+        private readonly ILogger<CustomActivityInfosController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CustomActivityInfosController(MT4NorthContext context)
+        public CustomActivityInfosController(
+            ILogger<CustomActivityInfosController> logger,
+            MT4NorthContext context,
+            UserManager<ApplicationUser> userManager)
         {
+            _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: api/CustomActivityInfos
+        // GET: api/CustomActivityInfos/Activity/{activityId}
         [Authorize()]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomActivityInfo>>> GetCustomActivityInfos()
+        [HttpGet("Activity/{activityId}")]
+        public async Task<ActionResult<IEnumerable<CustomActivityInfo>>> GetForActivityCustomActivityInfos(int activityId)
         {
-            var customActivityInfos = await _context.CustomActivityInfos.ToListAsync();
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var activity = await _context.Activities.FindAsync(activityId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Activities.FindAsync(activity.ProjectId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            // Check if user got R or RW permissions for the project the activity belongs to
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
+                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
+            if (userproject == null)
+            {
+                return Unauthorized();
+            }
+
+            var customActivityInfos = await _context.CustomActivityInfos.Where(c => c.ActivityId == activity.ActivityId).ToListAsync<CustomActivityInfo>();
+            return customActivityInfos;
+        }
+
+        // GET: api/CustomActivityInfos/Project/{projectId}
+        [Authorize()]
+        [HttpGet("Project/{projectId}")]
+        public async Task<ActionResult<IEnumerable<CustomActivityInfo>>> GetForProjectCustomActivityInfos(int projectId)
+        {
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(projectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Check if user got R or RW permissions for the project the activity belongs to
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
+                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
+            if (userproject == null)
+            {
+                return Unauthorized();
+            }
+
+            var customActivityInfos = await _context.CustomActivityInfos.Where(c => c.Activity.ProjectId == project.ProjectId).ToListAsync<CustomActivityInfo>();
             return customActivityInfos;
         }
 
@@ -36,10 +103,30 @@ namespace WebApplication_MT4North.Controllers
         public async Task<ActionResult<CustomActivityInfo>> GetCustomActivityInfo(int id)
         {
             var customActivityInfo = await _context.CustomActivityInfos.FindAsync(id);
-
             if (customActivityInfo == null)
             {
                 return NotFound();
+            }
+
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(customActivityInfo.Activity.ProjectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Check if user got R or RW permissions for the project the activity belongs to
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
+                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
+            if (userproject == null)
+            {
+                return Unauthorized();
             }
 
             return customActivityInfo;
@@ -55,6 +142,27 @@ namespace WebApplication_MT4North.Controllers
             if (id != customActivityInfo.CustomActivityInfoId)
             {
                 return BadRequest();
+            }
+
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(customActivityInfo.Activity.ProjectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Check if user got W or RW permissions for the project the activity belongs to
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
+                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "W")).FirstOrDefault();
+            if (userproject == null)
+            {
+                return Unauthorized();
             }
 
             _context.Entry(customActivityInfo).State = EntityState.Modified;
@@ -78,18 +186,55 @@ namespace WebApplication_MT4North.Controllers
             return NoContent();
         }
 
-        // POST: api/CustomActivityInfos
+        // POST: api/CustomActivityInfos/Activity/{activityId}
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize()]
-        [HttpPost]
-        public async Task<ActionResult<CustomActivityInfo>> PosCustomActivityInfo(CustomActivityInfo customActivityInfo)
+        [HttpPost("Activity/{activityId}")]
+        public async Task<ActionResult<CustomActivityInfo>> PostCustomActivityInfo(int activityId, CustomActivityInfo customActivityInfo)
         {
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var activity = await _context.Activities.FindAsync(activityId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(activity.ProjectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Check if user got W or RW permissions for the project the activity belongs to
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
+                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "W")).FirstOrDefault();
+            if (userproject == null)
+            {
+                return Unauthorized();
+            }
+
             _context.CustomActivityInfos.Add(customActivityInfo);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCustomActivityInfo", new { id = customActivityInfo.CustomActivityInfoId }, customActivityInfo);
         }
+        /*
+        [Authorize()]
+        [HttpPost("Activity/{activityId}")]
+        public async Task<ActionResult<CustomActivityInfo>> PostCustomActivityInfo(int activityId, CustomActivityInfo customActivityInfo)
+        {
+            _context.CustomActivityInfos.Add(customActivityInfo);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCustomActivityInfo", new { id = customActivityInfo.CustomActivityInfoId }, customActivityInfo);
+        }*/
 
         // DELETE: api/CustomActivityInfos/5
         [Authorize()]
@@ -100,6 +245,27 @@ namespace WebApplication_MT4North.Controllers
             if (customActivityInfo == null)
             {
                 return NotFound();
+            }
+
+            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(customActivityInfo.Activity.ProjectId);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Check if user got W or RW permissions for the project the activity belongs to
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
+                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "W")).FirstOrDefault();
+            if (userproject == null)
+            {
+                return Unauthorized();
             }
 
             _context.CustomActivityInfos.Remove(customActivityInfo);

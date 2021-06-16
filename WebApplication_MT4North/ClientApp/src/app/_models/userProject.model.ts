@@ -1,12 +1,12 @@
 import { User, Project } from '@app/_models';
 
 export class UserProject {
-  userProjectId: number;
+  userProjectId: string;
   role: string;
   rights: string;
-  projectId: number;
+  projectId: string;
   userId: string;
   user: User;
-  status: string;
+  status: number;
   project: Project;
 }

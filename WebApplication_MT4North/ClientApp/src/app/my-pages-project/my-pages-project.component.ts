@@ -19,10 +19,11 @@ export class MyPagesProjectComponent implements OnDestroy {
     private projectService: ProjectService
   ) {
 
-    this. userProjectsSubscription = this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+    this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => { this.userProjects = x; console.log('selected project: ', this.userProjects[0].project.name); });
   }
 
   ngOnDestroy() {
+    console.log('unsubscribing...');
     this.userProjectsSubscription.unsubscribe();
   }
 

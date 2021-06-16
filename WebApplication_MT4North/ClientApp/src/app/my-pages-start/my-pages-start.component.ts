@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { AccountService } from '@app/_services';
+import { AccountService, ProjectService } from '@app/_services';
 import { Subscription } from 'rxjs';
 import { User } from '../_models';
 import { first } from 'rxjs/operators';
@@ -17,7 +17,8 @@ export class MyPagesStartComponent implements OnDestroy {
   error = '';
 
   constructor(
-    private accountService: AccountService
+    private accountService: AccountService,
+    private projectService: AccountService
   ) {
     this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
     this.accountService.getCurrentUser()

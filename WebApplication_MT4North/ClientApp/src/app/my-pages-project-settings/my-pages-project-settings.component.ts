@@ -31,19 +31,18 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     this.accountService.getCurrentUser();
 
     this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
-    this.userProjectsSubscription = this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+    this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => this.userProjects = x);
 
     console.log('**currentUser: ', this.currentUser);
     console.log('userProject: ', this.userProjects.filter(x => x.userId == this.currentUser.id));
-
 
   }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       projectId: [this.userProjects[0].project.projectId],
-      projectName: [this.userProjects[0].project.name, Validators.required],
-      projectDescription: [this.userProjects[0].project.description, Validators.required],
+      name: [this.userProjects[0].project.name, Validators.required],
+      description: [this.userProjects[0].project.description, Validators.required],
     });
     this.hasRights = (this.userProjects.filter(x => x.userId == this.currentUser.id)[0].rights == 'RW');
     console.log('user has RW rights: ', this.hasRights);

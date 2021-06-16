@@ -15,7 +15,7 @@ export class MyPagesMembersComponent implements OnDestroy {
 
   constructor(private projectService: ProjectService) {
 
-    this.userProjectsSubscription = this.projectService.selectedProject.subscribe(x => this.userProjects = x);
+    this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => this.userProjects = x);
   }
 
   ngOnDestroy() {

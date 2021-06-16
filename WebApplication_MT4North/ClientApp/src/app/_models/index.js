@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./user.model"), exports);
 __exportStar(require("./userAuth.model"), exports);
 __exportStar(require("./userProject.model"), exports);
+__exportStar(require("./userInvitation.model"), exports);
 __exportStar(require("./project.model"), exports);
 __exportStar(require("./activity.model"), exports);
 __exportStar(require("./theme.model"), exports);

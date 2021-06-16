@@ -1,6 +1,7 @@
 export * from './user.model';
 export * from './userAuth.model';
 export * from './userProject.model';
+export * from './userInvitation.model';
 export * from './project.model';
 export * from './activity.model';
 export * from './theme.model';

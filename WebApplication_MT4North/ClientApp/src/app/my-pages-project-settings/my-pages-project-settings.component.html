@@ -10,7 +10,7 @@
           <td class="w-50">
             <div class="form-group">
 
-              <input type="text" formControlName="projectName" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
+              <input type="text" formControlName="name" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
             </div>
           </td>
           <!--<td class="w-25">
@@ -23,7 +23,7 @@
           </td>
           <td class="w-50">
             <div class="form-group">
-              <input type="text" formControlName="projectDescription" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectDescription.errors }" />
+              <input type="text" formControlName="description" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
             </div>
           </td>
           <!--<td class="w-25">

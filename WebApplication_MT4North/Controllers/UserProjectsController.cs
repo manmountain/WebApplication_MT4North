@@ -83,6 +83,7 @@ namespace WebApplication_MT4North.Controllers
         /// </returns>
         /// <response code="200">Ok</response>
         /// <response code="401">Unautherized</response>
+        /// <response code="403">Forbidden</response>
         /// <response code="500">Internal Server Error</response>
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
@@ -105,7 +106,7 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
             return Ok(userproject);
@@ -136,9 +137,11 @@ namespace WebApplication_MT4North.Controllers
         /// </returns>
         /// <response code="200">Ok</response>
         /// <response code="401">Unautherized</response>
+        /// <response code="403">Forbidden</response>
         /// <response code="500">Internal Server Error</response>
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
@@ -153,7 +156,7 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The caller doesnt have READ rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
             // fetch all user-projects for project with id projectId 
@@ -168,7 +171,7 @@ namespace WebApplication_MT4North.Controllers
             return Ok(userProjects);
         }
 
-        // POST: api/UserProjects/Project/{projectId}
+        // POST: api/UserProjects/{userEmail}/{projectId}/{role}/{permissions}
         /// <summary>
         /// Creates a new UserProject for Project with id ProjectId and Status pending linked to the user in the userInvite
         /// </summary>
@@ -217,11 +220,11 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
-            // fetch all user-projects for project with id projectId 
-            var userProjects = await _context.UserProjects.Where(p => p.ProjectId == projectId && p.UserId == user.Id).ToListAsync<UserProject>();
+            // fetch all user-projects for project with id projectId (that i NOT rejected)
+            var userProjects = await _context.UserProjects.Where(p => p.ProjectId == projectId && p.UserId == user.Id && p.Status != UserProjectStatus.Rejected).ToListAsync<UserProject>();
             // check if user is already invited to the project (or is a member)
             if (userProjects.Count > 0)
             {
@@ -259,9 +262,10 @@ namespace WebApplication_MT4North.Controllers
             _context.UserProjects.Add(userProject);
             await _context.SaveChangesAsync();
 
-            //return Ok(userProject);
-            return CreatedAtRoute("UserProjects/{userProject.UserProjectId}", new { id = userProject.UserProjectId }, userProject);
+            return Ok(userProject);
+            //return CreatedAtRoute("UserProjects/{userProject.UserProjectId}", new { id = userProject.UserProjectId }, userProject);
         }
+
         // PUT: api/UserProjects/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -274,10 +278,12 @@ namespace WebApplication_MT4North.Controllers
         /// </returns>
         /// <response code="200">OK</response>
         /// <response code="401">Unautherized</response>
+        /// <response code="403">Unautherized</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
@@ -291,7 +297,7 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
             if (id != userproject.UserProjectId)
@@ -320,7 +326,7 @@ namespace WebApplication_MT4North.Controllers
             return NoContent();
         }
 
-        //GET: api/UserProjects/Invite/
+        //GET: api/UserProjects/Invites/
         /// <summary>
         /// Get the invites for the current authorized user
         /// </summary>
@@ -352,7 +358,7 @@ namespace WebApplication_MT4North.Controllers
             return Ok(userProjects);
         }
 
-        //POST: api/UserProjects/Invite/Accept {id}
+        //POST: api/UserProjects/Invite/Accept/{id}
         /// <summary>
         /// Acccept a UserProject invatation with {id}
         /// </summary>

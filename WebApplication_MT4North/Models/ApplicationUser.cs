@@ -9,21 +9,36 @@ namespace WebApplication_MT4North.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        [JsonPropertyName("firstname")]
         public string FirstName { get; set; }
 
+        [JsonPropertyName("lastname")]
         public string LastName { get; set; }
 
+        [JsonPropertyName("gender")]
         public string Gender { get; set; }
 
+        [JsonPropertyName("companyname")]
         public string CompanyName { get; set; }
 
+        [JsonPropertyName("country")]
         public string Country { get; set; }
 
+        [JsonPropertyName("profilepicture")]
         public string ProfilePicture { get; set; }
 
+        [JsonPropertyName("usertype")]
         public string UserType { get; set; }
 
+        [JsonPropertyName("userrole")]
         public string UserRole { get; set; }
+
+        [JsonPropertyName("id")]
+        public override string Id
+        {
+            get { return base.Id; }
+            set { base.Id = value; }
+        }
 
         [JsonIgnore]
         public override string PasswordHash

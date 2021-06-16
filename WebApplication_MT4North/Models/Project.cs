@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -22,8 +23,13 @@ namespace WebApplication_MT4North.Models
         public virtual ICollection<InnovationModel> InnovationModels { get; set; }
         public virtual ICollection<RegisteredUserProject> RegisteredUserProjects { get; set; }*/
 
+        [JsonPropertyName("projectid")]
         public int ProjectId { get; set; }
+
+        [JsonPropertyName("name")]
         public string Name { get; set; }
+
+        [JsonPropertyName("description")]
         public string Description { get; set; }
     }
 }

@@ -132,6 +132,34 @@ export class ProjectService {
     }));
   }
 
+  acceptInvitation(projectId: number, email: string, role: string, permissions: string) {
+    return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      //localStorage.setItem('currentProjects', JSON.stringify(project));
+      //this.projectSubjects.next(project);
+      console.log('invited member');
+      this.userProjectsValue.push(userProject);
+      this.userProjectsSubject.next(this.userProjectsValue);
+
+      return userProject;
+    }));
+  }
+
+  rejectInvitation(projectId: number, email: string, role: string, permissions: string) {
+    return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      //localStorage.setItem('currentProjects', JSON.stringify(project));
+      //this.projectSubjects.next(project);
+      console.log('invited member');
+      this.userProjectsValue.push(userProject);
+      this.userProjectsSubject.next(this.userProjectsValue);
+
+      return userProject;
+    }));
+  }
+
   //update(id, params) {
   //  return this.http.put(`${environment.apiUrl}/users/${id}`, params)
   //    .pipe(map(x => {

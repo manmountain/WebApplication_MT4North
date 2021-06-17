@@ -83,7 +83,7 @@ export class ProjectService {
 
   update(params) {
     console.log(params);
-    return this.http.put(`${environment.apiUrl}/Projects/${this.userProjectsValue[0].projectId}`, params).pipe(map(x => {
+    return this.http.put(`${environment.apiUrl}/Projects/${this.userProjectsValue[0].projectid}`, params).pipe(map(x => {
       {
 
         // update local storage
@@ -91,7 +91,7 @@ export class ProjectService {
         ////console.log('PROJECT: ', project);
         //  localStorage.setitem('selectedProject', JSON.stringify(project));
         this.userProjectsValue[0].project = project;
-        let projectToUpdate = this.currentProjectsValue.find(y => y.projectId == this.userProjectsValue[0].projectId);
+        let projectToUpdate = this.currentProjectsValue.find(y => y.projectid == this.userProjectsValue[0].projectid);
         let index = this.currentProjectsValue.indexOf(projectToUpdate);
 
         this.currentProjectsValue[index] = project;

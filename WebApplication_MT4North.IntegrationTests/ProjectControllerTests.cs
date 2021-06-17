@@ -172,9 +172,9 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser1);
 
             // Invite user2 with RW permissions
-            await inviteUser(user2Credentials.Email, _newProject.ProjectId, "TestDeltagare", "RW", HttpStatusCode.OK);
+            await inviteUser(user2Credentials.Email, _newProject.ProjectId, "TestDeltagare", "RW", HttpStatusCode.Created);
             // Invite user3 with R  permissions
-            await inviteUser(user3Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.OK);
+            await inviteUser(user3Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Created);
         }
 
         private async Task inviteUser(string email, int projectId, string role, string permissions, HttpStatusCode expectedHttpStatus)
@@ -296,7 +296,7 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser2);
 
             // Invite user4 with R permissions
-            await inviteUser(user4Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.OK);
+            await inviteUser(user4Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Created);
         }
 
         [TestMethod]
@@ -316,7 +316,20 @@ namespace WebApplication_MT4North.IntegrationTests
         }
 
         [TestMethod]
-        public async Task AAG_UserShouldNotBeAbleToInvite()
+        public async Task AAG_ShouldBeAbleToInviteUserThatRejected()
+        {
+            // Make sure that we have a newProject
+            Assert.IsNotNull(_newProject);
+
+            // Autherize
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser1);
+
+            // Invite user3 with R  permissions
+            await inviteUser(user3Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Created);
+        }
+
+        [TestMethod]
+        public async Task AAH_UserShouldNotBeAbleToInvite()
         {
             // Make sure that we have a newProject
             Assert.IsNotNull(_newProject);
@@ -325,11 +338,11 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser4);
 
             // Invite a user (should Fail) because missing W permission of user4
-            await inviteUser(user2.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Forbidden);
+            await inviteUser(user2Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Forbidden);
         }
 
         [TestMethod]
-        public async Task AAH_ShouldBeAbleToEdit()
+        public async Task AAI_ShouldBeAbleToEdit()
         {
             // Make sure that we have a newProject
             Assert.IsNotNull(_newProject);
@@ -351,19 +364,20 @@ namespace WebApplication_MT4North.IntegrationTests
             project.Description = "New Decription";
 
             // Save the change
-            var putUrl = String.Format("/api/Projects/{id}", project.ProjectId);
+            var putUrl = "/api/Projects/"+project.ProjectId;
             var body = new StringContent(JsonSerializer.Serialize(project), Encoding.UTF8, MediaTypeNames.Application.Json);
             // Call to save
             var putResponse = await _httpClient.PutAsync(putUrl, body);
             // Did we succed?
             Assert.AreEqual(HttpStatusCode.OK, putResponse.StatusCode);
 
+
             // Call to get the project with id
             var getResponse2 = await _httpClient.GetAsync(getUrl);
             // Did we get the project?
-            Assert.AreEqual(HttpStatusCode.OK, getResponse.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, getResponse2.StatusCode);
 
-            var getProjectContent2 = await getResponse.Content.ReadAsStringAsync();
+            var getProjectContent2 = await getResponse2.Content.ReadAsStringAsync();
             var project2 = JsonSerializer.Deserialize<Project>(getProjectContent2);
 
             Assert.AreEqual(project.ProjectId, project2.ProjectId);
@@ -372,7 +386,7 @@ namespace WebApplication_MT4North.IntegrationTests
         }
 
         [TestMethod]
-        public async Task AAI_ShouldNotBeAbleToEdit()
+        public async Task AAJ_ShouldNotBeAbleToEdit()
         {
             // Make sure that we have a newProject
             Assert.IsNotNull(_newProject);
@@ -394,23 +408,46 @@ namespace WebApplication_MT4North.IntegrationTests
             project.Description = "Should not be saved";
 
             // Save the change
-            var putUrl = String.Format("/api/Projects/{id}", project.ProjectId);
+            var putUrl = "/api/Projects/"+project.ProjectId;
             var body = new StringContent(JsonSerializer.Serialize(project), Encoding.UTF8, MediaTypeNames.Application.Json);
             // Call to save
             var putResponse = await _httpClient.PutAsync(putUrl, body);
-            // Did we succed?
+            // Did we succed? We should get status Forbidden 403
             Assert.AreEqual(HttpStatusCode.Forbidden, putResponse.StatusCode);
         }
 
-        public async Task AAJ_ShouldNotBeAbleToDelete()
+        [TestMethod]
+        public async Task AAK_ShouldNotBeAbleToDelete()
         {
+            // Make sure that we have a newProject
+            Assert.IsNotNull(_newProject);
 
+            // Autherize user4
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser4);
 
+            // delete project
+            var delUrl = "api/Projects/" + _newProject.ProjectId;
+            // Call to delete
+            var delResponse = await _httpClient.DeleteAsync(delUrl);
+            // Did we succed? We should get status Forbidden 403
+            Assert.AreEqual(HttpStatusCode.Forbidden, delResponse.StatusCode);
         }
 
-        public async Task AAK_ShouldBeAbleToDelete()
+        [TestMethod]
+        public async Task AAL_ShouldBeAbleToDelete()
         {
+            // Make sure that we have a newProject
+            Assert.IsNotNull(_newProject);
 
+            // Autherize user4
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser2);
+
+            // delete project
+            var delUrl = "api/Projects/" + _newProject.ProjectId;
+            // Call to delete
+            var delResponse = await _httpClient.DeleteAsync(delUrl);
+            // Did we succed? We should get status Ok 200
+            Assert.AreEqual(HttpStatusCode.OK, delResponse.StatusCode);
 
         }
     }

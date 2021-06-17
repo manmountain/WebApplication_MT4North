@@ -160,7 +160,7 @@ namespace WebApplication_MT4North.Controllers
             }
 
             // fetch all user-projects for project with id projectId 
-            var userProjects = await _context.UserProjects.Where(p => p.ProjectId == projectId && p.Status == UserProjectStatus.Accepted).ToListAsync<UserProject>();
+            var userProjects = await _context.UserProjects.Where(p => p.ProjectId == projectId && (p.Status == UserProjectStatus.Pending || p.Status == UserProjectStatus.Accepted)).ToListAsync<UserProject>();
             foreach (var userProject in userProjects)
             {
                 await _context.Projects.Where(p => p.ProjectId == userProject.ProjectId).ToListAsync<Project>();

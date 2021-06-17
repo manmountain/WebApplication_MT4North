@@ -8,7 +8,7 @@ import { User, UserAuth } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-    private currentUserSubject: BehaviorSubject<User>;
+  private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
   private currentUserAuthSubject: BehaviorSubject<UserAuth>;
@@ -66,7 +66,6 @@ export class AccountService {
     return this.http.get<User>(`${environment.apiUrl}/Account/user`).pipe(map(user => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       //var token = currentUserValue.accessToken;
-      console.log('user id in getCurrentUser: ', user.id);
       
       localStorage.setItem('currentUser', JSON.stringify(user));
       this.currentUserSubject.next(user);

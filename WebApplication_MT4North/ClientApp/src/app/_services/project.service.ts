@@ -14,12 +14,18 @@ export class ProjectService {
   private userProjectsSubject: BehaviorSubject<UserProject[]>;
   public userProjects: Observable<UserProject[]>;
 
+  private invitationsSubject: BehaviorSubject<UserProject[]>;
+  public invitations: Observable<UserProject[]>;
+
   constructor(private http: HttpClient) {
     this.projectSubjects = new BehaviorSubject<Project[]>(JSON.parse(localStorage.getItem('currentProjects')));
     this.projects = this.projectSubjects.asObservable();
 
     this.userProjectsSubject = new BehaviorSubject<UserProject[]>(JSON.parse(localStorage.getItem('userProjects')));
     this.userProjects = this.userProjectsSubject.asObservable();
+
+    this.invitationsSubject = new BehaviorSubject<UserProject[]>(JSON.parse(localStorage.getItem('invitations')));
+    this.invitations = this.invitationsSubject.asObservable();
   }
 
   public get currentProjectsValue(): Project[] {
@@ -28,6 +34,10 @@ export class ProjectService {
 
   public get userProjectsValue(): UserProject[] {
     return this.userProjectsSubject.value;
+  }
+
+  public get invitationsValue(): UserProject[] {
+    return this.invitationsSubject.value;
   }
 
   createProject(name: string, description: string) {
@@ -95,12 +105,26 @@ export class ProjectService {
       }));
   }
 
-  inviteMember(email: string, role: string, permissions: string) {
-    return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${this.userProjectsValue[0].projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
+  getInvites() {
+    return this.http.get<any>(`${environment.apiUrl}/UserProjects/Invites`).pipe(map(invitations => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
 
       //localStorage.setItem('currentProjects', JSON.stringify(project));
       //this.projectSubjects.next(project);
+
+      this.invitationsSubject.next(invitations);
+
+      return invitations;
+    }));
+  }
+
+  inviteMember(projectId: number, email: string, role: string, permissions: string) {
+    return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      //localStorage.setItem('currentProjects', JSON.stringify(project));
+      //this.projectSubjects.next(project);
+      console.log('invited member');
       this.userProjectsValue.push(userProject);
       this.userProjectsSubject.next(this.userProjectsValue);
 

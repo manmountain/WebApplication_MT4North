@@ -11,7 +11,7 @@
       <div class="media d-flex align-items-center">
        <!-- <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
         <div class="media-body">
-          <h4 class="m-0">{{currentUser?.firstName}} {{currentUser?.lastName}}</h4>
+          <h4 class="m-0">{{currentUser?.firstname}} {{currentUser?.lastname}}</h4>
           <p class="font-weight-light text-muted mb-0">Organisation</p>
         </div>
       </div>
@@ -136,7 +136,7 @@
                         <span class="d-inline-block float-right" style="white-space:nowrap">
 
                           <i class="fa fa-eye mr-2" style="font-size:10px; color: gray"></i>
-                          <span class="btn p-0 m-0" data-effect="fadeOut" (click)="removeMember(fi.email)">×</span>
+                          <span class="btn p-0 m-0" data-effect="fadeOut" (click)="removeMember(fi.email.value)">×</span>
                         </span>
                       </span>
                     </div>
@@ -147,19 +147,19 @@
 
                     <div class="form-group m-0">
                       <!--<label for="sel1">Behörighet:</label>-->
-                      <select class="form-control" id="sel1">
+                      <select class="form-control" id="sel1" formControlName="permissions">
                         <option>Kan endast läsa</option>
                         <option>Kan läsa och redigera</option>
                       </select>
                     </div>
                   </div>
-                  <button class="btn btn-secondary" (click)="addMember(fi.email, fi.role, fi.permissions)">Lägg till</button>
+                  <button class="btn btn-secondary" (click)="addMember(fi.email.value, fi.role.value, fi.permissions.value)">Lägg till</button>
                 </form>
               </div>
               <div class="modal-footer">
                 <button type="submit" (click)="createProject()" class="btn btn-primary" [style.display]="isFirstStepModal ? 'block' : 'none'">Fortsätt</button>
-                <button type="button" (click)="inviteMembers()" class="btn" [style.display]="isFirstStepModal ? 'none' : 'block'" data-dismiss="modal"><u>Jag gör det här senare.</u></button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'">Bjud in till projekt</button>
+                <button type="button" class="btn" [style.display]="isFirstStepModal ? 'none' : 'block'" data-dismiss="modal"><u>Jag gör det här senare.</u></button>
+                <button type="button" (click)="inviteMembers()" class="btn btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'">Bjud in till projekt</button>
               </div>
             </div>
           </div>

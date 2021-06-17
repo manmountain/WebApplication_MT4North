@@ -18,6 +18,7 @@ export class MyPagesComponent implements OnDestroy {
   currentUser: User;
   projects: Project[];
   projectForm: FormGroup;
+  newProjectId: number;
   invitationForm: FormGroup;
   loading = false;
   submitted = false;
@@ -107,6 +108,8 @@ export class MyPagesComponent implements OnDestroy {
       .pipe(first())
       .subscribe(
         data => {
+          console.log('returned from create proj: ', data);
+          this.newProjectId = data.projectid;
           this.alertService.success('Projektet har skapats', { keepAfterRouteChange: true });
           this.loading = false;
         },
@@ -129,14 +132,19 @@ export class MyPagesComponent implements OnDestroy {
 
     this.loading = true;
     for (var userInvitation of this.userInvitations) {
-      this.projectService.inviteMember(userInvitation.email, userInvitation.role, userInvitation.permissions)
+      console.log('user permissions: ', userInvitation.permissions);
+      let permissions = userInvitation.permissions == "Kan endast läsa" ? "R" : "RW";
+      this.projectService.inviteMember(this.newProjectId, userInvitation.email, userInvitation.role, permissions)
         .pipe(first())
         .subscribe(
           data => {
+            console.log('user invited from my pages');
             this.alertService.success('Inbjudan har skickats', { keepAfterRouteChange: true });
             this.loading = false;
           },
           error => {
+            console.log('user NOT invited from my pages. error: ', error);
+
             this.alertService.error(error);
             this.loading = false;
           });
@@ -151,7 +159,8 @@ export class MyPagesComponent implements OnDestroy {
   }
 
   addMember(email: string, role: string, permissions: string) {
-    this.userInvitations.push(new UserInvitation(this.userInvitations.length+1, email, role, permissions));
+    this.userInvitations.push(new UserInvitation(this.userInvitations.length + 1, email, role, permissions));
+    console.log('invitations: ', this.userInvitations);
   }
 
   removeMember(email: string) {

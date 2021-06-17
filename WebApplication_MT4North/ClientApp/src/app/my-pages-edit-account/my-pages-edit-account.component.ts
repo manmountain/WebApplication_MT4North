@@ -33,8 +33,8 @@ export class MyPagesEditAccountComponent implements OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      firstName: [this.currentUser.firstName, Validators.required],
-      lastName: [this.currentUser.lastName, Validators.required],
+      firstName: [this.currentUser.firstname, Validators.required],
+      lastName: [this.currentUser.lastname, Validators.required],
       email: [this.currentUser.email, [Validators.required, Validators.email]],
     });
 

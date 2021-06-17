@@ -108,6 +108,9 @@ namespace WebApplication_MT4North.Controllers
                 // The caller doesnt have WRITE rights to this project
                 return Forbid();
             }
+            // fetch the rest
+            await _context.Projects.Where(p => p.ProjectId == userproject.ProjectId).ToListAsync<Project>();
+            await _context.Users.Where(u => u.Id == userproject.UserId).ToListAsync<ApplicationUser>();
 
             return Ok(userproject);
         }
@@ -160,7 +163,7 @@ namespace WebApplication_MT4North.Controllers
             }
 
             // fetch all user-projects for project with id projectId 
-            var userProjects = await _context.UserProjects.Where(p => p.ProjectId == projectId && p.Status == UserProjectStatus.Accepted).ToListAsync<UserProject>();
+            var userProjects = await _context.UserProjects.Where(p => p.ProjectId == projectId && (p.Status == UserProjectStatus.Pending || p.Status == UserProjectStatus.Accepted)).ToListAsync<UserProject>();
             foreach (var userProject in userProjects)
             {
                 await _context.Projects.Where(p => p.ProjectId == userProject.ProjectId).ToListAsync<Project>();
@@ -388,6 +391,9 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound(null);
             }
             invite.Status = UserProjectStatus.Accepted;
+            // fetch the rest
+            await _context.Projects.Where(p => p.ProjectId == invite.ProjectId).ToListAsync<Project>();
+            await _context.Users.Where(u => u.Id == invite.UserId).ToListAsync<ApplicationUser>();
             // Update userProject (invatation)
             _context.Entry(invite).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -424,6 +430,9 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
             invite.Status = UserProjectStatus.Rejected;
+            // fetch the rest
+            await _context.Projects.Where(p => p.ProjectId == invite.ProjectId).ToListAsync<Project>();
+            await _context.Users.Where(u => u.Id == invite.UserId).ToListAsync<ApplicationUser>();
             // Update userProject (invatation)
             _context.Entry(invite).State = EntityState.Modified;
             await _context.SaveChangesAsync();

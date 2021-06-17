@@ -16,10 +16,11 @@
       <tbody>
         <ng-container *ngFor="let userProject of userProjects; let i = index">
             <tr>
-              <td>{{userProject.user.firstName}} {{userProject.user.lastName}}</td>
+              <td>{{userProject.user.firstname}} {{userProject.user.lastname}}</td>
               <td>{{userProject.user.email}}</td>
               <td>
-                <div class="dropdown w-100">
+                  {{userProject.role}}
+                <!--<div class="dropdown w-100">
                   <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Projektledare
                   </button>
@@ -27,17 +28,19 @@
                     <a class="dropdown-item" href="#">Projektdeltagare</a>
                     <button class="dropdown-item">+ Lägg till ny roll</button>
                   </div>
-                </div>
+                </div>-->
               </td>
               <td>
-                <div class="dropdown w-100">
-                  <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Läsa och redigera
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Endast läsa</a>
-                  </div>
-                </div>
+                {{userProject.rights}}
+
+                <!--<div class="dropdown w-100">
+    <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Läsa och redigera
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Endast läsa</a>
+    </div>
+  </div>-->
               </td>
               <td><button class="btn btn-danger btn-sm float-right">Ta bort</button></td>
             </tr>

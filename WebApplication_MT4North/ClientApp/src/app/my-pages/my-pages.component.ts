@@ -66,9 +66,9 @@ export class MyPagesComponent implements OnDestroy {
     this.projectsSubscription.unsubscribe();
   }
 
-  selectProject(projectId: string) {
-    console.log('project id: ', projectId);
-    this.projectService.getUserProjects(projectId)
+  selectProject(projectid: string) {
+    console.log('project id: ', projectid);
+    this.projectService.getUserProjects(projectid)
       .pipe(first())
       .subscribe(
         data => {

@@ -1,8 +1,8 @@
 export enum Phase {
   CONCEPTUALIZATION = "Konceptualisering",
-  PROOFOFCONCEPT = "Utveckling",
-  VALIDATION = "Validering",
-  LAUNCH = "Lansering"
+  PROOFOFCONCEPT = "Konceptvalidering",
+  VALIDATION = "Produktutveckling",
+  LAUNCH = "Produktlansering"
 }
 
 export enum Status {

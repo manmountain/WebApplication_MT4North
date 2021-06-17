@@ -9,4 +9,5 @@ export class UserProject {
   user: User;
   status: number;
   project: Project;
+  isEditable = false;
 }

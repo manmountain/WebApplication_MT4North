@@ -106,7 +106,8 @@
             <td class="im-theme noselect align-middle">
               <span class="fa-stack fa-2x float-left im-theme-icon">
                 <i class="fa fa-circle fa-stack-2x float-left im-theme-{{i}}"></i>
-                <i class="fa fa-cog fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Teknikutveckling'" class="fa fa-cog fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Klinisk validering'" class="fa fa-hospital fa-stack-1x fa-inverse float-left"></i>
               </span><span class="align-middle im-theme-text ml-2">{{theme.name}}</span>
             </td>
 

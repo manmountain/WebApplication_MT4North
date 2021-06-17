@@ -35,19 +35,31 @@ export class MyPagesActivityStatusComponent {
     let activity1 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.CONCEPTUALIZATION, false);
     let activity2 = new Activity("Genomför kravanalys", "Genomför en kravanalys för konceptet. Finns standarder att förhålla sig till?", Phase.CONCEPTUALIZATION, true);
     let activity3 = new Activity("Utveckla prototyp baserat på koncept", "En första prototyp ska utvecklas som kan användas både som proof-of-concept och för att genomföra nödvändiga användartester i detta skede.", Phase.PROOFOFCONCEPT, false);
+    let activity41 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.VALIDATION, false);
+    let activity51 = new Activity("Genomför kravanalys", "Genomför en kravanalys för konceptet. Finns standarder att förhålla sig till?", Phase.LAUNCH, true);
     technicalDevelopmentTheme.addActivity(activity1);
     technicalDevelopmentTheme.addActivity(activity2);
     technicalDevelopmentTheme.addActivity(activity3);
+    technicalDevelopmentTheme.addActivity(activity41);
+    technicalDevelopmentTheme.addActivity(activity51);
 
     this.themes.push(technicalDevelopmentTheme);
 
-    let clinicalDevelopmentTheme = new Theme("Klinisk utveckling", "Beskrivning");
-    let activity4 = new Activity("Kontakta klinisk personal", "Kontakta klinisk personal inom relevant område för att bekräfta att produktidén svarar mot ett faktiskt, upplevt behov inom vården, alternativt innebär en för dem relevant förbättring av en existerande lösning. Undersök möjlighet till samarbeten för framtida klinisk utvärdering av prototyp/produkt.", Phase.CONCEPTUALIZATION, false);
-    let activity5 = new Activity("Genomför klinisk riskanalys", "Genomför en riskanalys i enlighet med relevant standard, tillsammans med personer med nödvändig klinisk kompetens.", Phase.PROOFOFCONCEPT, false);
+    let clinicalDevelopmentTheme = new Theme("Klinisk validering", "Beskrivning");
+    let activity4 = new Activity("Etablera kontakt med klinisk personal", "Utred hur man tar kontakt med relevant klinisk personal. Utred därefter möjligheten till samarbete kring verifieringen av behoven och för kommande klinisk utvärdering.", Phase.CONCEPTUALIZATION, false);
+    let activity5 = new Activity("Genomför användartester", "Genomför en riskanalys i enlighet med relevant standard, tillsammans med personer med nödvändig klinisk kompetens.", Phase.PROOFOFCONCEPT, false);
     let activity6 = new Activity("Genomför kliniska tester i laboratoriemiljö", "Testa att prototypen uppfyller de tänkta kliniska grundfunktionerna i relevant laboratoriemiljö.", Phase.PROOFOFCONCEPT, false);
+
+    let activity7 = new Activity("Validera produkten genom en klinisk prövning", "Utred hur man tar kontakt med relevant klinisk personal. Utred därefter möjligheten till samarbete kring verifieringen av behoven och för kommande klinisk utvärdering.", Phase.VALIDATION, false);
+
+    let activity8 = new Activity("Sök kontakt med tidiga användare", "Utred hur man tar kontakt med relevant klinisk personal. Utred därefter möjligheten till samarbete kring verifieringen av behoven och för kommande klinisk utvärdering.", Phase.LAUNCH, false);
+
     clinicalDevelopmentTheme.addActivity(activity4);
     clinicalDevelopmentTheme.addActivity(activity5);
     clinicalDevelopmentTheme.addActivity(activity6);
+    clinicalDevelopmentTheme.addActivity(activity7);
+    clinicalDevelopmentTheme.addActivity(activity8);
+
 
     this.themes.push(clinicalDevelopmentTheme);
 

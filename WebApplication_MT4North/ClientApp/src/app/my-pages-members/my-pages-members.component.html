@@ -1,6 +1,6 @@
 
 <div class="row mt-4">
-  <div class="col-sm-12 col-md-6">
+  <div class="col-12" style="max-width: 1100px;">
     <table class="table table-borderless">
       <thead class="thead-dark">
         <tr>
@@ -15,40 +15,52 @@
 
       <tbody>
         <ng-container *ngFor="let userProject of userProjects; let i = index">
-            <tr>
-              <td>{{userProject.user.firstname}} {{userProject.user.lastname}}</td>
-              <td>{{userProject.user.email}}</td>
-              <td>
-                  {{userProject.role}}
-                <!--<div class="dropdown w-100">
-                  <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Projektledare
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Projektdeltagare</a>
-                    <button class="dropdown-item">+ Lägg till ny roll</button>
-                  </div>
-                </div>-->
-              </td>
-              <td>
-                {{userProject.rights}}
+          <tr>
+            <td>{{userProject.user.firstname}} {{userProject.user.lastname}}</td>
+            <td>{{userProject.user.email}}</td>
+            <td>
+              <p *ngIf="!userProject.isEditable">{{userProject.role}}</p>
+              <input *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" value="{{userProject.role}}">
 
-                <!--<div class="dropdown w-100">
-    <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Läsa och redigera
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#">Endast läsa</a>
-    </div>
-  </div>-->
-              </td>
-              <td><button class="btn btn-danger btn-sm float-right">Ta bort</button></td>
-            </tr>
-          </ng-container>
-</tbody>
+              <!--<div class="dropdown w-100">
+              <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Projektledare
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Projektdeltagare</a>
+                <button class="dropdown-item">+ Lägg till ny roll</button>
+              </div>
+            </div>-->
+            </td>
+            <td>
+              <p *ngIf="!userProject.isEditable">{{userProject.rights}}</p>
+              <select *ngIf="userProject.isEditable" [(ngModel)]="userProject.rights" class="bootstrap-select" aria-labelledby="dropdownMenuButton">
+                <option value="R">R</option>
+                <option value="RW">RW</option>
+
+              </select>
+              <!--<div class="dropdown w-100">
+              <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Läsa och redigera
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Endast läsa</a>
+              </div>
+            </div>-->
+            </td>
+            <td>
+              <button class="btn btn-danger btn-sm float-right" [hidden]="!hasRights || userProject.isEditable">Ta bort</button>
+              <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || userProject.isEditable" (click)="userProject.isEditable = true">Ändra</button>
+              <input type="submit" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" value="Spara" (click)="updateProjectMember(userProject)">
+              <button type="button" class="btn btn-secondary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" (click)="userProject.isEditable = false">Avbryt</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
     </table>
     <hr />
     <button class="btn btn-primary btn-sm float-right mr-3" data-toggle="modal" data-target="#inviteMembersModal">Bjud in fler </button>
+    <alert></alert>
   </div>
 
   <!-- Modal -->
@@ -82,7 +94,7 @@
               <input type="email" class="form-control col" id="memberEmail" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100">
               <div class="form-group m-0">
                 <!--<label for="sel1">Behörighet:</label>-->
-                <select class="form-control" id="sel1">
+                <select class="form-control">
                   <option>Kan endast läsa</option>
                   <option>Kan läsa och redigera</option>
                 </select>

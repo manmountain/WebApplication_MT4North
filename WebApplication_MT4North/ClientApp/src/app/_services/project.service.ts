@@ -105,6 +105,26 @@ export class ProjectService {
       }));
   }
 
+  updateProjectMember(userProjectId: string, params) {
+    console.log(params);
+    return this.http.put(`${environment.apiUrl}/UserProjects/${userProjectId}`, params).pipe(map(userProject => {
+      {
+        //const project = { ...this.userProjects, ...params };
+
+        let projectToUpdate = this.userProjectsValue.find(y => y.userprojectid == userProjectId);
+        let index = this.userProjectsValue.indexOf(projectToUpdate);
+
+        this.userProjectsValue[index] = params;
+
+        console.log('PARMS: ', params);
+
+        // publish updated user to subscribers
+        this.userProjectsSubject.next(this.userProjectsValue);
+      }
+      return userProject;
+    }));
+  }
+
   getInvites() {
     return this.http.get<any>(`${environment.apiUrl}/UserProjects/Invites`).pipe(map(invitations => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes

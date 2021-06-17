@@ -4,9 +4,9 @@ exports.Status = exports.Phase = void 0;
 var Phase;
 (function (Phase) {
     Phase["CONCEPTUALIZATION"] = "Konceptualisering";
-    Phase["PROOFOFCONCEPT"] = "Utveckling";
-    Phase["VALIDATION"] = "Validering";
-    Phase["LAUNCH"] = "Lansering";
+    Phase["PROOFOFCONCEPT"] = "Konceptvalidering";
+    Phase["VALIDATION"] = "Produktutveckling";
+    Phase["LAUNCH"] = "Produktlansering";
 })(Phase = exports.Phase || (exports.Phase = {}));
 var Status;
 (function (Status) {

@@ -54,6 +54,43 @@ export class MyPagesStartComponent implements OnDestroy {
   ngOnDestroy() {
     this.accountSubscription.unsubscribe();
     this.invitationsSubscription.unsubscribe();
+  }
 
+  acceptInvite(userProjectId: string) {
+    this.projectService.acceptInvite(userProjectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log('invitation accepted: ', data);
+          let idToRemove = this.invitations.find(x => x.userprojectid == data.userprojectid)[0];
+          this.invitations.splice(idToRemove, 1);
+          //this.alertService.success('Ditt konto har uppdaterats', { keepAfterRouteChange: true });
+          //this.loading = false;
+        },
+        error => {
+          console.log('invitation accepted not working: ', error);
+
+          //this.alertService.error(error);
+          //this.loading = false;
+        });
+  }
+
+  rejectInvite(userProjectId: string) {
+    this.projectService.rejectInvite(userProjectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log('invitation rejected: ', data);
+          let idToRemove = this.invitations.find(x => x.userprojectid == data.userprojectid)[0];
+          this.invitations.splice(idToRemove, 1);
+          //this.alertService.success('Ditt konto har uppdaterats', { keepAfterRouteChange: true });
+          //this.loading = false;
+        },
+        error => {
+          console.log('invitation rejected not working: ', error);
+
+          //this.alertService.error(error);
+          //this.loading = false;
+        });
   }
 }

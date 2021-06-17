@@ -5,7 +5,7 @@ export class UserProject {
   role: string;
   rights: string;
   projectid: string;
-  userId: string;
+  userid: string;
   user: User;
   status: number;
   project: Project;

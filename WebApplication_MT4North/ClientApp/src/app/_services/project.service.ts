@@ -121,40 +121,39 @@ export class ProjectService {
   inviteMember(projectId: number, email: string, role: string, permissions: string) {
     return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
+      let userProjectToUpdate = this.currentProjectsValue.find(y => y.projectid == this.userProjectsValue[0].projectid);
 
-      //localStorage.setItem('currentProjects', JSON.stringify(project));
-      //this.projectSubjects.next(project);
-      console.log('invited member');
-      this.userProjectsValue.push(userProject);
-      this.userProjectsSubject.next(this.userProjectsValue);
-
-      return userProject;
-    }));
-  }
-
-  acceptInvitation(projectId: number, email: string, role: string, permissions: string) {
-    return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
-
-      //localStorage.setItem('currentProjects', JSON.stringify(project));
-      //this.projectSubjects.next(project);
-      console.log('invited member');
-      this.userProjectsValue.push(userProject);
-      this.userProjectsSubject.next(this.userProjectsValue);
+      ////localStorage.setItem('currentProjects', JSON.stringify(project));
+      ////this.projectSubjects.next(project);
+      //console.log('invited member');
+      //this.userProjectsValue.push(userProject);
+      //this.userProjectsSubject.next(this.userProjectsValue);
 
       return userProject;
     }));
   }
 
-  rejectInvitation(projectId: number, email: string, role: string, permissions: string) {
-    return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
+  acceptInvite(userProjectId: string) {
+    return this.http.post<any>(`${environment.apiUrl}/UserProjects/Invites/Accept/${userProjectId}`, '').pipe(map(userProject => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
 
       //localStorage.setItem('currentProjects', JSON.stringify(project));
       //this.projectSubjects.next(project);
-      console.log('invited member');
-      this.userProjectsValue.push(userProject);
-      this.userProjectsSubject.next(this.userProjectsValue);
+      console.log('invite accepted', userProject);
+      this.currentProjectsValue.push(userProject.project);
+      this.projectSubjects.next(this.currentProjectsValue);
+
+      return userProject;
+    }));
+  }
+
+  rejectInvite(userProjectId: string) {
+    return this.http.post<any>(`${environment.apiUrl}/UserProjects/Invites/Reject/${userProjectId}`, '').pipe(map(userProject => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      //localStorage.setItem('currentProjects', JSON.stringify(project));
+      //this.projectSubjects.next(project);
+      console.log('invited rejected');
 
       return userProject;
     }));

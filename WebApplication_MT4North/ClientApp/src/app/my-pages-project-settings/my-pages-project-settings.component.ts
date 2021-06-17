@@ -40,7 +40,7 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      projectId: [this.userProjects[0].project.projectId],
+      projectid: [this.userProjects[0].project.projectid],
       name: [this.userProjects[0].project.name, Validators.required],
       description: [this.userProjects[0].project.description, Validators.required],
     });

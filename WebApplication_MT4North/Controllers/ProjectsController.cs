@@ -172,10 +172,12 @@ namespace WebApplication_MT4North.Controllers
         /// </returns>
         /// <response code="204">OK No content</response>
         /// <response code="401">Unautherized</response>
+        /// <response code="403">Unautherized</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
@@ -189,7 +191,7 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
             if (id != project.ProjectId)
@@ -247,7 +249,7 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
             var project = await _context.Projects.FindAsync(id);

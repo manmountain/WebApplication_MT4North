@@ -262,8 +262,9 @@ namespace WebApplication_MT4North.Controllers
             _context.UserProjects.Add(userProject);
             await _context.SaveChangesAsync();
 
-            return Ok(userProject);
-            //return CreatedAtRoute("UserProjects/{userProject.UserProjectId}", new { id = userProject.UserProjectId }, userProject);
+            //return Ok(userProject);
+            return CreatedAtAction("InviteUserToProject", new { userEmail, projectId, role, permissions }, userProject);
+            //return CreatedAtRoute(nameof(GetUserProject), new { id = userProject.UserProjectId }, userProject);
         }
 
         // PUT: api/UserProjects/5

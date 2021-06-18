@@ -90,8 +90,8 @@ export class AccountService {
            {
             // update local storage
             const user = { ...this.currentUserValue, ...params };
-            localStorage.setItem('user', JSON.stringify(user));
-
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            console.log('USER: ', user);
             // publish updated user to subscribers
             this.currentUserSubject.next(user);
           }

@@ -23,14 +23,14 @@
               <input *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" value="{{userProject.role}}">
 
               <!--<div class="dropdown w-100">
-              <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Projektledare
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Projektdeltagare</a>
-                <button class="dropdown-item">+ Lägg till ny roll</button>
-              </div>
-            </div>-->
+                <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Projektledare
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Projektdeltagare</a>
+                  <button class="dropdown-item">+ Lägg till ny roll</button>
+                </div>
+              </div>-->
             </td>
             <td>
               <p *ngIf="!userProject.isEditable">{{userProject.rights}}</p>
@@ -40,17 +40,18 @@
 
               </select>
               <!--<div class="dropdown w-100">
-              <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Läsa och redigera
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Endast läsa</a>
-              </div>
-            </div>-->
+                <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Läsa och redigera
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Endast läsa</a>
+                </div>
+              </div>-->
             </td>
             <td>
+              <p *ngIf="userProject.status == 0" class="font-italic float-left">Inbjudan skickad</p>
               <button class="btn btn-danger btn-sm float-right" [hidden]="!hasRights || userProject.isEditable">Ta bort</button>
-              <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || userProject.isEditable" (click)="userProject.isEditable = true">Ändra</button>
+              <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || userProject.isEditable || userProject.status == 0" (click)="userProject.isEditable = true">Ändra</button>
               <input type="submit" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" value="Spara" (click)="updateProjectMember(userProject)">
               <button type="button" class="btn btn-secondary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" (click)="userProject.isEditable = false">Avbryt</button>
             </td>
@@ -59,8 +60,15 @@
       </tbody>
     </table>
     <hr />
-    <button class="btn btn-primary btn-sm float-right mr-3" data-toggle="modal" data-target="#inviteMembersModal">Bjud in fler </button>
-    <alert></alert>
+  </div>
+
+  <div class="row w-100">
+    <div class="col">
+      <alert class="float-left ml-3"></alert>
+    </div>
+    <div class="col">
+      <button class="btn im-btn-primary btn-sm float-right" data-toggle="modal" [hidden]="!hasRights" data-target="#inviteMembersModal">Bjud in fler </button>
+    </div>
   </div>
 
   <!-- Modal -->
@@ -74,37 +82,39 @@
           </button>
         </div>
         <div class="modal-body">
-          <form ngNativeValidate class="form-group mt-2">
-            <!--<label for="projectTitle"><b>Projektmedlemmar</b></label>-->
-            <div *ngFor="let member of emailList">
+          <form [formGroup]="invitationForm" class="form-group mt-2" [style.display]="isFirstStepModal ? 'none' : 'block'">
+            <label for="projectTitle"><b>Projektmedlemmar</b></label>
+            <div *ngFor="let userInvitation of userInvitations">
               <div class="card mb-1 col-6" style="background-color: #F9F9F9; border: 1px solid lightgray">
                 <span class="d-inline-block" style="white-space:nowrap">
                   <span class="card-text">
-                    {{member}}
+                    {{userInvitation.email}}
                   </span>
                   <span class="d-inline-block float-right" style="white-space:nowrap">
 
                     <i class="fa fa-eye mr-2" style="font-size:10px; color: gray"></i>
-                    <span class="btn p-0 m-0" data-effect="fadeOut" (click)="removeMember(member)">×</span>
+                    <span class="btn p-0 m-0" data-effect="fadeOut" (click)="removeMember(fi.email.value)">×</span>
                   </span>
                 </span>
               </div>
             </div>
             <div class="row" style="margin:16px 0 16px 0">
-              <input type="email" class="form-control col" id="memberEmail" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100">
+              <input type="email" class="form-control col" formControlName="email" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100" required [ngClass]="{ 'is-invalid': fi.email.errors }">
+              <input class="form-control col" formControlName="role" placeholder="Ange roll" aria-describedby="inviteMembersHelp" maxlength="100">
+
               <div class="form-group m-0">
                 <!--<label for="sel1">Behörighet:</label>-->
-                <select class="form-control">
+                <select class="form-control" id="sel1" formControlName="permissions">
                   <option>Kan endast läsa</option>
                   <option>Kan läsa och redigera</option>
                 </select>
               </div>
             </div>
-            <button class="btn btn-secondary" (click)="addMember('test@mail.com')">Lägg till</button>
+            <button class="btn btn-primary" (click)="addMember(fi.email.value, fi.role.value, fi.permissions.value)">Lägg till</button>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'">Bjud in till projekt</button>
+          <button type="button" class="btn im-btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'" (click)="inviteMembers()">Bjud in till projekt</button>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AlertService, AccountService, ProjectService } from '@app/_services';
-import { User, UserProject } from '../_models';
+import { User, UserProject, Project } from '../_models';
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -17,9 +17,11 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
   hasRights = false;
   currentUser: User;
   userProjects: UserProject[];
+  selectedProject: Project;
   error = '';
   accountSubscription: Subscription;
   userProjectsSubscription: Subscription;
+  selectedProjectSubscription: Subscription;
   editModeIsOn = false;
 
   constructor(
@@ -31,10 +33,15 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     this.accountService.getCurrentUser();
 
     this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
+
+    //this.projectService.getUserProjects(this.projectService.selectedProjectValue.projectid).subscribe(x => {
+    //  console.log('XYZ: ', x);
+    //});;
+    this.selectedProjectSubscription = this.projectService.selectedProject.subscribe(x => { this.selectedProject = x; });
+
     this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => {
+      console.log('X: ', x);
       this.userProjects = x;
-      console.log('currentUserID: ', this.currentUser.id);
-      console.log('userporjc: ', this.userProjects);
       this.hasRights = (this.userProjects.filter(x => x.userid == this.currentUser.id)[0].rights == 'RW');
     });
 
@@ -47,9 +54,9 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      projectid: [this.userProjects[0].project.projectid],
-      name: [this.userProjects[0].project.name, Validators.required],
-      description: [this.userProjects[0].project.description, Validators.required],
+      projectid: [this.selectedProject.projectid],
+      name: [this.selectedProject.name, Validators.required],
+      description: [this.selectedProject.description, Validators.required],
     });
   }
 
@@ -57,6 +64,8 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     console.log('unsubscribing from observers in project settings');
     this.accountSubscription.unsubscribe();
     this.userProjectsSubscription.unsubscribe();
+    this.selectedProjectSubscription.unsubscribe();
+
   }
 
   activateEditMode(param: boolean) {
@@ -87,6 +96,7 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
         data => {
           this.alertService.success('Projektet har uppdaterats', { keepAfterRouteChange: true });
           this.loading = false;
+          this.editModeIsOn = false;
         },
         error => {
           this.alertService.error(error);

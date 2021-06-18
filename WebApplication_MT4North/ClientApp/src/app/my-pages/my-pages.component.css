@@ -140,7 +140,8 @@ li:focus {
 }
 
 #addBtn:hover {
-    color: blue;
+  /*  background: #9BE3A1;
+*/ color: #68B06E;
 }
 
 #show-sidebar,

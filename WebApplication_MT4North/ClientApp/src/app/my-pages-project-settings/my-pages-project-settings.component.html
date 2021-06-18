@@ -9,8 +9,8 @@
           </td>
           <td class="w-50">
             <div class="form-group">
-
-              <input type="text" formControlName="name" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+              <p *ngIf="!editModeIsOn" type="text">{{selectedProject.name}}</p>
+              <input *ngIf="editModeIsOn" type="text" formControlName="name" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
             </div>
           </td>
           <!--<td class="w-25">
@@ -23,7 +23,8 @@
           </td>
           <td class="w-50">
             <div class="form-group">
-              <input type="text" formControlName="description" [disabled]="!editModeIsOn" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
+              <p *ngIf="!editModeIsOn" type="text">{{selectedProject.description}}</p>
+              <textarea *ngIf="editModeIsOn" type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
             </div>
           </td>
           <!--<td class="w-25">
@@ -86,6 +87,8 @@
       </div>
     </div>
   </form>
-  <alert></alert>
+</div>
+<div class="row">
+  <alert class="m-3"></alert>
 </div>
 

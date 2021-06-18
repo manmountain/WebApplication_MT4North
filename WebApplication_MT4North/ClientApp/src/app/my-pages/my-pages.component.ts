@@ -18,7 +18,7 @@ export class MyPagesComponent implements OnDestroy {
   currentUser: User;
   projects: Project[];
   projectForm: FormGroup;
-  newProjectId: number;
+  newProjectId: string;
   invitationForm: FormGroup;
   loading = false;
   submitted = false;
@@ -37,7 +37,7 @@ export class MyPagesComponent implements OnDestroy {
     this.projectService.getProjects()
       .pipe(first())
       .subscribe(
-        data => { },
+        data => { console.log('reloaded nav menu');},
 
         error => {
           this.error = error;
@@ -68,6 +68,18 @@ export class MyPagesComponent implements OnDestroy {
 
   selectProject(projectid: string) {
     console.log('project id: ', projectid);
+    this.projectService.selectProject(projectid)
+      .pipe(first())
+      .subscribe(
+        data => {
+
+        },
+
+        error => {
+          this.error = error;
+          this.alertService.error(error);
+        });
+
     this.projectService.getUserProjects(projectid)
       .pipe(first())
       .subscribe(

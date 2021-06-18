@@ -17,12 +17,18 @@ export class ProjectService {
   private invitationsSubject: BehaviorSubject<UserProject[]>;
   public invitations: Observable<UserProject[]>;
 
+  private selectedProjectSubject: BehaviorSubject<Project>;
+  public selectedProject: Observable<Project>;
+
   constructor(private http: HttpClient) {
     this.projectSubjects = new BehaviorSubject<Project[]>(JSON.parse(localStorage.getItem('currentProjects')));
     this.projects = this.projectSubjects.asObservable();
 
     this.userProjectsSubject = new BehaviorSubject<UserProject[]>(JSON.parse(localStorage.getItem('userProjects')));
     this.userProjects = this.userProjectsSubject.asObservable();
+
+    this.selectedProjectSubject = new BehaviorSubject<Project>(JSON.parse(localStorage.getItem('selectedProject')));
+    this.selectedProject = this.selectedProjectSubject.asObservable();
 
     this.invitationsSubject = new BehaviorSubject<UserProject[]>(JSON.parse(localStorage.getItem('invitations')));
     this.invitations = this.invitationsSubject.asObservable();
@@ -40,13 +46,19 @@ export class ProjectService {
     return this.invitationsSubject.value;
   }
 
+  public get selectedProjectValue(): Project {
+    return this.selectedProjectSubject.value;
+  }
+
   createProject(name: string, description: string) {
     return this.http.post<any>(`${environment.apiUrl}/Projects`, { name, description }).pipe(map(project => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-      //localStorage.setItem('currentProjects', JSON.stringify(project));
       //this.projectSubjects.next(project);
       this.currentProjectsValue.push(project);
+      const currentProjects = { ...this.currentProjectsValue, ...project };
+
+      localStorage.setItem('currentProjects', JSON.stringify(currentProjects));
       this.projectSubjects.next(this.currentProjectsValue);
 
       return project;
@@ -62,10 +74,21 @@ export class ProjectService {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       console.log('projects value in service: ', this.currentProjectsValue);
 
-      localStorage.setItem('currentProjects', JSON.stringify(projects));
+      //localStorage.setItem('currentProjects', JSON.stringify(projects));
       this.projectSubjects.next(projects);
       return projects;
     }));;
+  }
+
+  selectProject(projectId: string) {
+    return this.http.get<Project>(`${environment.apiUrl}/Projects/${projectId}`).pipe(map(project => {
+
+      localStorage.setItem('selectedProject', JSON.stringify(project));
+
+      this.selectedProjectSubject.next(project);
+
+      return project;
+    }));
   }
 
   getUserProjects(projectId: string) {
@@ -74,9 +97,22 @@ export class ProjectService {
     return this.http.get<UserProject[]>(`${environment.apiUrl}/UserProjects/Project/${projectId}`).pipe(map(userProjects => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       console.log('selected project value in service: ', this.userProjectsValue);
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+      localStorage.setItem('userProjects', JSON.stringify(userProjects, getCircularReplacer()));
 
-      localStorage.setItem('userProjects', JSON.stringify(userProjects));
       this.userProjectsSubject.next(userProjects);
+
       return userProjects;
     }));;
   }
@@ -89,16 +125,35 @@ export class ProjectService {
         // update local storage
         const project = { ...this.userProjects, ...params };
         ////console.log('PROJECT: ', project);
-        //  localStorage.setitem('selectedProject', JSON.stringify(project));
-        this.userProjectsValue[0].project = project;
+          //localStorage.setitem('selectedProject', JSON.stringify(project));
+        for (var userProject of this.userProjectsValue) {
+          userProject.project = project;
+        }
         let projectToUpdate = this.currentProjectsValue.find(y => y.projectid == this.userProjectsValue[0].projectid);
         let index = this.currentProjectsValue.indexOf(projectToUpdate);
 
         this.currentProjectsValue[index] = project;
+        console.log('PROJ VALUES: ', this.userProjectsValue);
+
+        const getCircularReplacer = () => {
+          const seen = new WeakSet();
+          return (key, value) => {
+            if (typeof value === "object" && value !== null) {
+              if (seen.has(value)) {
+                return;
+              }
+              seen.add(value);
+            }
+            return value;
+          };
+        };
+
+        localStorage.setItem('selectedProject', JSON.stringify(project, getCircularReplacer()));
 
           // publish updated user to subscribers
         this.userProjectsSubject.next(this.userProjectsValue);
         this.projectSubjects.next(this.currentProjectsValue);
+        this.selectedProjectSubject.next(project);
 
         }
         return x;
@@ -109,12 +164,25 @@ export class ProjectService {
     console.log(params);
     return this.http.put(`${environment.apiUrl}/UserProjects/${userProjectId}`, params).pipe(map(userProject => {
       {
-        //const project = { ...this.userProjects, ...params };
+
 
         let projectToUpdate = this.userProjectsValue.find(y => y.userprojectid == userProjectId);
         let index = this.userProjectsValue.indexOf(projectToUpdate);
 
         this.userProjectsValue[index] = params;
+        const getCircularReplacer = () => {
+          const seen = new WeakSet();
+          return (key, value) => {
+            if (typeof value === "object" && value !== null) {
+              if (seen.has(value)) {
+                return;
+              }
+              seen.add(value);
+            }
+            return value;
+          };
+        };
+        localStorage.setItem('userProjects', JSON.stringify(this.userProjectsValue, getCircularReplacer()));
 
         console.log('PARMS: ', params);
 
@@ -138,16 +206,30 @@ export class ProjectService {
     }));
   }
 
-  inviteMember(projectId: number, email: string, role: string, permissions: string) {
+  inviteMember(projectId: string, email: string, role: string, permissions: string) {
     return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      let userProjectToUpdate = this.currentProjectsValue.find(y => y.projectid == this.userProjectsValue[0].projectid);
 
       ////localStorage.setItem('currentProjects', JSON.stringify(project));
       ////this.projectSubjects.next(project);
       //console.log('invited member');
-      //this.userProjectsValue.push(userProject);
-      //this.userProjectsSubject.next(this.userProjectsValue);
+      this.userProjectsValue.push(userProject);
+
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+      localStorage.setItem('userProjects', JSON.stringify(this.userProjectsValue, getCircularReplacer()));
+
+      this.userProjectsSubject.next(this.userProjectsValue);
 
       return userProject;
     }));

@@ -29,9 +29,14 @@ im-background-color {
   background: #8ed694;
 }
 
+  .im-btn-primary:hover {
+    background: #9BE3A1;
+  }
+
 code {
   color: #e01a76;
 }
+
 button:active {
   outline: none !important;
 }
@@ -41,6 +46,7 @@ button:active {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
 .nav-bk7-body {
   background: #c2e59c;
   background: -webkit-linear-gradient(to right, #64b3f4, #c2e59c);

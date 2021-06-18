@@ -64,6 +64,7 @@ export class MyPagesStartComponent implements OnDestroy {
           console.log('invitation accepted: ', data);
           let idToRemove = this.invitations.find(x => x.userprojectid == data.userprojectid)[0];
           this.invitations.splice(idToRemove, 1);
+          console.log('INVITATIO LEFT AFTER REMOVE: ', this.invitations);
           //this.alertService.success('Ditt konto har uppdaterats', { keepAfterRouteChange: true });
           //this.loading = false;
         },
@@ -83,6 +84,8 @@ export class MyPagesStartComponent implements OnDestroy {
           console.log('invitation rejected: ', data);
           let idToRemove = this.invitations.find(x => x.userprojectid == data.userprojectid)[0];
           this.invitations.splice(idToRemove, 1);
+          console.log('INVITATION LEFT AFTER REMOVE: ', this.invitations);
+
           //this.alertService.success('Ditt konto har uppdaterats', { keepAfterRouteChange: true });
           //this.loading = false;
         },

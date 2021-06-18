@@ -74,7 +74,7 @@ export class AlertComponent implements OnInit, OnDestroy {
   cssClass(alert: Alert) {
     if (!alert) return;
 
-    const classes = ['alert', 'alert-dismissable', 'mt-4', 'container'];
+    const classes = ['alert', 'alert-dismissable', 'container'];
 
     const alertTypeClass = {
       [AlertType.Success]: 'alert alert-success',

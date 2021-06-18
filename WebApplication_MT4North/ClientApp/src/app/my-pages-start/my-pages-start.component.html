@@ -2,7 +2,7 @@
 <p class="lead text-black mb-0">Välj projekt eller lägg till ett nytt via menyn till vänster.</p>
 <br />
 <h5 *ngIf="invitations?.length > 0" class="text-black mb-0">Du har {{invitations?.length}} nya projektinbjudningar:</h5>
-<h5 *ngIf="invitations?.length == 0">Du har inga obesvarade projektinbjudningar.</h5>
+<!--<h5 *ngIf="invitations?.length == 0">Du har inga obesvarade projektinbjudningar.</h5>-->
 
 <div *ngFor="let invitation of invitations">
   <div class="card col-sm-12 col-md-4 mb-3 mt-3">

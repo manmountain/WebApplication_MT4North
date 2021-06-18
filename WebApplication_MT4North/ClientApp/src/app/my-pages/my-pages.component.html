@@ -67,7 +67,7 @@
                   <li class="btn text-left list-group-item" routerLink="./projects/{{project?.projectid}}/activity-status" (click)="selectProject(project?.projectid)"><a>{{project?.name}}</a> <!--<span class="badge badge-pill badge-primary">20</span>--></li>
                 </ng-container>
               </ul>
-              <button class="btn w-100 text-left" id="addBtn" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Lägg till</span></button>
+              <button class="btn w-100 text-left" id="addBtn" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Skapa nytt projekt</span></button>
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Lägg till nytt projekt</h5>
+                <h5 class="modal-title">Skapa nytt projekt</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -153,13 +153,13 @@
                       </select>
                     </div>
                   </div>
-                  <button class="btn btn-secondary" (click)="addMember(fi.email.value, fi.role.value, fi.permissions.value)">Lägg till</button>
+                  <button class="btn btn-primary" (click)="addMember(fi.email.value, fi.role.value, fi.permissions.value)">Lägg till</button>
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="submit" (click)="createProject()" class="btn btn-primary" [style.display]="isFirstStepModal ? 'block' : 'none'">Fortsätt</button>
+                <button type="submit" (click)="createProject()" class="btn im-btn-primary" [style.display]="isFirstStepModal ? 'block' : 'none'">Skapa och fortsätt</button>
                 <button type="button" class="btn" [style.display]="isFirstStepModal ? 'none' : 'block'" data-dismiss="modal"><u>Jag gör det här senare.</u></button>
-                <button type="button" (click)="inviteMembers()" class="btn btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'">Bjud in till projekt</button>
+                <button type="button" (click)="inviteMembers()" class="btn im-btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'">Bjud in till projekt</button>
               </div>
             </div>
           </div>

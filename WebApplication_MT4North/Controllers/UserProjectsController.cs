@@ -309,7 +309,17 @@ namespace WebApplication_MT4North.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(userproject).State = EntityState.Modified;
+            if (callerUserProject.UserProjectId == userproject.UserProjectId)
+            {
+                callerUserProject.Role = userproject.Role;
+                callerUserProject.Rights = userproject.Rights;
+                callerUserProject.Status = userproject.Status;
+                _context.Entry(callerUserProject).State = EntityState.Modified;
+            }
+            else
+            {
+                _context.Entry(userproject).State = EntityState.Modified;
+            }
 
             try
             {

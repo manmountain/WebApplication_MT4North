@@ -10,9 +10,9 @@ namespace WebApplication_MT4North.Models
     {
         public Theme()
         {
-            Activities = new HashSet<Activity>();
-            BaseActivityInfos = new HashSet<BaseActivityInfo>();
-            CustomActivityInfos = new HashSet<CustomActivityInfo>();
+            //Activities = new HashSet<Activity>();
+            //BaseActivityInfos = new HashSet<BaseActivityInfo>();
+            //CustomActivityInfos = new HashSet<CustomActivityInfo>();
         }
 
         [JsonPropertyName("themeid")]
@@ -24,13 +24,13 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonPropertyName("activities")]
+        /*[JsonPropertyName("activities")]
         public virtual ICollection<Activity> Activities { get; set; }
 
         [JsonPropertyName("baseactivityinfos")]
         public virtual ICollection<BaseActivityInfo> BaseActivityInfos { get; set; }
 
         [JsonPropertyName("customactivityinfos")]
-        public virtual ICollection<CustomActivityInfo> CustomActivityInfos { get; set; }
+        public virtual ICollection<CustomActivityInfo> CustomActivityInfos { get; set; }*/
     }
 }

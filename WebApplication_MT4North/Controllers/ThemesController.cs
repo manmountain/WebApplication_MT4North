@@ -48,8 +48,8 @@ namespace WebApplication_MT4North.Controllers
         // PUT: api/Themes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize(Roles = "AdminUser")]
         [HttpPut("{id}")]
+        [Authorize(Roles = "AdminUser")]
         public async Task<IActionResult> PutTheme(int id, Theme theme)
         {
             if (id != theme.ThemeId)
@@ -62,6 +62,8 @@ namespace WebApplication_MT4North.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                // return updateted object
+                return Ok(theme);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,8 +83,8 @@ namespace WebApplication_MT4North.Controllers
         // POST: api/Themes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize(Roles = "AdminUser")]
         [HttpPost]
+        [Authorize(Roles = "AdminUser")]
         public async Task<ActionResult<Theme>> PosTheme(Theme theme)
         {
             _context.Themes.Add(theme);
@@ -92,8 +94,8 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/Themes/5
-        [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
+        [Authorize(Roles = "AdminUser")]
         public async Task<ActionResult<Theme>> DeleteTheme(int id)
         {
             var theme = await _context.Themes.FindAsync(id);

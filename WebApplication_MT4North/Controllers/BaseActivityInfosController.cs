@@ -26,9 +26,6 @@ namespace WebApplication_MT4North.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BaseActivityInfo>>> GetBaseActivityInfos()
         {
-            // TODO: Check permissions
-            
-
             var baseActivityInfos = await _context.BaseActivityInfos.ToListAsync();
             return baseActivityInfos;
         }

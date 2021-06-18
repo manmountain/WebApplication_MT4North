@@ -185,16 +185,11 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ThemeId")
-                        .HasColumnType("int");
-
                     b.HasKey("ActivityId");
 
                     b.HasIndex("BaseInfoId");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("ThemeId");
 
                     b.ToTable("Activities");
                 });
@@ -502,16 +497,12 @@ namespace WebApplication_MT4North.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WebApplication_MT4North.Models.Theme", null)
-                        .WithMany("Activities")
-                        .HasForeignKey("ThemeId");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.BaseActivityInfo", b =>
                 {
                     b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
-                        .WithMany("BaseActivityInfos")
+                        .WithMany()
                         .HasForeignKey("ThemeId");
                 });
 
@@ -522,7 +513,7 @@ namespace WebApplication_MT4North.Migrations
                         .HasForeignKey("ActivityId");
 
                     b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
-                        .WithMany("CustomActivityInfos")
+                        .WithMany()
                         .HasForeignKey("ThemeId");
                 });
 

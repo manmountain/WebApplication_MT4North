@@ -1,6 +1,9 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Theme, Activity, Phase, Status } from "../_models";
-import { ViewService } from "../_services";
+import { ViewService, ProjectService } from "../_services";
+import { first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+
 //import html2canvas from 'html2canvas';
 
 //import { Console } from 'console';
@@ -14,9 +17,12 @@ import { ViewService } from "../_services";
 export class MyPagesActivityStatusComponent {
   phases = Phase;
   themes: Theme[] = [];
+  testThemes: Theme[] = [];
   hideExcluded: boolean = false;
   hideFinished: boolean = false;
   isScreenshotting: boolean = false;
+  themesSubscription: Subscription;
+
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
   @ViewChild('imTableView', { static: false }) imTableView: ElementRef;
@@ -26,10 +32,25 @@ export class MyPagesActivityStatusComponent {
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
 
-  constructor(private viewService: ViewService) {
+  constructor(private viewService: ViewService, private projectService: ProjectService) {
+    this.projectService.getThemes().pipe(first())
+      .subscribe(
+        data => {
+          console.log('DATA themes: ', data);
+        },
+
+        error => {
+          console.log('error getting themes: ', error);
+          //this.error = error;
+          //this.alertService.error(error);
+        });
+    this.themesSubscription = this.projectService.themes.subscribe(x => { this.testThemes = x; console.log('THEMES IN DB:', x); });
+
   }
 
   ngOnInit() {
+
+
     //console.log("initiating");
     let technicalDevelopmentTheme = new Theme("Teknikutveckling", "Beskrivning");
     let activity1 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.CONCEPTUALIZATION, false);

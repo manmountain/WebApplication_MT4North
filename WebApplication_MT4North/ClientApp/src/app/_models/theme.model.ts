@@ -1,6 +1,7 @@
 import { Activity } from "./activity.model";
 
 export class Theme {
+  themeid: string;
   name: string;
   description: string;
   activities: Activity[] = [];

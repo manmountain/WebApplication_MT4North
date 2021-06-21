@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { Project, UserProject } from '@app/_models';
+import { Project, UserProject, Theme } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -16,6 +16,9 @@ export class ProjectService {
 
   private invitationsSubject: BehaviorSubject<UserProject[]>;
   public invitations: Observable<UserProject[]>;
+
+  private themesSubject: BehaviorSubject<Theme[]>;
+  public themes: Observable<Theme[]>;
 
   private selectedProjectSubject: BehaviorSubject<Project>;
   public selectedProject: Observable<Project>;
@@ -32,6 +35,9 @@ export class ProjectService {
 
     this.invitationsSubject = new BehaviorSubject<UserProject[]>(JSON.parse(localStorage.getItem('invitations')));
     this.invitations = this.invitationsSubject.asObservable();
+
+    this.themesSubject = new BehaviorSubject<Theme[]>(JSON.parse(localStorage.getItem('themes')));
+    this.themes = this.themesSubject.asObservable();
   }
 
   public get currentProjectsValue(): Project[] {
@@ -48,6 +54,10 @@ export class ProjectService {
 
   public get selectedProjectValue(): Project {
     return this.selectedProjectSubject.value;
+  }
+
+  public get themesValue(): Theme[] {
+    return this.themesSubject.value;
   }
 
   createProject(name: string, description: string) {
@@ -258,6 +268,15 @@ export class ProjectService {
       console.log('invited rejected');
 
       return userProject;
+    }));
+  }
+
+  getThemes() {
+    return this.http.get<Theme[]>(`${environment.apiUrl}/Themes`).pipe(map(themes => {
+      const themesConst = { ...this.themesValue, ...themes };
+
+      localStorage.setItem('themes', JSON.stringify(themesConst));
+      return themes;
     }));
   }
 

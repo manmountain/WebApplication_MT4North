@@ -101,7 +101,7 @@ export class MyPagesMembersComponent implements OnDestroy {
   }
 
   removeMember(email: string) {
-    let idToRemove = this.userInvitations.filter(x => x.email == email)[0].id;
+    let idToRemove = this.userInvitations.filter(x => x.email == email)[0].id-1;
     this.userInvitations.splice(idToRemove, 1);
   }
 

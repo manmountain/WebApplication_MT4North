@@ -118,7 +118,7 @@
               <div class="modal-body">
                 <form [formGroup]="projectForm" (ngSubmit)="createProject()" ngNativeClass class="form-group mt-2" [style.display]="isFirstStepModal ? 'block' : 'none'">
                   <label for="projectTitle"><b>Projektets titel</b></label>
-                  <input class="form-control" formControlName="name" id="projectTitle" aria-describedby="projectTitleHelp" maxlength="50" required  [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                  <input class="form-control" formControlName="name" id="projectTitle" aria-describedby="projectTitleHelp" maxlength="50" required [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
                   <!--<small id="projectTitleHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 
                   <p class="p-0 m-0"><label for="projectDescriptionText" class="col-form-label"><b>Kort projektbeskrivning</b><small class="ml-2">Valfritt</small></label></p>

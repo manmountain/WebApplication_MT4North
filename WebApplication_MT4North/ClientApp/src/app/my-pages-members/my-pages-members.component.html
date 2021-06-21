@@ -15,42 +15,44 @@
 
       <tbody>
         <ng-container *ngFor="let userProject of userProjects; let i = index">
-          <tr>
-            <td>{{userProject.user.firstname}} {{userProject.user.lastname}}</td>
-            <td>{{userProject.user.email}}</td>
-            <td>
-              <p *ngIf="!userProject.isEditable">{{userProject.role}}</p>
-              <input *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" value="{{userProject.role}}">
+          <tr [ngClass]="{'bg-light': currentUser.id == userProject.user.id}">
+            <td class="align-middle" >{{userProject.user.firstname}} {{userProject.user.lastname}}</td>
+            <td class="align-middle" >{{userProject.user.email}}</td>
+            <td class="align-middle" >
+              <span *ngIf="!userProject.isEditable">{{userProject.role}}</span>
+              <input class="align-middle" *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" value="{{userProject.role}}">
 
               <!--<div class="dropdown w-100">
-                <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Projektledare
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Projektdeltagare</a>
-                  <button class="dropdown-item">+ Lägg till ny roll</button>
-                </div>
-              </div>-->
+      <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Projektledare
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Projektdeltagare</a>
+        <button class="dropdown-item">+ Lägg till ny roll</button>
+      </div>
+    </div>-->
             </td>
-            <td>
-              <p *ngIf="!userProject.isEditable">{{userProject.rights}}</p>
-              <select *ngIf="userProject.isEditable" [(ngModel)]="userProject.rights" class="bootstrap-select" aria-labelledby="dropdownMenuButton">
+            <td class="align-middle">
+              <span class="align-middle" *ngIf="!userProject.isEditable">{{userProject.rights}}</span>
+              <select *ngIf="userProject.isEditable" [(ngModel)]="userProject.rights" class="bootstrap-select align-middle" aria-labelledby="dropdownMenuButton">
                 <option value="R">R</option>
                 <option value="RW">RW</option>
 
               </select>
               <!--<div class="dropdown w-100">
-                <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Läsa och redigera
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Endast läsa</a>
-                </div>
-              </div>-->
+      <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Läsa och redigera
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Endast läsa</a>
+      </div>
+    </div>-->
             </td>
-            <td>
+            <td class="align-middle" >
               <p *ngIf="userProject.status == 0" class="font-italic float-left">Inbjudan skickad</p>
-              <button class="btn btn-danger btn-sm float-right" [hidden]="!hasRights || userProject.isEditable">Ta bort</button>
+              <button class="btn btn-danger btn-sm float-right" [hidden]="!hasRights || userProject.isEditable || currentUser.id == userProject.user.id">Ta bort</button>
+              <button class="btn btn-danger btn-sm float-right" *ngIf="currentUser.id == userProject.user.id">Lämna</button>
+
               <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || userProject.isEditable || userProject.status == 0" (click)="userProject.isEditable = true">Ändra</button>
               <input type="submit" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" value="Spara" (click)="updateProjectMember(userProject)">
               <button type="button" class="btn btn-secondary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" (click)="userProject.isEditable = false">Avbryt</button>
@@ -62,7 +64,7 @@
     <hr />
   </div>
 
-  <div class="row w-100">
+  <div class="row w-100" style="max-width: 1100px;">
     <div class="col">
       <alert class="float-left ml-3"></alert>
     </div>
@@ -114,7 +116,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn im-btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'" (click)="inviteMembers()">Bjud in till projekt</button>
+          <button [disabled]="userInvitations.length == 0" type="button" class="btn im-btn-primary" data-dismiss="modal" [style.display]="isFirstStepModal ? 'none' : 'block'" (click)="inviteMembers()">Bjud in till projekt</button>
         </div>
       </div>
     </div>

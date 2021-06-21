@@ -34,7 +34,7 @@ namespace WebApplication_MT4North.IntegrationTests
 
         private LoginRequest adminCredentials = new LoginRequest
         {
-            Email = "user2@localhost",
+            Email = "admin@localhost",
             Password = "P@ssw0rd1!"
         };
 
@@ -44,7 +44,7 @@ namespace WebApplication_MT4North.IntegrationTests
         private string authUser;
         private string authAdmin;
 
-        private static Project _newProject;
+        private static BaseActivityInfo _newActivity;
 
         [TestInitialize]
         public async Task SetUpAsync()
@@ -88,9 +88,9 @@ namespace WebApplication_MT4North.IntegrationTests
             return userResult;
         }
 
-        private async Task<List<BaseActivityInfo>> getActivitiesAsync(HttpStatusCode expectedHttpStatusCode)
+        private async Task<List<BaseActivityInfo>> GetActivitiesAsync(HttpStatusCode expectedHttpStatusCode)
         {
-            var getResponse = await _httpClient.GetAsync("api/BaseActivitiesInfos");
+            var getResponse = await _httpClient.GetAsync("api/BaseActivityInfos");
 
             Assert.AreEqual(expectedHttpStatusCode, getResponse.StatusCode);
 
@@ -99,10 +99,10 @@ namespace WebApplication_MT4North.IntegrationTests
             return result;
         }
 
-        private async Task<BaseActivityInfo> getActivityAsync(int id, HttpStatusCode expectedHttpStatusCode)
+        private async Task<BaseActivityInfo> GetActivityAsync(int id, HttpStatusCode expectedHttpStatusCode)
         {
             
-            var getResponse = await _httpClient.GetAsync("api/BaseActivitiesInfos/"+id);
+            var getResponse = await _httpClient.GetAsync("api/BaseActivityInfos/" + id);
 
             Assert.AreEqual(expectedHttpStatusCode, getResponse.StatusCode);
 
@@ -111,113 +111,188 @@ namespace WebApplication_MT4North.IntegrationTests
             return result;
         }
 
-        private async Task<BaseActivityInfo> createActivity()
+        private async Task<List<Theme>> GetThemesAsync(HttpStatusCode expectedHttpStatusCode)
         {
-            var theme = new Theme();
+            var getResponse = await _httpClient.GetAsync("api/Themes");
+
+            Assert.AreEqual(expectedHttpStatusCode, getResponse.StatusCode);
+
+            var content = await getResponse.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<List<Theme>>(content);
+            return result;
+        }
+
+        private async Task<BaseActivityInfo> CreateActivity(HttpStatusCode expectedHttpStatus)
+        {
+            // Get a theme
+            var themes = await GetThemesAsync(HttpStatusCode.OK);
+            Assert.IsNotNull(themes);
+            Assert.IsTrue(themes.Count > 0);
+            var theme = themes[0];
+            // Create a new base activity
             var activity = new BaseActivityInfo
             {
                 Name = "TestBastActivityInfo",
-                Description = "Activity for UnitTest BaseActivitiesInfoControllerTest",
+                Description = "Activity for UnitTest BaseActivityInfosControllerTest",
                 Phase = "Test Phase",
-                Theme = theme
+                Theme = theme,
+                ThemeId = theme.ThemeId
             };
 
-            // TODO: .....
+            var response = await _httpClient.PostAsync("api/BaseActivityInfos/",
+                new StringContent(JsonSerializer.Serialize(activity), Encoding.UTF8, MediaTypeNames.Application.Json));
+            Assert.AreEqual(expectedHttpStatus, response.StatusCode);
+            if (expectedHttpStatus == HttpStatusCode.Created)
+            {
+                // Get created theme from body
+                var postResponseBody = await response.Content.ReadAsStringAsync();
+                var new_activity = JsonSerializer.Deserialize<BaseActivityInfo>(postResponseBody);
+                // Check the result
+                Assert.IsNotNull(new_activity);
+                Assert.AreEqual(activity.Name, new_activity.Name);
+                Assert.AreEqual(activity.Description, new_activity.Description);
+                // return the new activity
+                return new_activity;
+            }
+            return null;
+        }
 
-            return activity;
+        private async Task<BaseActivityInfo> PutActivityAsync(BaseActivityInfo activity, HttpStatusCode expectedHttpStatus)
+        {
+            var response = await _httpClient.PutAsync("api/BaseActivityInfos/" + activity.BaseActivityInfoId,
+                new StringContent(JsonSerializer.Serialize(activity), Encoding.UTF8, MediaTypeNames.Application.Json));
+            Assert.AreEqual(expectedHttpStatus, response.StatusCode);
+            if (expectedHttpStatus == HttpStatusCode.OK)
+            {
+                var putResponseBody = await response.Content.ReadAsStringAsync();
+                var updated_activity = JsonSerializer.Deserialize<BaseActivityInfo>(putResponseBody);
+                return updated_activity;
+            }
+            return null;
+        }
+
+        private async void DelActivityAsync(BaseActivityInfo activity, HttpStatusCode expectedHttpStatus)
+        {
+            var response = await _httpClient.DeleteAsync("api/BaseActivityInfos/" + activity.BaseActivityInfoId);
+            Assert.AreEqual(expectedHttpStatus, response.StatusCode);
         }
 
         [TestMethod]
-        public async Task ShouldBeAbleToGetActivities()
+        public async Task AA_ShouldBeAbleToGetActivities()
         {
             //Both admin and user should be able to get activties
             // Autherize Admin
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authAdmin);
             // Get for admin
-            var activities1 = await getActivitiesAsync(HttpStatusCode.OK);
+            var activities1 = await GetActivitiesAsync(HttpStatusCode.OK);
             Assert.IsNotNull(activities1);
             Assert.IsTrue(activities1.Count > 0);
             // Autherize User
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
             // Get for user
-            var activities2 = await getActivitiesAsync(HttpStatusCode.OK);
+            var activities2 = await GetActivitiesAsync(HttpStatusCode.OK);
             Assert.IsNotNull(activities2);
             Assert.IsTrue(activities2.Count > 0);
             // Compare results
             Assert.AreEqual(activities1.Count, activities2.Count);
-            CollectionAssert.AreEqual(activities1, activities2);
+            //CollectionAssert.AreEqual(activities1, activities2);
         }
 
         [TestMethod]
-        public async Task ShouldBeAbleToGetSingleActivity()
+        public async Task AB_ShouldBeAbleToGetSingleActivity()
         {
             //Both admin and user should be able to get activties
             // Autherize Admin
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authAdmin);
             // Get for admin
-            var activities1 = await getActivitiesAsync(HttpStatusCode.OK);
+            var activities1 = await GetActivitiesAsync(HttpStatusCode.OK);
             Assert.IsNotNull(activities1);
             Assert.IsTrue(activities1.Count > 0);
-            var activity1 = await getActivityAsync(activities1[0].BaseActivityInfoId, HttpStatusCode.OK);
+            var activity1 = await GetActivityAsync(activities1[0].BaseActivityInfoId, HttpStatusCode.OK);
             // Autherize User
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
             // Get for user
-            var activities2 = await getActivitiesAsync(HttpStatusCode.OK);
+            var activities2 = await GetActivitiesAsync(HttpStatusCode.OK);
             Assert.IsNotNull(activities2);
             Assert.IsTrue(activities2.Count > 0);
-            var activity2 = await getActivityAsync(activities2[0].BaseActivityInfoId, HttpStatusCode.OK);
+            var activity2 = await GetActivityAsync(activities2[0].BaseActivityInfoId, HttpStatusCode.OK);
             // Compare results
             Assert.AreEqual(activities1.Count, activities2.Count);
-            Assert.AreEqual(activities1.Count, activities2.Count);
-            Assert.AreEqual(activity1, activity2);
+            Assert.AreEqual(activity1.BaseActivityInfoId, activity2.BaseActivityInfoId);
+            Assert.AreEqual(activity1.Name, activity2.Name);
+            Assert.AreEqual(activity1.Description, activity2.Description);
+            Assert.AreEqual(activity1.ThemeId, activity2.ThemeId);
+            Assert.IsNotNull(activity1.Theme);
+            Assert.IsNotNull(activity2.Theme);
+            //Assert.AreEqual(activity1, activity2);
         }
 
         [TestMethod]
-        public async Task ShouldBeAbleToCreateActivity()
+        public async Task AC_ShouldBeAbleToCreateActivity()
         {
             // Autherize Admin
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authAdmin);
-
+            var activity = await CreateActivity(HttpStatusCode.Created);
+            Assert.IsNotNull(activity);
+            _newActivity = activity;
         }
 
         [TestMethod]
-        public async Task ShouldBeNotAbleToCreateActivity()
+        public async Task AD_ShouldNotBeAbleToCreateActivity()
         {
             // Autherize User
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
-
+            var activity = await CreateActivity(HttpStatusCode.Forbidden);
+            Assert.IsNull(activity);
         }
 
         [TestMethod]
-        public async Task ShouldBeAbleToEditActivity()
+        public async Task AE_ShouldBeAbleToEditActivity()
         {
             // Autherize Admin
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authAdmin);
-
+            Assert.IsNotNull(_newActivity);
+            // Make changes to the activity we created earlier
+            _newActivity.Name = "New " + _newActivity.Name;
+            _newActivity.Description = "New " + _newActivity.Description;
+            // Save the changes made 
+            var activity = await PutActivityAsync(_newActivity, HttpStatusCode.OK);
+            Assert.AreEqual(_newActivity.ThemeId, activity.ThemeId);
+            Assert.AreEqual(_newActivity.Name, activity.Name);
+            Assert.AreEqual(_newActivity.Description, activity.Description);
         }
 
         [TestMethod]
-        public async Task ShouldBeNotAbleToEditActivity()
+        public async Task AF_ShouldNotBeAbleToEditActivity()
         {
             // Autherize User
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
-
+            Assert.IsNotNull(_newActivity);
+            // Make changes to the activity we created earlier
+            _newActivity.Name = "Not Saved Changes " + _newActivity.Name;
+            _newActivity.Description = "Not Saved Changes " + _newActivity.Description;
+            // Save the changes
+            var activity = await PutActivityAsync(_newActivity, HttpStatusCode.Forbidden);
+            Assert.IsNull(activity);
         }
 
         [TestMethod]
-        public async Task ShouldBeAbleToDeleteActivity()
+        public async Task AG_ShouldNotBeAbleToDeleteActivity()
+        {
+            // Autherize User
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
+            Assert.IsNotNull(_newActivity);
+            DelActivityAsync(_newActivity, HttpStatusCode.Forbidden);
+        }
+
+        [TestMethod]
+        public async Task AH_ShouldBeAbleToDeleteActivity()
         {
             // Autherize Admin
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authAdmin);
-
+            Assert.IsNotNull(_newActivity);
+            DelActivityAsync(_newActivity, HttpStatusCode.OK);
         }
-
-        [TestMethod]
-        public async Task ShouldBeNotAbleToDeleteActivity()
-        {
-            // Autherize User
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
-
-        }
+       
     }
 }

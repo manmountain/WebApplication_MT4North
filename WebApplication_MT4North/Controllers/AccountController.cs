@@ -226,7 +226,8 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            //var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            
             if (!string.IsNullOrWhiteSpace(request.Email))
             {
                 //TODO: Can a user A change email to the same email as another user? ...
@@ -251,14 +252,7 @@ namespace WebApplication_MT4North.Controllers
 
             if (updateResult.Succeeded)
             {
-                return Ok(new UserResult
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Gender = user.Gender
-                });
+                return Ok(user);
             }
 
             var errors = updateResult.Errors.Select(x => x.Description).ToList();
@@ -301,14 +295,7 @@ namespace WebApplication_MT4North.Controllers
 
             if (updateResult.Succeeded)
             {
-                return Ok(new UserResult
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Gender = user.Gender
-                });
+                return Ok(updateResult);
             }
 
             var errors = updateResult.Errors.Select(x => x.Description).ToList();

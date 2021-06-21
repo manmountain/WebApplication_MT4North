@@ -258,6 +258,7 @@ namespace WebApplication_MT4North.IntegrationTests
             theme1.Description = "Changed description of theme created from test ThemeControllerTests";
             // Save the changes
             var theme2 = await putThemeAsync(theme1, HttpStatusCode.Forbidden);
+            Assert.IsNull(theme2);
         }
 
         [TestMethod]

@@ -65,7 +65,7 @@ namespace WebApplication_MT4North.Controllers
                 foreach(var userProject in userProjects)
                 {
                     _context.Projects.FirstOrDefault(p => p.ProjectId == userProject.ProjectId);
-                    //_context.Users.FirstOrDefault(u => u.Id == userProject.User.Id);
+                    _context.Users.FirstOrDefault(u => u.Id == userProject.User.Id);
                 }
                 return Ok(userProjects);
             }
@@ -111,7 +111,7 @@ namespace WebApplication_MT4North.Controllers
             // fetch the rest
             await _context.Projects.Where(p => p.ProjectId == userproject.ProjectId).ToListAsync<Project>();
             await _context.Users.Where(u => u.Id == userproject.UserId).ToListAsync<ApplicationUser>();
-
+            // return result
             return Ok(userproject);
         }
 
@@ -309,7 +309,17 @@ namespace WebApplication_MT4North.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(userproject).State = EntityState.Modified;
+            if (callerUserProject.UserProjectId == userproject.UserProjectId)
+            {
+                callerUserProject.Role = userproject.Role;
+                callerUserProject.Rights = userproject.Rights;
+                callerUserProject.Status = userproject.Status;
+                _context.Entry(callerUserProject).State = EntityState.Modified;
+            }
+            else
+            {
+                _context.Entry(userproject).State = EntityState.Modified;
+            }
 
             try
             {

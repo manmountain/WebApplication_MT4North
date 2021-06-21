@@ -295,14 +295,7 @@ namespace WebApplication_MT4North.Controllers
 
             if (updateResult.Succeeded)
             {
-                return Ok(new UserResult
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Gender = user.Gender
-                });
+                return Ok(updateResult);
             }
 
             var errors = updateResult.Errors.Select(x => x.Description).ToList();

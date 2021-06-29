@@ -101,7 +101,7 @@ namespace WebApplication_MT4North.Controllers
                 return Unauthorized();
             }
 
-            // fetch sub-activity and project
+            // fetch base or custom -activity and project
             var project = await _context.Projects.Where(p => p.ProjectId == activity.ProjectId).ToListAsync<Project>();
             if (activity.BaseActivityInfoId != null)
             {
@@ -289,9 +289,13 @@ namespace WebApplication_MT4North.Controllers
             }
 
             // Remove custom activity info if we got one
-            if (activity.CustomActivityInfo != null)
+            if (activity.CustomActivityInfoId != null)
             {
                 _context.CustomActivityInfos.Remove(activity.CustomActivityInfo);
+            }
+            if (activity.Notes.Count > 0)
+            {
+                _context.Notes.RemoveRange(activity.Notes); 
             }
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
@@ -319,7 +323,23 @@ namespace WebApplication_MT4North.Controllers
                 return Unauthorized();
             }
 
+            // fetch the project from the database
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projectId);
             var activities = await _context.Activities.Where(a => a.ProjectId == userproject.ProjectId).ToListAsync<Activity>();
+            foreach(var activity in activities)
+            {
+                // fetch base or custom -activity and theme
+                if (activity.BaseActivityInfoId != null)
+                {
+                    var baseactivity = await _context.BaseActivityInfos.FirstOrDefaultAsync(b => b.BaseActivityInfoId == activity.BaseActivityInfoId);
+                    var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.BaseActivityInfo.ThemeId);
+                }
+                if (activity.CustomActivityInfoId != null)
+                {
+                    var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
+                    var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
+                }
+            }
             return activities;
         }
 

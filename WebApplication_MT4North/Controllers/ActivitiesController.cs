@@ -150,6 +150,8 @@ namespace WebApplication_MT4North.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                Ok(activity);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -300,7 +302,7 @@ namespace WebApplication_MT4North.Controllers
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
 
-            return activity;
+            return Ok(activity);
         }
  
         // GET  /api/Activities/Project/{projectId}

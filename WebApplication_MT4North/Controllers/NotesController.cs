@@ -21,9 +21,14 @@ namespace WebApplication_MT4North.Controllers
         private readonly ILogger<NotesController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public NotesController(MT4NorthContext context)
+        public NotesController(
+            ILogger<NotesController> logger,
+            MT4NorthContext context,
+            UserManager<ApplicationUser> userManager)
         {
+            _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Notes
@@ -54,7 +59,7 @@ namespace WebApplication_MT4North.Controllers
             var activity = await _context.Activities.FindAsync(activityId);
             if (activity == null)
             {
-                return NoContent();
+                return NotFound();
             }
             var project  = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
@@ -82,6 +87,11 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
 
             var note = await _context.Notes.FindAsync(id);
+            // Make sure that we got a note to return 
+            if (note == null)
+            {
+                return NotFound();
+            }
 
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(note.ActivityId);
@@ -102,11 +112,6 @@ namespace WebApplication_MT4North.Controllers
             {
 
                 return Unauthorized();
-            }
-
-            if (note == null)
-            {
-                return NotFound();
             }
 
             return note;
@@ -147,7 +152,6 @@ namespace WebApplication_MT4North.Controllers
             {
                 return BadRequest();
             }
-
             // Update Note
             _context.Entry(note).State = EntityState.Modified;
 
@@ -166,7 +170,6 @@ namespace WebApplication_MT4North.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
@@ -203,7 +206,7 @@ namespace WebApplication_MT4North.Controllers
             // Note with empty string content is not Ok 
             if (note.Text.Trim().Length == 0)
             {
-                return NoContent();
+                return BadRequest();
             }
 
             // Set the user

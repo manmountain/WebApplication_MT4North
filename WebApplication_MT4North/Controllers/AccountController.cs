@@ -179,6 +179,10 @@ namespace WebApplication_MT4North.Controllers
         {
             try
             {
+                // Fetch current user
+                string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+                var user = await _userManager.FindByEmailAsync(userEmail);
+                //
                 var userName = User.Identity?.Name;
                 _logger.LogInformation($"User [{userName}] is trying to refresh JWT token.");
 
@@ -189,10 +193,12 @@ namespace WebApplication_MT4North.Controllers
                 var accessToken = await HttpContext.GetTokenAsync("Bearer", "access_token");
                 var jwtResult = _jwtAuthManager.Refresh(request.RefreshToken, accessToken, DateTime.Now);
                 _logger.LogInformation($"User [{userName}] has refreshed JWT token.");
+
+                var roles = await _userManager.GetRolesAsync(user);
                 return Ok(new LoginResult
                 {
                     //UserName = userName,
-                    //Roles = roles.ToList<string>(), //TODO: ?
+                    Roles = roles.ToList<string>(),
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
                 });

@@ -37,17 +37,21 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("projectid")]
         public int ProjectId { get; set; }
 
-        [JsonPropertyName("baseinfoid")]
-        public int? BaseInfoId { get; set; }
-        //public int? CustomActivityInfoId { get; set; }
+        [JsonPropertyName("baseactivityinfoid")]
+        public int? BaseActivityInfoId { get; set; }
 
-        [JsonPropertyName("baseinfo")]
-        public virtual BaseActivityInfo BaseInfo { get; set; }
+        [JsonPropertyName("customactivityinfoid")]
+        public int? CustomActivityInfoId { get; set; }
+
+        [JsonPropertyName("baseactivityinfo")]
+        public virtual BaseActivityInfo BaseActivityInfo { get; set; }
+
+        [JsonPropertyName("customactivityinfo")]
+        public virtual CustomActivityInfo CustomActivityInfo { get; set; }
 
         [JsonPropertyName("project")]
         public virtual Project Project { get; set; }
-        //public virtual CustomActivityInfo CustomActivityInfo { get; set; }
-
+        
         [JsonPropertyName("notes")]
         public virtual ICollection<Note> Notes { get; set; }
     }

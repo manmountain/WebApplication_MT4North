@@ -31,72 +31,6 @@ namespace WebApplication_MT4North.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/CustomActivityInfos/Activity/{activityId}
-        [Authorize()]
-        [HttpGet("Activity/{activityId}")]
-        public async Task<ActionResult<IEnumerable<CustomActivityInfo>>> GetForActivityCustomActivityInfos(int activityId)
-        {
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activities.FindAsync(activityId);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Activities.FindAsync(activity.ProjectId);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            // Check if user got R or RW permissions for the project the activity belongs to
-            var userproject = _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
-                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
-            if (userproject == null)
-            {
-                return Unauthorized();
-            }
-
-            var customActivityInfos = await _context.CustomActivityInfos.Where(c => c.ActivityId == activity.ActivityId).ToListAsync<CustomActivityInfo>();
-            return customActivityInfos;
-        }
-
-        // GET: api/CustomActivityInfos/Project/{projectId}
-        [Authorize()]
-        [HttpGet("Project/{projectId}")]
-        public async Task<ActionResult<IEnumerable<CustomActivityInfo>>> GetForProjectCustomActivityInfos(int projectId)
-        {
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects.FindAsync(projectId);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            // Check if user got R or RW permissions for the project the activity belongs to
-            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
-                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
-            if (userproject == null)
-            {
-                return Unauthorized();
-            }
-
-            var customActivityInfos = await _context.CustomActivityInfos.Where(c => c.Activity.ProjectId == project.ProjectId).ToListAsync<CustomActivityInfo>();
-            return customActivityInfos;
-        }
-
         // GET: api/CustomActivityInfos/5
         [Authorize()]
         [HttpGet("{id}")]
@@ -115,14 +49,14 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(customActivityInfo.Activity.ProjectId);
-            if (project == null)
+            var activity = await _context.Activities.FirstAsync(a => a.CustomActivityInfoId == customActivityInfo.CustomActivityInfoId);
+            if (activity == null)
             {
                 return NotFound();
             }
 
             // Check if user got R or RW permissions for the project the activity belongs to
-            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
+            var userproject = _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
                                                                p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
             if (userproject == null)
             {
@@ -131,7 +65,7 @@ namespace WebApplication_MT4North.Controllers
 
             return customActivityInfo;
         }
-
+        
         // PUT: api/CustomActivityInfos/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -151,56 +85,7 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(customActivityInfo.Activity.ProjectId);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            // Check if user got W or RW permissions for the project the activity belongs to
-            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
-                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "W")).FirstOrDefault();
-            if (userproject == null)
-            {
-                return Unauthorized();
-            }
-
-            _context.Entry(customActivityInfo).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomActivityInfoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/CustomActivityInfos/Activity/{activityId}
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize()]
-        [HttpPost("Activity/{activityId}")]
-        public async Task<ActionResult<CustomActivityInfo>> PostCustomActivityInfo(int activityId, CustomActivityInfo customActivityInfo)
-        {
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activities.FindAsync(activityId);
+            var activity = await _context.Activities.FirstAsync(a => a.CustomActivityInfoId == customActivityInfo.CustomActivityInfoId);
             if (activity == null)
             {
                 return NotFound();
@@ -220,22 +105,29 @@ namespace WebApplication_MT4North.Controllers
                 return Unauthorized();
             }
 
-            _context.CustomActivityInfos.Add(customActivityInfo);
-            await _context.SaveChangesAsync();
+            _context.Entry(customActivityInfo).State = EntityState.Modified;
 
-            return CreatedAtAction("GetCustomActivityInfo", new { id = customActivityInfo.CustomActivityInfoId }, customActivityInfo);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(customActivityInfo);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CustomActivityInfoExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
+        
         /*
-        [Authorize()]
-        [HttpPost("Activity/{activityId}")]
-        public async Task<ActionResult<CustomActivityInfo>> PostCustomActivityInfo(int activityId, CustomActivityInfo customActivityInfo)
-        {
-            _context.CustomActivityInfos.Add(customActivityInfo);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCustomActivityInfo", new { id = customActivityInfo.CustomActivityInfoId }, customActivityInfo);
-        }*/
-
         // DELETE: api/CustomActivityInfos/5
         [Authorize()]
         [HttpDelete("{id}")]
@@ -254,7 +146,13 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(customActivityInfo.Activity.ProjectId);
+            var activity = await _context.Activities.FirstAsync(a => a.CustomActivityInfoId == customActivityInfo.CustomActivityInfoId);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
             {
                 return NotFound();
@@ -272,7 +170,7 @@ namespace WebApplication_MT4North.Controllers
             await _context.SaveChangesAsync();
 
             return customActivityInfo;
-        }
+        }*/
 
         private bool CustomActivityInfoExists(int id)
         {

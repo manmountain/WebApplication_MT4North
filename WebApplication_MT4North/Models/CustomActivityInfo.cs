@@ -23,11 +23,13 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("phase")]
         public string Phase { get; set; }
 
+        /*
         [JsonPropertyName("activityid")]
         public int? ActivityId { get; set; }
 
         [JsonPropertyName("activity")]
         public virtual Activity Activity { get; set; }
+        */
 
         [JsonPropertyName("theme")]
         public virtual Theme Theme { get; set; }

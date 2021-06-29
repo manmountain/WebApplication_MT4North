@@ -137,7 +137,7 @@ namespace WebApplication_MT4North.Models
                     {
                         IsExcluded = false,
                         Status = status[o],
-                        BaseInfo = baseActivity,
+                        //BaseInfo = baseActivity,
                         /*CustomActivityInfos = new List<CustomActivityInfo>(new CustomActivityInfo[]
                         {
                             _customActivitys[n],

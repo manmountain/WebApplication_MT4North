@@ -161,7 +161,10 @@ namespace WebApplication_MT4North.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BaseInfoId")
+                    b.Property<int?>("BaseActivityInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CustomActivityInfoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeadlineDate")
@@ -187,7 +190,9 @@ namespace WebApplication_MT4North.Migrations
 
                     b.HasKey("ActivityId");
 
-                    b.HasIndex("BaseInfoId");
+                    b.HasIndex("BaseActivityInfoId");
+
+                    b.HasIndex("CustomActivityInfoId");
 
                     b.HasIndex("ProjectId");
 
@@ -316,9 +321,6 @@ namespace WebApplication_MT4North.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -332,8 +334,6 @@ namespace WebApplication_MT4North.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CustomActivityInfoId");
-
-                    b.HasIndex("ActivityId");
 
                     b.HasIndex("ThemeId");
 
@@ -488,9 +488,13 @@ namespace WebApplication_MT4North.Migrations
 
             modelBuilder.Entity("WebApplication_MT4North.Models.Activity", b =>
                 {
-                    b.HasOne("WebApplication_MT4North.Models.BaseActivityInfo", "BaseInfo")
+                    b.HasOne("WebApplication_MT4North.Models.BaseActivityInfo", "BaseActivityInfo")
                         .WithMany()
-                        .HasForeignKey("BaseInfoId");
+                        .HasForeignKey("BaseActivityInfoId");
+
+                    b.HasOne("WebApplication_MT4North.Models.CustomActivityInfo", "CustomActivityInfo")
+                        .WithMany()
+                        .HasForeignKey("CustomActivityInfoId");
 
                     b.HasOne("WebApplication_MT4North.Models.Project", "Project")
                         .WithMany()
@@ -508,10 +512,6 @@ namespace WebApplication_MT4North.Migrations
 
             modelBuilder.Entity("WebApplication_MT4North.Models.CustomActivityInfo", b =>
                 {
-                    b.HasOne("WebApplication_MT4North.Models.Activity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
                     b.HasOne("WebApplication_MT4North.Models.Theme", "Theme")
                         .WithMany()
                         .HasForeignKey("ThemeId");

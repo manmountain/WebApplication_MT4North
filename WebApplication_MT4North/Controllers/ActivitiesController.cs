@@ -56,15 +56,18 @@ namespace WebApplication_MT4North.Controllers
             // Load Project, CustomActivityInfo, BaseActivityInfo from database
             foreach (var activity in activities)
             {
+                // fetch sub-activity and project
                 var project = await _context.Projects.Where(p => p.ProjectId == activity.ProjectId).ToListAsync<Project>();
-                //var customActivities = await _context.CustomActivityInfos.Where(c => c.ActivityId == activity.ActivityId).ToListAsync<CustomActivityInfo>();
-                /* System.Text.Json.JsonException:
-                 * A possible object cycle was detected which is not supported. This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32.
-                foreach (var customActivity in customActivities)
+                if (activity.BaseActivityInfoId != null)
                 {
-                    var themes = await _context.Themes.Where(t => t.ThemeId == customActivity.ThemeId).ToListAsync<Theme>();
-                }*/
-                //var baseActivity = await _context.BaseActivityInfos.Where(b => b.BaseActivityInfoId == activity.BaseInfoId).ToListAsync<BaseActivityInfo>();
+                    var baseactivity = await _context.BaseActivityInfos.FirstOrDefaultAsync(b => b.BaseActivityInfoId == activity.BaseActivityInfoId);
+                    var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.BaseActivityInfo.ThemeId);
+                }
+                if (activity.CustomActivityInfoId != null)
+                {
+                    var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
+                    var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
+                }
 
             }
             // Return the activites found
@@ -96,6 +99,19 @@ namespace WebApplication_MT4North.Controllers
             if (userproject.Count == 0)
             {
                 return Unauthorized();
+            }
+
+            // fetch sub-activity and project
+            var project = await _context.Projects.Where(p => p.ProjectId == activity.ProjectId).ToListAsync<Project>();
+            if (activity.BaseActivityInfoId != null)
+            {
+                var baseactivity = await _context.BaseActivityInfos.FirstOrDefaultAsync(b => b.BaseActivityInfoId == activity.BaseActivityInfoId);
+                var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.BaseActivityInfo.ThemeId);
+            }
+            if (activity.CustomActivityInfoId != null)
+            {
+                var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
+                var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
             }
 
             return activity;
@@ -150,6 +166,102 @@ namespace WebApplication_MT4North.Controllers
             return NoContent();
         }
 
+        // POST /api/Activities/
+        // create an activitys for user in project with ProjectId == projectId
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize()]
+        [HttpPost("")]
+        public async Task<ActionResult<Activity>> PostActivity(Activity activity)
+        {
+            // Check input data
+            if (activity.BaseActivityInfoId != null && activity.CustomActivityInfoId != null)
+            {
+                return BadRequest(); // cant have both BaseActivity AND CustomActivity
+            }
+
+            if (activity.BaseActivityInfoId == null && activity.CustomActivityInfoId == null)
+            {
+                return BadRequest(); // We must have a BaseActivity OR CustomActivity
+            }
+
+            if (activity.BaseActivityInfo != null && activity.BaseActivityInfoId != activity.BaseActivityInfo.BaseActivityInfoId)
+            {
+                return BadRequest(); // BaseInfoActivityInfo id's dont match
+            }
+
+            if (activity.ProjectId == null /*|| activity.ProjectId != activity.Project.ProjectId*/)
+            {
+                return BadRequest(); // Projects is null or id's dont match
+            }
+
+            // Check that the base activity exixts if attached
+            if (activity.BaseActivityInfo != null)
+            {
+                if (!BaseActivityInfoExists((int)activity.BaseActivityInfoId))
+                {
+                    return NotFound(); // We didnt find the base activity
+                }
+            }
+
+            // Check that the project exists
+            if (!ProjectExists((int)activity.ProjectId))
+            {
+                return NotFound(); // We didnt find the base activity
+            }
+
+
+            // Make sure we dont have any notes
+            if (activity.Notes.Count != 0)
+            {
+                return BadRequest();
+            }
+
+            // Check permissions
+            // Check if the caller got the RW rights! Otherwise return Forbidden
+            string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var caller = await _userManager.FindByEmailAsync(callerEmail);
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == activity.ProjectId && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "W")); // TODO Enum non R-read RW-readwrite
+            if (callerUserProject == null)
+            {
+                // The caller doesnt have WRITE rights to this project
+                return Forbid();
+            }
+
+            if (activity.BaseActivityInfoId != null)
+            {
+                activity.BaseActivityInfo = null;
+            }
+
+            // If we got a CustomActivityInfo attached to the activity. Add it to the database
+            if (activity.CustomActivityInfo != null)
+            {
+                activity.CustomActivityInfo.Theme = null;
+                _context.CustomActivityInfos.Add(activity.CustomActivityInfo);
+                await _context.SaveChangesAsync();
+
+                activity.CustomActivityInfoId = activity.CustomActivityInfo.CustomActivityInfoId;
+            }
+            // Add the activity to the database
+            _context.Activities.Add(activity);
+            await _context.SaveChangesAsync();
+
+            // fetch sub-activity and theme
+            var project = await _context.Projects.Where(p => p.ProjectId == activity.ProjectId).ToListAsync<Project>();
+            if (activity.BaseActivityInfoId != null)
+            {
+                var baseactivity = await _context.BaseActivityInfos.FirstOrDefaultAsync(b => b.BaseActivityInfoId == activity.BaseActivityInfoId);
+                var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.BaseActivityInfo.ThemeId);
+            }
+            if (activity.CustomActivityInfoId != null)
+            {
+                var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
+                var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
+            }
+
+            return CreatedAtAction("GetActivity", new { id = activity.ActivityId }, activity);
+        }
+
         // DEL  /api/Activities/{id}
         // delete activity with ActivityId == id
         [Authorize()]
@@ -176,12 +288,17 @@ namespace WebApplication_MT4North.Controllers
                 return Unauthorized();
             }
 
+            // Remove custom activity info if we got one
+            if (activity.CustomActivityInfo != null)
+            {
+                _context.CustomActivityInfos.Remove(activity.CustomActivityInfo);
+            }
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
 
             return activity;
         }
-
+ 
         // GET  /api/Activities/Project/{projectId}
         // all activitys for project with ProjectId == projectId
         [Authorize()]
@@ -206,6 +323,7 @@ namespace WebApplication_MT4North.Controllers
             return activities;
         }
 
+        /*
         // POST /api/Activities/Project/{projectId}
         // create an activitys for user in project with ProjectId == projectId
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -221,11 +339,21 @@ namespace WebApplication_MT4North.Controllers
 
 
             return CreatedAtAction("GetActivity", new { id = activity.ActivityId }, activity);
-        }
+        }*/
 
         private bool ActivityExists(int id)
         {
             return _context.Activities.Any(e => e.ActivityId == id);
+        }
+
+        private bool BaseActivityInfoExists(int id)
+        {
+            return _context.BaseActivityInfos.Any(e => e.BaseActivityInfoId == id);
+        }
+
+        private bool ProjectExists(int id)
+        {
+            return _context.Projects.Any(e => e.ProjectId == id);
         }
     }
 }

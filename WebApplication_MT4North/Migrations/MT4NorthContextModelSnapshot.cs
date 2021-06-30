@@ -357,13 +357,11 @@ namespace WebApplication_MT4North.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("NoteId");
 
                     b.HasIndex("ActivityId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Notes");
                 });
@@ -519,13 +517,9 @@ namespace WebApplication_MT4North.Migrations
 
             modelBuilder.Entity("WebApplication_MT4North.Models.Note", b =>
                 {
-                    b.HasOne("WebApplication_MT4North.Models.Activity", "Activity")
+                    b.HasOne("WebApplication_MT4North.Models.Activity", null)
                         .WithMany("Notes")
                         .HasForeignKey("ActivityId");
-
-                    b.HasOne("WebApplication_MT4North.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WebApplication_MT4North.Models.UserProject", b =>

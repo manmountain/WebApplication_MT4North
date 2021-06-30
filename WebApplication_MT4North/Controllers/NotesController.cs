@@ -158,6 +158,7 @@ namespace WebApplication_MT4North.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok(note);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -209,16 +210,16 @@ namespace WebApplication_MT4North.Controllers
                 return BadRequest();
             }
 
-            // Set the user
-            note.User = user;
+            // Set the user Id
+            //note.User = user;
             note.UserId = user.Id;
             // If no timestamp set from frontend, Use local server time as a bad fallback
             if (note.TimeStamp == null)
             {
                 note.TimeStamp = DateTime.Now;
             }
-            // Set the activity
-            note.Activity = activity;
+            // Set the activity Id
+            //note.Activity = activity;
             note.ActivityId = activity.ActivityId;
             // Trim text 
             note.Text = note.Text.Trim();

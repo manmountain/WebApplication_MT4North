@@ -23,10 +23,10 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("text")]
         public string Text { get; set; }
 
-        [JsonPropertyName("activity")]
-        public virtual Activity Activity { get; set; }
+        /*[JsonPropertyName("activity")]
+        public virtual Activity Activity { get; set; }*/
 
-        [JsonPropertyName("user")]
-        public virtual ApplicationUser User { get; set; }
+        /*[JsonPropertyName("user")]
+        public virtual ApplicationUser User { get; set; }*/
     }
 }

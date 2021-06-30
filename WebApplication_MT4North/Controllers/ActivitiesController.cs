@@ -68,7 +68,7 @@ namespace WebApplication_MT4North.Controllers
                     var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
                     var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
                 }
-
+                var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
             }
             // Return the activites found
             return activities;
@@ -113,7 +113,7 @@ namespace WebApplication_MT4North.Controllers
                 var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
                 var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
             }
-
+            var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
             return activity;
         }
 
@@ -260,6 +260,7 @@ namespace WebApplication_MT4North.Controllers
                 var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
                 var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
             }
+            var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
 
             return CreatedAtAction("GetActivity", new { id = activity.ActivityId }, activity);
         }
@@ -341,6 +342,7 @@ namespace WebApplication_MT4North.Controllers
                     var customactivity = await _context.CustomActivityInfos.FirstOrDefaultAsync(b => b.CustomActivityInfoId == activity.CustomActivityInfoId);
                     var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
                 }
+                var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
             }
             return activities;
         }

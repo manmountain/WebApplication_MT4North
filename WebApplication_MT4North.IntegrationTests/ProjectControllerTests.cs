@@ -159,7 +159,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(userproject.ProjectId, _newProject.ProjectId);
             Assert.AreEqual(userproject.Role, "Projektägare");
             Assert.AreEqual(userproject.Rights, "RW");
-            Assert.AreEqual(userproject.Status, UserProjectStatus.Accepted);
+            Assert.AreEqual(userproject.Status, UserProjectStatus.ACCEPTED);
         }
 
         [TestMethod]
@@ -220,7 +220,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(userproject.UserId, user.Id);
             Assert.AreEqual(userproject.Role, role);
             Assert.AreEqual(userproject.Rights, permissions);
-            Assert.AreEqual(userproject.Status, UserProjectStatus.Pending);
+            Assert.AreEqual(userproject.Status, UserProjectStatus.PENDING);
 
             // Accept invite
             var url = "api/UserProjects/Invites/Accept/" + userproject.UserProjectId;
@@ -264,7 +264,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(userproject.UserId, user.Id);
             Assert.AreEqual(userproject.Role, role);
             Assert.AreEqual(userproject.Rights, permissions); 
-            Assert.AreEqual(userproject.Status, UserProjectStatus.Pending);
+            Assert.AreEqual(userproject.Status, UserProjectStatus.PENDING);
 
             // Reject invite
             var url = "api/UserProjects/Invites/Reject/"+userproject.UserProjectId;

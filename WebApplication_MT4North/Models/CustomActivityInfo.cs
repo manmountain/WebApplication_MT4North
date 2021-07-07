@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace WebApplication_MT4North.Models
 {
+
     public partial class CustomActivityInfo
     {
         [JsonPropertyName("customactivityinfoid")]
@@ -21,15 +22,7 @@ namespace WebApplication_MT4North.Models
         public int? ThemeId { get; set; }
 
         [JsonPropertyName("phase")]
-        public string Phase { get; set; }
-
-        /*
-        [JsonPropertyName("activityid")]
-        public int? ActivityId { get; set; }
-
-        [JsonPropertyName("activity")]
-        public virtual Activity Activity { get; set; }
-        */
+        public ActivityPhase Phase { get; set; }
 
         [JsonPropertyName("theme")]
         public virtual Theme Theme { get; set; }

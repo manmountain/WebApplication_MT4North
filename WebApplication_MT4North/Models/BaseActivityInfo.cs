@@ -6,6 +6,15 @@ using System.Text.Json.Serialization;
 
 namespace WebApplication_MT4North.Models
 {
+
+    public enum ActivityPhase
+    {
+        CONCEPTUALIZATION,
+        VALIDATION,
+        DEVELOPMENT,
+        LAUNCH
+    }
+
     public partial class BaseActivityInfo
     {
         public BaseActivityInfo()
@@ -25,8 +34,15 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
+
+        /*TODO: Enums
+         CONCEPTUALIZATION = "Konceptualisering",
+         VALIDATION = "Konceptvalidering",
+         DEVELOPMENT = "Produktutveckling",
+         LAUNCH = "Produktlansering"
+        */
         [JsonPropertyName("phase")]
-        public string Phase { get; set; }
+        public ActivityPhase Phase { get; set; }
 
         [JsonPropertyName("theme")]
         public virtual Theme Theme { get; set; }

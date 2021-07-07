@@ -32,6 +32,27 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/CustomActivityInfos/5
+        /// <summary>
+        /// Get the custom activity with CustomActivityId == id
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The custom activity with CustomActivityId == id
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">BadRequest</response>
+        /// <response code="401">Forbidden</response>
+        /// <response code="403">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomActivityInfo>> GetCustomActivityInfo(int id)
@@ -57,7 +78,7 @@ namespace WebApplication_MT4North.Controllers
 
             // Check if user got R or RW permissions for the project the activity belongs to
             var userproject = _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
-                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R")).FirstOrDefault();
+                                                               p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ)).FirstOrDefault();
             if (userproject == null)
             {
                 return Unauthorized();
@@ -65,8 +86,29 @@ namespace WebApplication_MT4North.Controllers
 
             return customActivityInfo;
         }
-        
+
         // PUT: api/CustomActivityInfos/5
+        /// <summary>
+        /// Update custom activity with CustomActivityId == id
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The updated custom activity with CustomActivityId == id
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">BadRequest</response>
+        /// <response code="401">Forbidden</response>
+        /// <response code="403">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize()]
@@ -99,7 +141,7 @@ namespace WebApplication_MT4North.Controllers
 
             // Check if user got W or RW permissions for the project the activity belongs to
             var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
-                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "W")).FirstOrDefault();
+                                                               p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).FirstOrDefault();
             if (userproject == null)
             {
                 return Unauthorized();

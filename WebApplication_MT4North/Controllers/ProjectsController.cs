@@ -58,7 +58,7 @@ namespace WebApplication_MT4North.Controllers
             
             // fetch all user-projects where the user is a member
             //var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
-            var userProjects = await _context.UserProjects.Where(p => p.UserId == user.Id && p.Status == UserProjectStatus.Accepted).ToListAsync<UserProject>();
+            var userProjects = await _context.UserProjects.Where(p => p.UserId == user.Id && p.Status == UserProjectStatus.ACCEPTED).ToListAsync<UserProject>();
             // fetch projects from userProjects
             var projects = new List<Project>();
             foreach (var userProject in userProjects)
@@ -105,7 +105,7 @@ namespace WebApplication_MT4North.Controllers
             // Get the project
             var project = await _context.Projects.FindAsync(id);
 
-            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == project.ProjectId && p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "R"));
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == project.ProjectId && p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ));
             if (callerUserProject == null)
             {
                 // The user doesnt have READ rights to this project
@@ -150,9 +150,9 @@ namespace WebApplication_MT4North.Controllers
             var userProject = new UserProject();
             userProject.Project = project;
             userProject.User = user;
-            userProject.Role = "Projektägare";
-            userProject.Rights = "RW";
-            userProject.Status = UserProjectStatus.Accepted;
+            userProject.Role = UserProjectRoles.OWNER; // "Projektägare";
+            userProject.Rights = UserProjectPermissions.READWRITE; //"RW";
+            userProject.Status = UserProjectStatus.ACCEPTED;
             // Save user-project
             _context.UserProjects.Add(userProject);
             await _context.SaveChangesAsync();
@@ -170,12 +170,15 @@ namespace WebApplication_MT4North.Controllers
         /// <returns>
         /// Updated Project
         /// </returns>
-        /// <response code="204">OK No content</response>
-        /// <response code="401">Unautherized</response>
+        /// <response code="200">OK</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">BadRequest</response>
+        /// <response code="401">Forbidden</response>
         /// <response code="403">Unautherized</response>
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
@@ -187,7 +190,7 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the WRITE rights! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
-            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "W"));
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE));
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
@@ -218,7 +221,6 @@ namespace WebApplication_MT4North.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
@@ -245,7 +247,7 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the WRITE rights! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
-            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == "RW" || p.Rights == "W"));
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE));
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project

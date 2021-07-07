@@ -41,6 +41,20 @@ namespace WebApplication_MT4North.Controllers
             _jwtAuthManager = jwtAuthManager;
         }
 
+        // GET: api/Account/register
+        /// <summary>
+        /// Register a new application user
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -99,6 +113,22 @@ namespace WebApplication_MT4North.Controllers
             });
         }
 
+        // GET: api/Account/login
+        /// <summary>
+        /// Authenticate user credentials
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> LoginAsync([FromBody] LoginRequest request)
@@ -159,6 +189,22 @@ namespace WebApplication_MT4North.Controllers
             });
         }
 
+        // GET: api/Account/signout
+        /// <summary>
+        /// Deauthenticate user
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [HttpPost("logout")]
         [Authorize]
         public ActionResult Logout()
@@ -173,6 +219,20 @@ namespace WebApplication_MT4North.Controllers
             return Ok();
         }
 
+        // GET: api/Account/refresh-token
+        /// <summary>
+        /// Refresh the authentication
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [HttpPost("refresh-token")]
         [Authorize]
         public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
@@ -210,6 +270,21 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/Account/User
+        /// <summary>
+        /// Get the application user
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [HttpGet("user")]
         [Authorize]
         public async Task<ActionResult<ApplicationUser>> GetCurrentUserAsync()
@@ -226,6 +301,22 @@ namespace WebApplication_MT4North.Controllers
             return Ok(user);
         }
 
+        // PUT: api/Account/user
+        /// <summary>
+        /// Update application user
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [HttpPut("user")]
         [Authorize]
         public async Task<ActionResult> UpdateCurrentUserAsync([FromBody] UserRequest request)
@@ -268,6 +359,7 @@ namespace WebApplication_MT4North.Controllers
                 Errors = errors
             });
         }
+
 
         [HttpPut("user/{userEmail}")]
         [Authorize(Roles = "AdminUser")]

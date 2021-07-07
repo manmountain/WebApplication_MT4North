@@ -11,3 +11,4 @@ export class UserProject {
   project: Project;
   isEditable = false;
 }
+

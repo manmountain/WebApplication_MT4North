@@ -84,8 +84,9 @@
     <None Remove="ClientApp\src\app\my-pages-edit-account\my-pages-edit-account.component.ts" />
     <None Remove="ClientApp\src\app\_components\alert.component.ts" />
     <None Remove="ClientApp\src\app\_models\activity.model.ts" />
+    <None Remove="ClientApp\src\app\_models\activityInfo.model.ts" />
     <None Remove="ClientApp\src\app\_models\alert.ts" />
-    <None Remove="ClientApp\src\app\_models\common.ts" />
+    <None Remove="ClientApp\src\app\_models\enums.ts" />
     <None Remove="ClientApp\src\app\_models\enumToArrayPipe.ts" />
     <None Remove="ClientApp\src\app\_models\matchesPhasePipe.ts" />
     <None Remove="ClientApp\src\app\_models\project.model.ts" />
@@ -196,7 +197,7 @@
 
   <ItemGroup>
     <None Update="ClientApp\src\app\_models\common - Copy.js.map">
-      <DependentUpon>common.js.map</DependentUpon>
+      <DependentUpon>enums.js.map</DependentUpon>
     </None>
     <None Update="ClientApp\src\app\_models\userProject - Copy.js">
       <DependentUpon>userProject.model.js</DependentUpon>
@@ -208,6 +209,9 @@
 
   <ItemGroup>
     <TypeScriptCompile Update="ClientApp\src\app\_models\activity.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\_models\activityInfo.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

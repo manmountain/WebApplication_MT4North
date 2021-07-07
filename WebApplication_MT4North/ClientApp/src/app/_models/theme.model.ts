@@ -4,16 +4,16 @@ export class Theme {
   themeid: string;
   name: string;
   description: string;
-  activities: Activity[] = [];
+  //activities: Activity[] = [];
 
   constructor(name: string, description: string) {
     this.name = name;
     this.description = description;
   }
 
-  addActivity(activity: Activity) {
-    this.activities.push(activity);
-  }
+  //addActivity(activity: Activity) {
+  //  this.activities.push(activity);
+  //}
 
   /**
 

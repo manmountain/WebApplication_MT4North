@@ -1,7 +1,4 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { Activity } from "./activity.model";
-
-import { Phase } from "./common";
 
 @Pipe({
   name: 'enumToArray',

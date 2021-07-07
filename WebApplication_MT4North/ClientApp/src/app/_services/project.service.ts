@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { Project, UserProject, Theme } from '@app/_models';
+import { Project, UserProject, Theme, Activity, ActivityInfo } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -23,6 +23,9 @@ export class ProjectService {
   private selectedProjectSubject: BehaviorSubject<Project>;
   public selectedProject: Observable<Project>;
 
+  private activitiesSubject: BehaviorSubject<Activity[]>;
+  public activities: Observable<Activity[]>;
+
   constructor(private http: HttpClient) {
     this.projectSubjects = new BehaviorSubject<Project[]>(JSON.parse(localStorage.getItem('currentProjects')));
     this.projects = this.projectSubjects.asObservable();
@@ -38,6 +41,9 @@ export class ProjectService {
 
     this.themesSubject = new BehaviorSubject<Theme[]>(JSON.parse(localStorage.getItem('themes')));
     this.themes = this.themesSubject.asObservable();
+
+    this.activitiesSubject = new BehaviorSubject<Activity[]>(JSON.parse(localStorage.getItem('activities')));
+    this.activities = this.activitiesSubject.asObservable();
   }
 
   public get currentProjectsValue(): Project[] {
@@ -58,6 +64,10 @@ export class ProjectService {
 
   public get themesValue(): Theme[] {
     return this.themesSubject.value;
+  }
+
+  public get activitiesValue(): Activity[] {
+    return this.activitiesSubject.value;
   }
 
   createProject(name: string, description: string) {
@@ -127,7 +137,7 @@ export class ProjectService {
     }));;
   }
 
-  update(params) {
+  updateProject(params) {
     console.log(params);
     return this.http.put(`${environment.apiUrl}/Projects/${this.userProjectsValue[0].projectid}`, params).pipe(map(x => {
       {
@@ -174,8 +184,6 @@ export class ProjectService {
     console.log(params);
     return this.http.put(`${environment.apiUrl}/UserProjects/${userProjectId}`, params).pipe(map(userProject => {
       {
-
-
         let projectToUpdate = this.userProjectsValue.find(y => y.userprojectid == userProjectId);
         let index = this.userProjectsValue.indexOf(projectToUpdate);
 
@@ -276,7 +284,30 @@ export class ProjectService {
       const themesConst = { ...this.themesValue, ...themes };
 
       localStorage.setItem('themes', JSON.stringify(themesConst));
+      this.themesSubject.next(themes);
+
       return themes;
+    }));
+  }
+
+  getActivities() {
+    return this.http.get<Activity[]>(`${environment.apiUrl}/Activities/Project/${this.userProjectsValue[0].projectid}`,).pipe(map(activities => {
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+      localStorage.setItem('activities', JSON.stringify(getCircularReplacer()));
+      this.activitiesSubject.next(activities);
+
+      return activities;
     }));
   }
 

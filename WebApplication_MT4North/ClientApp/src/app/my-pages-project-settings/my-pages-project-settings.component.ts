@@ -90,7 +90,7 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     console.log('form value: ', this.form.value);
 
     this.loading = true;
-    this.projectService.update(this.form.value)
+    this.projectService.updateProject(this.form.value)
       .pipe(first())
       .subscribe(
         data => {

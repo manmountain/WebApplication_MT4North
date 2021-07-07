@@ -1,6 +1,8 @@
 <!--<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>-->
 
 <div class="row ml-0 mt-4 mb-2">
+  <alert></alert>
+
   <div class="col m-0 p-0  d-none d-md-inline im-toolbar mr-4">
     <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" (click)="toggleExpandView()" data-toggle="tooltip" data-placement="bottom" title="{{isFullscreen == true ? 'Stäng fullskärmsläge' : 'Öppna fullskärmsläge'}}">
@@ -10,8 +12,8 @@
         <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{getMaxDate()}}" />
       </div>
       <!--<button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
-    <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
-  </button>-->
+        <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
+      </button>-->
       <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
         <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild" (click)="makeScreenshot()"></i>
       </button>
@@ -68,7 +70,7 @@
 
     </div>
   </div>
-  </div>
+</div>
   <div class="row mr-3">
     <table #imTableView class="table ml-3 m-0"  [ngClass]="{'animate': isScreenshotting === true}" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
 
@@ -134,15 +136,15 @@
                       <!-- ACTIVITES -->
                       <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
                         <td class="col-xs-1 im-cell im-inner-col">
-                          <div *ngFor="let activity of (theme.activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
+                          <div *ngFor="let activity of (activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
                             <div class="panel panel-default" [style.display]="activity.isExcluded == true && hideExcluded == true || activity.status == 'checked' && hideFinished == true ? 'none' : 'block'">
                               <div class="panel-heading">
                                 <h3 class="panel-title">
-                                  <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isExcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
+                                  <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
                                     <label>
                                       <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
-                                      <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isExcluded">
-                                      {{activity.name}}
+                                      <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
+                                      {{activity.baseactivityinfo.name}}
                                     </label>
                                   </a>
                                 </h3>
@@ -152,7 +154,7 @@
                                 <div class="panel-body im-theme-{{i}}">
 
                                   <p class="mb-2 p-0">
-                                    {{activity.description}}
+                                    {{activity.baseactivityinfodescription}}
                                   </p>
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Theme, Activity, Phase, Status } from "../_models";
-import { ViewService, ProjectService } from "../_services";
+import { Theme, Activity, ActivityPhase, ActivityStatus } from "../_models";
+import { AlertService, ViewService, ProjectService } from "../_services";
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -15,13 +15,17 @@ import { Subscription } from 'rxjs';
 })
 
 export class MyPagesActivityStatusComponent {
-  phases = Phase;
+  phases = ActivityPhase;
   themes: Theme[] = [];
+  activities: Activity[] = [];
   testThemes: Theme[] = [];
   hideExcluded: boolean = false;
   hideFinished: boolean = false;
   isScreenshotting: boolean = false;
   themesSubscription: Subscription;
+  activitiesSubscription: Subscription;
+
+  error = '';
 
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
@@ -32,7 +36,11 @@ export class MyPagesActivityStatusComponent {
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
 
-  constructor(private viewService: ViewService, private projectService: ProjectService) {
+  constructor(
+    private viewService: ViewService,
+    private projectService: ProjectService,
+    private alertService: AlertService) {
+    this.themesSubscription = this.projectService.themes.subscribe(x => { this.themes = x; console.log('THEMES IN DB:', x); });
     this.projectService.getThemes().pipe(first())
       .subscribe(
         data => {
@@ -41,60 +49,55 @@ export class MyPagesActivityStatusComponent {
 
         error => {
           console.log('error getting themes: ', error);
-          //this.error = error;
-          //this.alertService.error(error);
+          this.error = error;
+          this.alertService.error(error);
         });
-    this.themesSubscription = this.projectService.themes.subscribe(x => { this.testThemes = x; console.log('THEMES IN DB:', x); });
 
+    this.activitiesSubscription = this.projectService.activities.subscribe(x => { this.activities = x; console.log('ACTIVITIES IN DB:', x); });
+    this.projectService.getActivities().pipe(first())
+      .subscribe(
+        data => {
+        },
+
+        error => {
+          this.error = error;
+          this.alertService.error(error);
+        });
   }
 
   ngOnInit() {
-
-
-    //console.log("initiating");
-    let technicalDevelopmentTheme = new Theme("Teknikutveckling", "Beskrivning");
-    let activity1 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.CONCEPTUALIZATION, false);
-    let activity2 = new Activity("Genomför kravanalys", "Genomför en kravanalys för konceptet. Finns standarder att förhålla sig till?", Phase.CONCEPTUALIZATION, true);
-    let activity3 = new Activity("Utveckla prototyp baserat på koncept", "En första prototyp ska utvecklas som kan användas både som proof-of-concept och för att genomföra nödvändiga användartester i detta skede.", Phase.PROOFOFCONCEPT, false);
-    let activity41 = new Activity("Observera grundläggande principer", "Utveckla ett grundläggande koncept som svarar mot behov.", Phase.VALIDATION, false);
-    let activity51 = new Activity("Genomför kravanalys", "Genomför en kravanalys för konceptet. Finns standarder att förhålla sig till?", Phase.LAUNCH, true);
-    technicalDevelopmentTheme.addActivity(activity1);
-    technicalDevelopmentTheme.addActivity(activity2);
-    technicalDevelopmentTheme.addActivity(activity3);
-    technicalDevelopmentTheme.addActivity(activity41);
-    technicalDevelopmentTheme.addActivity(activity51);
-
-    this.themes.push(technicalDevelopmentTheme);
-
-    let clinicalDevelopmentTheme = new Theme("Klinisk validering", "Beskrivning");
-    let activity4 = new Activity("Etablera kontakt med klinisk personal", "Utred hur man tar kontakt med relevant klinisk personal. Utred därefter möjligheten till samarbete kring verifieringen av behoven och för kommande klinisk utvärdering.", Phase.CONCEPTUALIZATION, false);
-    let activity5 = new Activity("Genomför användartester", "Genomför en riskanalys i enlighet med relevant standard, tillsammans med personer med nödvändig klinisk kompetens.", Phase.PROOFOFCONCEPT, false);
-    let activity6 = new Activity("Genomför kliniska tester i laboratoriemiljö", "Testa att prototypen uppfyller de tänkta kliniska grundfunktionerna i relevant laboratoriemiljö.", Phase.PROOFOFCONCEPT, false);
-
-    let activity7 = new Activity("Validera produkten genom en klinisk prövning", "Utred hur man tar kontakt med relevant klinisk personal. Utred därefter möjligheten till samarbete kring verifieringen av behoven och för kommande klinisk utvärdering.", Phase.VALIDATION, false);
-
-    let activity8 = new Activity("Sök kontakt med tidiga användare", "Utred hur man tar kontakt med relevant klinisk personal. Utred därefter möjligheten till samarbete kring verifieringen av behoven och för kommande klinisk utvärdering.", Phase.LAUNCH, false);
-
-    clinicalDevelopmentTheme.addActivity(activity4);
-    clinicalDevelopmentTheme.addActivity(activity5);
-    clinicalDevelopmentTheme.addActivity(activity6);
-    clinicalDevelopmentTheme.addActivity(activity7);
-    clinicalDevelopmentTheme.addActivity(activity8);
-
-
-    this.themes.push(clinicalDevelopmentTheme);
-
   }
 
-  getProgress(theme: Theme, phase: Phase): number {
-    let activityVal = 100 / theme.activities.filter(x => x.phase == phase && x.isExcluded == false).length;
-    let nrOfStarted = theme.activities.filter(x => x.status != Status.NOTSTARTED && x.phase == phase && x.isExcluded == false).length;
-
-    return activityVal * nrOfStarted;
+  getPhases() {
+    
   }
 
-  containsOngoingAcitvities(theme: Theme, phase: Phase): boolean {
-    return theme.activities.filter(x => x.phase == phase && x.status == Status.ONGOING && x.isExcluded == false).length > 0;
+  ngOnDestroy() {
+    this.themesSubscription.unsubscribe();
+    this.activitiesSubscription.unsubscribe();
+  }
+
+  getProgress(theme: Theme, phase: ActivityPhase): number {
+    let activityValBase = 100 / this.activities.filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
+    var nrOfStarted = this.activities.filter(x => x.baseactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
+
+    let activityValCustom = 100 / this.activities.filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
+    nrOfStarted += this.activities.filter(x => x.customactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
+
+    return (activityValBase+activityValCustom) * nrOfStarted;
+  }
+
+  isBaseActivity(activity: Activity) {
+    return activity.baseactivityinfoid != null;
+  }
+
+  containsOngoingAcitvities(theme: Theme, phase: ActivityPhase): boolean {
+    //for (let activity of this.activities) {
+    //}
+    let ongoingBaseActivities = this.activities.filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.status == ActivityStatus.ONGOING && x.isexcluded == false);
+    let ongoingCustomActivities = this.activities.filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.status == ActivityStatus.ONGOING && x.isexcluded == false);
+
+    return ongoingBaseActivities.length > 0 || ongoingCustomActivities.length > 0;
   }
 
   onHideExcludedChanged(value: boolean) {
@@ -107,27 +110,31 @@ export class MyPagesActivityStatusComponent {
 
   checkStatus(activity: Activity) {
     switch (activity.status) {
-      case "checked": {
-        activity.status = Status.NOTSTARTED;
+      case 0: {
+        activity.status = ActivityStatus.NOTSTARTED;
         break;
       }
-      case "unchecked": {
-        activity.status = Status.ONGOING;
+      case 1: {
+        activity.status = ActivityStatus.ONGOING;
         break;
       }
-      case "crossed": {
-        activity.status = Status.FINISHED;
+      case 2: {
+        activity.status = ActivityStatus.FINISHED;
         break;
       }
     }
   }
 
   toggleActivityIsExcluded(activity: Activity) {
-    activity.isExcluded = !activity.isExcluded;
+    activity.isexcluded = !activity.isexcluded;
   }
 
-  hasActivities(theme: Theme, phase: Phase) {
-    return theme.activities.filter(x => x.phase == phase && x.isExcluded == false).length > 0;
+  hasActivities(theme: Theme, phase: ActivityPhase) {
+    console.log('ACTIVITIES: ', this.activities);
+    let baseActivities = this.activities.filter(x => x.baseactivityinfo != null && x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false);
+    let customActivities = this.activities.filter(x => x.customactivityinfo != null && x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false);
+
+    return baseActivities.length > 0 || customActivities.length > 0;
   }
 
   expandAll() {

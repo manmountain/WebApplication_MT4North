@@ -1,19 +1,18 @@
-import { Phase } from "./common";
-import { Status } from "./common";
+import { ActivityInfo } from '@app/_models';
+import { ActivityStatus } from "./enums";
 
 
 export class Activity {
-  name: string;
-  description: string;
-  phase: Phase;
-  status: Status;
-  isExcluded: Boolean;
-
-  constructor(name: string, description: string, phase: Phase, isExcluded: Boolean) {
-    this.name = name;
-    this.description = description;
-    this.phase = phase;
-    this.status = Status.NOTSTARTED;
-    this.isExcluded = isExcluded;
-  }
+  activityid: string;
+  isexcluded: Boolean;
+  status: ActivityStatus;
+  startdate: string;
+  finishdate: string;
+  deadlinedate: string;
+  resources: string;
+  projectId: string;
+  baseactivityinfoid: string;
+  customactivityinfoid: string;
+  baseactivityinfo: ActivityInfo;
+  customactivityinfo: ActivityInfo;
 }

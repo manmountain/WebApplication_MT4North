@@ -8,9 +8,22 @@ namespace WebApplication_MT4North.Models
 {
     public enum UserProjectStatus
     {
-        Pending,
-        Accepted,
-        Rejected
+        PENDING,
+        ACCEPTED,
+        REJECTED
+    }
+
+    public enum UserProjectPermissions
+    {
+        READ,
+        WRITE,
+        READWRITE
+    }
+
+    public enum UserProjectRoles
+    {
+        OWNER,
+        PARTICIPANT,
     }
 
     public partial class UserProject
@@ -19,10 +32,10 @@ namespace WebApplication_MT4North.Models
         public int UserProjectId { get; set; }
 
         [JsonPropertyName("role")]
-        public string Role { get; set; }
+        public UserProjectRoles Role { get; set; }
 
         [JsonPropertyName("rights")]
-        public string Rights { get; set; }
+        public UserProjectPermissions Rights { get; set; }
 
         [JsonPropertyName("projectid")]
         public int ProjectId { get; set; }

@@ -67,7 +67,7 @@ namespace WebApplication_MT4North.Controllers
                 return NoContent();
             }
             // Check user permissions
-            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.Accepted && (p.Rights == "RW" || p.Rights == "R")).ToListAsync<UserProject>();
+            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ)).ToListAsync<UserProject>();
             if(userproj.Count == 0)
             {
                 return Unauthorized();
@@ -105,7 +105,7 @@ namespace WebApplication_MT4North.Controllers
                 return NoContent();
             }
             // Get userprojects with permissions R/RW
-            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.Accepted && (p.Rights == "RW" || p.Rights == "R")).ToListAsync<UserProject>();
+            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ)).ToListAsync<UserProject>();
 
             // Check if the user is allowed to do that
             if (note.UserId != user.Id && userproj.Count == 0)
@@ -139,7 +139,7 @@ namespace WebApplication_MT4North.Controllers
                 return NoContent();
             }
             // Get userprojects with permissions W/RW
-            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.Accepted && (p.Rights == "RW" || p.Rights == "W")).ToListAsync<UserProject>();
+            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
             // Check if the user is allowed to do that
             if (note.UserId != user.Id && userproj.Count == 0)
             {
@@ -197,7 +197,7 @@ namespace WebApplication_MT4North.Controllers
                 return BadRequest(); // ??? NoContent() ??? NotFound() ???
             }
             // Get userprojects with permissions W/RW
-            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.Accepted && (p.Rights == "RW" || p.Rights == "W")).ToListAsync<UserProject>();
+            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
             // Check if the user is allowed to do that
             if (userproj.Count == 0)
             {
@@ -259,7 +259,7 @@ namespace WebApplication_MT4North.Controllers
                 return NoContent();
             }
             // Get userprojects with permissions W/RW
-            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.Accepted && (p.Rights == "RW" || p.Rights == "W")).ToListAsync<UserProject>();
+            var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
             // Check if the user is allowed to do that
             if (note.UserId != user.Id && userproj.Count == 0)
             {

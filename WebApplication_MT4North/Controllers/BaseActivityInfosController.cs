@@ -22,6 +22,19 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/BaseActivityInfos
+        /// <summary>
+        /// Get all base activities available
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The available base activities
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BaseActivityInfo>>> GetBaseActivityInfos()
@@ -36,6 +49,19 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // GET: api/BaseActivityInfos/5
+        /// <summary>
+        /// Get base activity with BaseActivityId == id
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The base activity with BaseActivityId == id
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize()]
         [HttpGet("{id}")]
         public async Task<ActionResult<BaseActivityInfo>> GetBaseActivityInfo(int id)
@@ -52,6 +78,28 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // PUT: api/BaseActivityInfos/5
+        /// <summary>
+        /// Update base activity with BaseActivityId == id
+        /// Must have AdminUser-role to execute
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The updated base activity with BaseActivityId == id
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">BadRequest</response>
+        /// <response code="401">Forbidden</response>
+        /// <response code="403">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize(Roles = "AdminUser")]
@@ -88,6 +136,28 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // POST: api/BaseActivityInfos
+        /// <summary>
+        /// Create a new base activity
+        /// Must have AdminUser-role to execute
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The new base activity
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">BadRequest</response>
+        /// <response code="401">Forbidden</response>
+        /// <response code="403">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         // To protect from overposting attacks, enable the specific properties you want to bind to, for'
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize(Roles = "AdminUser")]
@@ -106,6 +176,28 @@ namespace WebApplication_MT4North.Controllers
         }
 
         // DELETE: api/BaseActivityInfos/5
+        /// <summary>
+        /// Delete base activity with BaseActivityId == id
+        /// Must have AdminUser-role to execute
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// The deleted base activity with BaseActivityId == id
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="204">No content</response>
+        /// <response code="400">BadRequest</response>
+        /// <response code="401">Forbidden</response>
+        /// <response code="403">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status204NoContent)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<BaseActivityInfo>> DeleteBaseActivityInfo(int id)

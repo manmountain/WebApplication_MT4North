@@ -6,6 +6,13 @@ using System.Text.Json.Serialization;
 
 namespace WebApplication_MT4North.Models
 {
+    public enum ActivityStatus
+    {
+        STATUS_NOTSTARTED,
+        STATUS_ONGOING,
+        STATUS_FINISHED
+    }
+
     public partial class Activity
     {
         public Activity()
@@ -20,9 +27,9 @@ namespace WebApplication_MT4North.Models
         public bool IsExcluded { get; set; }
 
         [JsonPropertyName("status")]
-        public string Status { get; set; }
+        public ActivityStatus Status { get; set; }
 
-        [JsonPropertyName("startdata")]
+        [JsonPropertyName("startdate")]
         public DateTime? StartDate { get; set; }
 
         [JsonPropertyName("finishdate")]

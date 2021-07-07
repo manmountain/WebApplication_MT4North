@@ -29,7 +29,7 @@ namespace WebApplication_MT4North.Models
         }
 
         private async void CreateProject(
-            MT4NorthContext context, string projectName, string projectDescription, ApplicationUser[] users, string[] userRoles, string[] userRights)
+            MT4NorthContext context, string projectName, string projectDescription, ApplicationUser[] users, UserProjectRoles[] userRoles, UserProjectPermissions[] userRights)
         {
             if (context.Projects.Any(e => e.Name == projectName) != true)
             {
@@ -62,7 +62,7 @@ namespace WebApplication_MT4North.Models
                     {
                         Name = baseActivityName,
                         Description = "Beskrivning av bas aktivitet " + baseActivityName,
-                        Phase = phases[j],
+                        //Phase = phases[j],
                         Theme = _themes[i],
                     };
                     context.BaseActivityInfos.Add(baseActivity);
@@ -85,7 +85,7 @@ namespace WebApplication_MT4North.Models
                     {
                         Name = customActivityName,
                         Description = "Beskrivning av anpassad aktivitet " + customActivityName,
-                        Phase = phases[h],
+                        //Phase = phases[h],
                         Theme = _themes[k],
                     };
                     context.CustomActivityInfos.Add(customActivity);
@@ -121,7 +121,7 @@ namespace WebApplication_MT4North.Models
                         Role = userRoles[m],
                         User = user,
                         Project = project,
-                        Status = UserProjectStatus.Accepted
+                        Status = UserProjectStatus.ACCEPTED
                     };
                     context.UserProjects.Add(userProject);
                     m++;
@@ -136,7 +136,7 @@ namespace WebApplication_MT4North.Models
                     var activity = new Activity
                     {
                         IsExcluded = false,
-                        Status = status[o],
+                        Status = ActivityStatus.STATUS_NOTSTARTED, //status[o],
                         //BaseInfo = baseActivity,
                         /*CustomActivityInfos = new List<CustomActivityInfo>(new CustomActivityInfo[]
                         {
@@ -159,8 +159,8 @@ namespace WebApplication_MT4North.Models
 
         private async Task SeedProjectsAsync(MT4NorthContext context)
         {
-            CreateProject(context, "Projekt Ett1", "En beskrivning a projekt ett", new ApplicationUser[] { _user1, _user2, _user3 }, new string[] { "ProjektÄgare", "Deltagare", "Beställare" }, new string[] { "RW", "RW", "R" });
-            CreateProject(context, "Projekt Två", "En beskrivning a projekt två", new ApplicationUser[] { _user3, _user2, _user4 }, new string[] { "ProjektÄgare", "Granskare", "Granskare"  }, new string[] { "RW", "R" , "R" });
+            CreateProject(context, "Projekt Ett1", "En beskrivning a projekt ett", new ApplicationUser[] { _user1, _user2, _user3 }, new UserProjectRoles[] { UserProjectRoles.OWNER, UserProjectRoles.PARTICIPANT, UserProjectRoles.PARTICIPANT }, new UserProjectPermissions[] { UserProjectPermissions.READWRITE, UserProjectPermissions.READWRITE, UserProjectPermissions.READ });
+            CreateProject(context, "Projekt Två", "En beskrivning a projekt två", new ApplicationUser[] { _user3, _user2, _user4 }, new UserProjectRoles[] { UserProjectRoles.OWNER, UserProjectRoles.PARTICIPANT, UserProjectRoles.PARTICIPANT }, new UserProjectPermissions[] { UserProjectPermissions.READWRITE, UserProjectPermissions.READ , UserProjectPermissions.READ });
         }
 
         private void SeedUsersAsync(UserManager<ApplicationUser> userManager)

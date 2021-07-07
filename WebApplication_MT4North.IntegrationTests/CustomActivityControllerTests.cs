@@ -168,7 +168,7 @@ namespace WebApplication_MT4North.IntegrationTests
             {
                 Name = "TestCustomActivityInfo "+name,
                 Description = "Activity for UnitTest CustomActivityInfosControllerTest",
-                Phase = "Test Phase",
+                Phase = ActivityPhase.DEVELOPMENT,
                 Theme = theme,
                 ThemeId = theme.ThemeId
             };

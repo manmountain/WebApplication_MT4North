@@ -185,8 +185,8 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("ActivityId");
 
@@ -301,8 +301,8 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phase")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Phase")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ThemeId")
                         .HasColumnType("int");
@@ -327,8 +327,8 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phase")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Phase")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ThemeId")
                         .HasColumnType("int");
@@ -412,11 +412,11 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Rights")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Rights")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

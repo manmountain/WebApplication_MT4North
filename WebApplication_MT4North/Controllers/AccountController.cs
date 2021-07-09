@@ -41,7 +41,7 @@ namespace WebApplication_MT4North.Controllers
             _jwtAuthManager = jwtAuthManager;
         }
 
-        // GET: api/Account/register
+        // POST: api/Account/register
         /// <summary>
         /// Register a new application user
         /// </summary>
@@ -189,7 +189,7 @@ namespace WebApplication_MT4North.Controllers
             });
         }
 
-        // GET: api/Account/signout
+        // POST: api/Account/signout
         /// <summary>
         /// Deauthenticate user
         /// </summary>
@@ -219,7 +219,7 @@ namespace WebApplication_MT4North.Controllers
             return Ok();
         }
 
-        // GET: api/Account/refresh-token
+        // POST: api/Account/refresh-token
         /// <summary>
         /// Refresh the authentication
         /// </summary>

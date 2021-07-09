@@ -157,6 +157,20 @@ namespace WebApplication_MT4North.Controllers
             _context.UserProjects.Add(userProject);
             await _context.SaveChangesAsync();
 
+
+            // Add baseActivitiesInfos for the project
+            var baseActivityInfos = await _context.BaseActivityInfos.ToListAsync();
+            foreach (var baseActivityInfo in baseActivityInfos)
+            {
+                var activity = new Activity();
+                activity.ProjectId = project.ProjectId;
+                activity.BaseActivityInfoId = baseActivityInfo.BaseActivityInfoId;
+                activity.BaseActivityInfo = baseActivityInfo;
+                // fetch the theme of the activity
+                _context.Themes.FirstOrDefault(t => t.ThemeId == baseActivityInfo.ThemeId);
+                _context.Activities.Add(activity);
+            }
+            await _context.SaveChangesAsync();
             return CreatedAtAction("PostProject", new { project.ProjectId }, project);
         }
 

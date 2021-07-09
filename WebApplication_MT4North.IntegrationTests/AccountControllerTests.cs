@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using WebApplication_MT4North.Models;
 
 namespace WebApplication_MT4North.IntegrationTests
 {
@@ -151,7 +152,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(HttpStatusCode.OK, updatePasswordResponse.StatusCode);
 
             var updatedUserResponseContent = await updateUserResponse.Content.ReadAsStringAsync();
-            var updatedUserResult = JsonSerializer.Deserialize<UserResult>(updatedUserResponseContent);
+            var updatedUserResult = JsonSerializer.Deserialize<ApplicationUser>(updatedUserResponseContent);
 
             Assert.AreEqual(updatedUserResult.FirstName, "Upd");
             Assert.AreEqual(updatedUserResult.LastName,  "Ated");
@@ -492,7 +493,8 @@ namespace WebApplication_MT4North.IntegrationTests
             const string userName = "admin@localhost";
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,userName),
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email,userName),
                 new Claim(ClaimTypes.Role, UserRoles.Admin)
             };
             var jwtAuthManager = _serviceProvider.GetRequiredService<IJwtAuthManager>();
@@ -522,7 +524,8 @@ namespace WebApplication_MT4North.IntegrationTests
             const string userName = "admin@localhost";
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,userName),
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Email,userName),
                 new Claim(ClaimTypes.Role, UserRoles.Admin)
             };
             var jwtAuthManager = _serviceProvider.GetRequiredService<IJwtAuthManager>();

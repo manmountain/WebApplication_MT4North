@@ -137,7 +137,7 @@ export class MyPagesActivityStatusComponent {
       .subscribe(
         data => {
           console.log('activity updated: ', data);
-          this.alertService.success('Aktiviteten har uppdaterats', { keepAfterRouteChange: true });
+          this.alertService.success('Dina ändringar har sparats.', { keepAfterRouteChange: true });
         },
         error => {
           console.log('activity NOT updated. error: ', error);

@@ -2,7 +2,6 @@
 <div *ngIf="isDataLoaded">
 
   <div class="row ml-0 mt-4 mb-2">
-    <alert></alert>
 
     <div class="col m-0 p-0  d-none d-md-inline im-toolbar mr-4">
       <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
@@ -81,17 +80,17 @@
           <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
 
             <!--
-            <div class="dropdown w-100">
-              <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                2021-01-28
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">2020-08-15</a>
-                <a class="dropdown-item" href="#">2020-01-18</a>
-                <a class="dropdown-item" href="#">2019-09-07</a>
-              </div>
+          <div class="dropdown w-100">
+            <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              2021-01-28
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">2020-08-15</a>
+              <a class="dropdown-item" href="#">2020-01-18</a>
+              <a class="dropdown-item" href="#">2019-09-07</a>
             </div>
-              -->
+          </div>
+            -->
           </th>
           <ng-container *ngFor="let phase of phases | enumToArray">
             <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase | numberToPhase: phase}}</th>
@@ -193,10 +192,10 @@
                                           <div class="modal-body">
                                             <div class="row">
                                               <!--
-                                              <div class="col-12 mb-3">
-                                                <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
-                                              </div>
-                                                -->
+                                            <div class="col-12 mb-3">
+                                              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+                                            </div>
+                                              -->
                                               <div class="col-12">
                                                 <div class="row">
                                                   <div class="col-2 mr-1">
@@ -281,10 +280,10 @@
                                             </form>
                                           </div>
                                           <!--
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
-                                          </div>
-                                            -->
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                        </div>
+                                          -->
                                         </div>
                                       </div>
                                     </div>
@@ -345,9 +344,12 @@
                 </table>
               </div>
             </td>
-       </ng-container>
+        </ng-container>
       </tbody>
     </table>
+    <div class="row ml-3 mt-4">
+      <alert></alert>
+    </div>
   </div>
 
   <div id="download">

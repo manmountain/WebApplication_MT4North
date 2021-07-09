@@ -157,8 +157,8 @@ namespace WebApplication_MT4North.IntegrationTests
 
             Assert.AreEqual(userproject.UserId, user1.Id);
             Assert.AreEqual(userproject.ProjectId, _newProject.ProjectId);
-            Assert.AreEqual(userproject.Role, "Projektägare");
-            Assert.AreEqual(userproject.Rights, "RW");
+            Assert.AreEqual(userproject.Role, UserProjectRoles.OWNER);
+            Assert.AreEqual(userproject.Rights, UserProjectPermissions.READWRITE);
             Assert.AreEqual(userproject.Status, UserProjectStatus.ACCEPTED);
         }
 
@@ -172,18 +172,18 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser1);
 
             // Invite user2 with RW permissions
-            await inviteUser(user2Credentials.Email, _newProject.ProjectId, "TestDeltagare", "RW", HttpStatusCode.Created);
+            await inviteUser(user2Credentials.Email, _newProject.ProjectId, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READWRITE, HttpStatusCode.Created);
             // Invite user3 with R  permissions
-            await inviteUser(user3Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Created);
+            await inviteUser(user3Credentials.Email, _newProject.ProjectId, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READ, HttpStatusCode.Created);
         }
 
-        private async Task inviteUser(string email, int projectId, string role, string permissions, HttpStatusCode expectedHttpStatus)
+        private async Task inviteUser(string email, int projectId, UserProjectRoles role, UserProjectPermissions permissions, HttpStatusCode expectedHttpStatus)
         {
             // Invite user
             //var url = String.Format("/api/UserProjects/{userEmail}/{projectId}/{role}/{permissions}", email, projectId, role, permissions);
 
             //api/UserProjects/Invites/{userEmail}/{projectId}/{role}/{permissions}
-            var url = "/api/UserProjects/"+email+"/"+projectId+"/"+role+"/"+permissions;
+            var url = "/api/UserProjects/"+email+"/"+projectId+"/"+(int)role+"/"+(int)permissions;
             var body = new StringContent("", Encoding.UTF8, MediaTypeNames.Application.Json);
             // Call to create new UserProject with status pending
             var postResponse = await _httpClient.PostAsync(url, body);
@@ -194,11 +194,11 @@ namespace WebApplication_MT4North.IntegrationTests
         [TestMethod]
         public async Task AAD_UsersShouldBeAbleToAcceptAndReject()
         {
-            await acceptInvite(user2, authUser2, "TestDeltagare", "RW");
-            await rejectInvite(user3, authUser3, "TestDeltagare", "R");
+            await acceptInvite(user2, authUser2, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READWRITE);
+            await rejectInvite(user3, authUser3, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READ);
         }
 
-        private async Task acceptInvite(ApplicationUser user, string authUser, string role, string permissions)
+        private async Task acceptInvite(ApplicationUser user, string authUser, UserProjectRoles role, UserProjectPermissions permissions)
         {
             // Autherize
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
@@ -242,7 +242,7 @@ namespace WebApplication_MT4North.IntegrationTests
             Assert.AreEqual(userProjects2.Count, 0);
         }
 
-        private async Task rejectInvite(ApplicationUser user, string authUser, string role, string permissions)
+        private async Task rejectInvite(ApplicationUser user, string authUser, UserProjectRoles role, UserProjectPermissions permissions)
         {
             // Autherize
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser);
@@ -296,7 +296,7 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser2);
 
             // Invite user4 with R permissions
-            await inviteUser(user4Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Created);
+            await inviteUser(user4Credentials.Email, _newProject.ProjectId, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READ, HttpStatusCode.Created);
         }
 
         [TestMethod]
@@ -309,10 +309,10 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser2);
 
             // Invite user4 again (should Fail)
-            await inviteUser(user4Credentials.Email, _newProject.ProjectId, "TestDeltagare", "RW", HttpStatusCode.BadRequest);
+            await inviteUser(user4Credentials.Email, _newProject.ProjectId, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READWRITE, HttpStatusCode.BadRequest);
 
             // Accept the previus invitation for user4
-            await acceptInvite(user4, authUser4, "TestDeltagare", "R");
+            await acceptInvite(user4, authUser4, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READ);
         }
 
         [TestMethod]
@@ -325,7 +325,7 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser1);
 
             // Invite user3 with R  permissions
-            await inviteUser(user3Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Created);
+            await inviteUser(user3Credentials.Email, _newProject.ProjectId, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READ, HttpStatusCode.Created);
         }
 
         [TestMethod]
@@ -338,7 +338,7 @@ namespace WebApplication_MT4North.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, authUser4);
 
             // Invite a user (should Fail) because missing W permission of user4
-            await inviteUser(user2Credentials.Email, _newProject.ProjectId, "TestDeltagare", "R", HttpStatusCode.Forbidden);
+            await inviteUser(user2Credentials.Email, _newProject.ProjectId, UserProjectRoles.PARTICIPANT, UserProjectPermissions.READ, HttpStatusCode.Forbidden);
         }
 
         [TestMethod]

@@ -194,7 +194,7 @@ namespace WebApplication_MT4North.Controllers
             {
                 await _context.SaveChangesAsync();
 
-                Ok(activity);
+                return Ok(activity);
             }
             catch (DbUpdateConcurrencyException)
             {

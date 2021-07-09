@@ -15,6 +15,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 export class MyPagesComponent implements OnDestroy {
   isFirstStepModal = true;
+  permissions = ProjectRights;
+  roles = ProjectRole;
   userInvitations: UserInvitation[] = [];
   currentUser: User;
   projects: Project[];
@@ -58,8 +60,8 @@ export class MyPagesComponent implements OnDestroy {
     });
     this.invitationForm = this.formBuilder.group({
       email: ['', Validators.required],
-      role: [''],
-      permissions: ['']
+      role: [this.roles.PARTICIPANT],
+      permissions: [this.permissions.READ]
     });
   }
 

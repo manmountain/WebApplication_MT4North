@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AccountService, ProjectService } from '@app/_services';
 import { Subscription } from 'rxjs';
-import { User, UserProject } from '../_models';
+import { User, UserProject, ProjectRights, ProjectRole } from '../_models';
 import { first } from 'rxjs/operators';
 
 
@@ -12,6 +12,8 @@ import { first } from 'rxjs/operators';
 })
 
 export class MyPagesStartComponent implements OnDestroy {
+  permissions = ProjectRights;
+  roles = ProjectRole;
   currentUser: User;
   invitations: UserProject[];
   accountSubscription: Subscription;

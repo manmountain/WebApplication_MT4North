@@ -42,8 +42,8 @@ export class MyPagesMembersComponent implements OnDestroy {
   ngOnInit() {
     this.invitationForm = this.formBuilder.group({
       email: ['', Validators.required, Validators.email],
-      role: [this.currentUserProject.role],
-      permissions: [this.currentUserProject.rights]
+      role: [this.roles.PARTICIPANT],
+      permissions: [this.permissions.READ]
     });
   }
 

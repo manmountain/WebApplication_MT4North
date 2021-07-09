@@ -1,7 +1,8 @@
 <h2 class="display-4 text-black-50">Välkommen {{currentUser?.firstname}}!</h2>
 <p class="lead text-black mb-0">Välj projekt eller lägg till ett nytt via menyn till vänster.</p>
 <br />
-<h5 *ngIf="invitations?.length > 0" class="text-black mb-0">Du har {{invitations?.length}} nya projektinbjudningar:</h5>
+<h5 *ngIf="invitations?.length == 1" class="text-black mb-0">Du har {{invitations?.length}} ny projektinbjudning:</h5>
+<h5 *ngIf="invitations?.length > 1" class="text-black mb-0">Du har {{invitations?.length}} nya projektinbjudningar:</h5>
 <!--<h5 *ngIf="invitations?.length == 0">Du har inga obesvarade projektinbjudningar.</h5>-->
 
 <div *ngFor="let invitation of invitations">
@@ -9,7 +10,7 @@
     <div class="card-body">
       <h5 class="card-title">{{invitation.project.name}}</h5>
       <h6 class="card-subtitle mb-2 text-muted">{{invitation.project.description}}</h6>
-      <p class="card-text">Din roll: {{invitation.role}} <br />Dina rättigheter: {{invitation.rights}}</p>
+      <p class="card-text"><b>Din roll: </b>{{invitation.role | numberToRole}} <br /><b>Din behörighet: </b>{{invitation.rights | numberToRights}}</p>
       <button class="btn btn-secondary mr-2" (click)="rejectInvite(invitation.userprojectid)">Neka</button>
       <button class="btn btn-primary" (click)="acceptInvite(invitation.userprojectid)">Acceptera</button>
     </div>

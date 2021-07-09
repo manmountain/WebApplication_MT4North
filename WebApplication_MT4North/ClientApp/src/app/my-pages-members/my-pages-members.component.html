@@ -101,19 +101,26 @@
                 </span>
               </div>
             </div>
+
+            <div class="row w-75" style="margin:16px 0 16px 0">
+              <label for="input1">Emailadress</label>
+              <input type="email" id="input1" class="form-control" formControlName="email" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100" required [ngClass]="{ 'is-invalid': fi.email.errors }">
+            </div>
+
+            <!--<input class="form-control col" formControlName="role" placeholder="Ange roll" aria-describedby="inviteMembersHelp" maxlength="100">-->
             <div class="row" style="margin:16px 0 16px 0">
-              <input type="email" class="form-control col" formControlName="email" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100" required [ngClass]="{ 'is-invalid': fi.email.errors }">
-              <!--<input class="form-control col" formControlName="role" placeholder="Ange roll" aria-describedby="inviteMembersHelp" maxlength="100">-->
               <div class="form-group m-0">
-                <!--<label for="sel1">Behörighet:</label>-->
-                <select class="form-control" id="sel_role" formControlName="role">
-                  <option *ngFor="let role of roles | enumToArray" [ngValue]="role">{{roles[role]}}</option>
+                <label for="sel1">Roll</label>
+                <select class="form-control" id="sel1" formControlName="role">
+                  <option *ngFor="let role of roles | enumToArray" [ngValue]="role">{{role | numberToRole}}</option>
                 </select>
               </div>
+            </div>
+            <div class="row" style="margin:16px 0 16px 0">
               <div class="form-group m-0">
-                <!--<label for="sel1">Behörighet:</label>-->
-                <select class="form-control" id="sel1" formControlName="permissions">
-                  <option *ngFor="let right of rights | enumToArray" [ngValue]="right">{{rights[right]}}</option>
+                <label for="sel2">Behörighet</label>
+                <select id="sel2"class="form-control" formControlName="permissions">
+                  <option *ngFor="let permission of permissions | enumToArray" [ngValue]="permission">{{permission | numberToRights}}</option>
                 </select>
               </div>
             </div>

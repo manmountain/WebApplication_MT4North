@@ -88,7 +88,11 @@
     <None Remove="ClientApp\src\app\_models\alert.ts" />
     <None Remove="ClientApp\src\app\_models\enums.ts" />
     <None Remove="ClientApp\src\app\_models\enumToArrayPipe.ts" />
-    <None Remove="ClientApp\src\app\_models\matchesPhasePipe.ts" />
+    <None Remove="ClientApp\src\app\_models\matchesPhaseAndThemePipe.ts" />
+    <None Remove="ClientApp\src\app\_models\numberToPhasePipe.ts" />
+    <None Remove="ClientApp\src\app\_models\numberToRightsPipe.ts" />
+    <None Remove="ClientApp\src\app\_models\numberToRolePipe.ts" />
+    <None Remove="ClientApp\src\app\_models\numberToStatusPipe.ts" />
     <None Remove="ClientApp\src\app\_models\project.model.ts" />
     <None Remove="ClientApp\src\app\_models\theme.model.ts" />
     <None Remove="ClientApp\src\app\my-pages-activity-status\my-pages-activity-status.component.ts" />

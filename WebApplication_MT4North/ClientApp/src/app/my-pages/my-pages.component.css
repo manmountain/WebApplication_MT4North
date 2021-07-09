@@ -174,8 +174,8 @@ li:focus {
 }
 */
 
-/*@media (max-width: 768px) {
-*/  #sidebar.active {
+@media (max-width: 768px) {
+  #sidebar.active {
     margin-left: -17rem;
   }
 
@@ -194,7 +194,7 @@ li:focus {
     width: 100%;
   }
         
-/*}*/
+}
         
 
 

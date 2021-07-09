@@ -18,26 +18,27 @@
           <tr [ngClass]="{'bg-light': currentUser.id == userProject.user.id}">
             <td class="align-middle" >{{userProject.user.firstname}} {{userProject.user.lastname}}</td>
             <td class="align-middle" >{{userProject.user.email}}</td>
-            <td class="align-middle" >
-              <span *ngIf="!userProject.isEditable">{{userProject.role}}</span>
-              <input class="align-middle" *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" value="{{userProject.role}}">
+            <td class="align-middle">
+              <span *ngIf="!userProject.isEditable">{{userProject.role | numberToRole}}</span>
+              <select *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" class="bootstrap-select align-middle" aria-labelledby="dropdownMenuButton">
+                <option *ngFor="let role of roles | enumToArray" [ngValue]="role">{{role | numberToRole}}</option>
+              </select>
+              <!--<input class="align-middle" *ngIf="userProject.isEditable" [(ngModel)]="userProject.role" value="{{userProject.role |}}">-->
 
               <!--<div class="dropdown w-100">
-      <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Projektledare
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Projektdeltagare</a>
-        <button class="dropdown-item">+ Lägg till ny roll</button>
-      </div>
-    </div>-->
+    <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Projektledare
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Projektdeltagare</a>
+      <button class="dropdown-item">+ Lägg till ny roll</button>
+    </div>
+  </div>-->
             </td>
             <td class="align-middle">
-              <span class="align-middle" *ngIf="!userProject.isEditable">{{userProject.rights}}</span>
+              <span class="align-middle" *ngIf="!userProject.isEditable">{{userProject.rights | numberToRights}}</span>
               <select *ngIf="userProject.isEditable" [(ngModel)]="userProject.rights" class="bootstrap-select align-middle" aria-labelledby="dropdownMenuButton">
-                <option value="R">R</option>
-                <option value="RW">RW</option>
-
+                <option *ngFor="let permission of permissions | enumToArray" [ngValue]="permission">{{permission | numberToRights}}</option>
               </select>
               <!--<div class="dropdown w-100">
       <button class="btn thead-light white-text p-0 m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -102,13 +103,17 @@
             </div>
             <div class="row" style="margin:16px 0 16px 0">
               <input type="email" class="form-control col" formControlName="email" placeholder="Ange emailadress" aria-describedby="inviteMembersHelp" maxlength="100" required [ngClass]="{ 'is-invalid': fi.email.errors }">
-              <input class="form-control col" formControlName="role" placeholder="Ange roll" aria-describedby="inviteMembersHelp" maxlength="100">
-
+              <!--<input class="form-control col" formControlName="role" placeholder="Ange roll" aria-describedby="inviteMembersHelp" maxlength="100">-->
+              <div class="form-group m-0">
+                <!--<label for="sel1">Behörighet:</label>-->
+                <select class="form-control" id="sel_role" formControlName="role">
+                  <option *ngFor="let role of roles | enumToArray" [ngValue]="role">{{roles[role]}}</option>
+                </select>
+              </div>
               <div class="form-group m-0">
                 <!--<label for="sel1">Behörighet:</label>-->
                 <select class="form-control" id="sel1" formControlName="permissions">
-                  <option>Kan endast läsa</option>
-                  <option>Kan läsa och redigera</option>
+                  <option *ngFor="let right of rights | enumToArray" [ngValue]="right">{{rights[right]}}</option>
                 </select>
               </div>
             </div>

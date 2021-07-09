@@ -24,7 +24,7 @@ import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.com
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
 import { MyPagesEditAccountComponent } from './my-pages-edit-account';
-import { MatchesPhasePipe, EnumToArrayPipe } from './_models';
+import { MatchesPhaseAndThemePipe, EnumToArrayPipe, NumberToPhasePipe, NumberToRolePipe, NumberToRightsPipe, NumberToStatusPipe } from './_models';
 import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
 import { RegisterComponent } from './register/register.component';
 
@@ -94,8 +94,12 @@ const routes: Routes = [
     MyPagesMembersComponent,
     MyPagesProjectSettingsComponent,
     MyPagesEditAccountComponent,
-    MatchesPhasePipe,
+    MatchesPhaseAndThemePipe,
     EnumToArrayPipe,
+    NumberToPhasePipe,
+    NumberToRolePipe,
+    NumberToRightsPipe,
+    NumberToStatusPipe,
     RegisterComponent,
     AlertComponent
   ],

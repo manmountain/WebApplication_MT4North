@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ProjectService, AccountService, AlertService } from '@app/_services';
-import { User, UserProject, UserInvitation } from '../_models';
+import { User, UserProject, UserInvitation, ProjectRights, ProjectRole } from '../_models';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -15,8 +15,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class MyPagesMembersComponent implements OnDestroy {
   userProjects: UserProject[];
   userInvitations: UserInvitation[] = [];
+  permissions = ProjectRights;
+  roles = ProjectRole;
   invitationForm: FormGroup;
   currentUser: User;
+  currentUserProject: UserProject;
   userProjectsSubscription: Subscription;
   accountSubscription: Subscription;
   hasRights = false;
@@ -31,16 +34,16 @@ export class MyPagesMembersComponent implements OnDestroy {
     this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
     this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => {
       this.userProjects = x;
-      this.hasRights = (this.userProjects.filter(x => x.userid == this.currentUser.id)[0].rights == 'RW');
+      this.currentUserProject = this.userProjects.filter(x => x.userid == this.currentUser.id)[0];
+      this.hasRights = this.currentUserProject.rights == ProjectRights.READWRITE && this.currentUserProject.role == ProjectRole.OWNER;
     });
-
   }
 
   ngOnInit() {
     this.invitationForm = this.formBuilder.group({
       email: ['', Validators.required, Validators.email],
-      role: [''],
-      permissions: ['']
+      role: [this.currentUserProject.role],
+      permissions: [this.currentUserProject.rights]
     });
   }
 
@@ -77,8 +80,8 @@ export class MyPagesMembersComponent implements OnDestroy {
 
     for (var userInvitation of this.userInvitations) {
       console.log('user permissions: ', userInvitation.permissions);
-      let permissions = userInvitation.permissions == "Kan endast läsa" ? "R" : "RW";
-      this.projectService.inviteMember(this.userProjects[0].projectid, userInvitation.email, userInvitation.role, permissions)
+      //let permissions = userInvitation.permissions == 0 ? 0 : 2;
+      this.projectService.inviteMember(this.userProjects[0].projectid, userInvitation.email, userInvitation.role, userInvitation.permissions)
         .pipe(first())
         .subscribe(
           data => {
@@ -95,7 +98,7 @@ export class MyPagesMembersComponent implements OnDestroy {
     }
   }
 
-  addMember(email: string, role: string, permissions: string) {
+  addMember(email: string, role: ProjectRole, permissions: ProjectRights) {
     this.userInvitations.push(new UserInvitation(this.userInvitations.length + 1, email, role, permissions));
     console.log('invitations: ', this.userInvitations);
   }

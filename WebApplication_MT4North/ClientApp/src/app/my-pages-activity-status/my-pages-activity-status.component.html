@@ -1,78 +1,79 @@
 <!--<p class=" text-black mt-2 mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>-->
+<div *ngIf="isDataLoaded">
 
-<div class="row ml-0 mt-4 mb-2">
-  <alert></alert>
+  <div class="row ml-0 mt-4 mb-2">
+    <alert></alert>
 
-  <div class="col m-0 p-0  d-none d-md-inline im-toolbar mr-4">
-    <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
-      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" (click)="toggleExpandView()" data-toggle="tooltip" data-placement="bottom" title="{{isFullscreen == true ? 'Stäng fullskärmsläge' : 'Öppna fullskärmsläge'}}">
-        <i class="fa" [ngClass]="(isFullscreen === true) ? 'fa-compress' : 'fa-expand'"></i>
-      </button>
-      <div class="im-toolbar ml-2 mr-2" id="historyBar">
-        <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{getMaxDate()}}" />
-      </div>
-      <!--<button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
-        <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
-      </button>-->
-      <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
-        <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild" (click)="makeScreenshot()"></i>
-      </button>
-      <div class="btn-group" role="group">
-        <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
-          <i class="fas fa-expand-alt fa-fw"></i>
-          Expandera...
+    <div class="col m-0 p-0  d-none d-md-inline im-toolbar mr-4">
+      <div class="mr-4 btn-group btn-group-sm d-flex" role="group" aria-label="Verktyg för innovationsmodellen">
+        <button type="button" class="btn btn-light" onmousedown="event.preventDefault()" (click)="toggleExpandView()" data-toggle="tooltip" data-placement="bottom" title="{{isFullscreen == true ? 'Stäng fullskärmsläge' : 'Öppna fullskärmsläge'}}">
+          <i class="fa" [ngClass]="(isFullscreen === true) ? 'fa-compress' : 'fa-expand'"></i>
         </button>
-        <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
-          <button class="dropdown-item" (click)="expandAll()">Expandera allt</button>
-          <button class="dropdown-item" (click)="expandThemes()">Expandera teman</button>
-          <button class="dropdown-item" (click)="expandActivities()">Expandera aktiviteter</button>
+        <div class="im-toolbar ml-2 mr-2" id="historyBar">
+          <input type="date" class="rounded" id="historyCalendar" [(ngModel)]="selectedDate" max="{{getMaxDate()}}" />
         </div>
-      </div>
-      <div class="btn-group" role="group">
-        <button id="collapseBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
-          <i class="fas fa-compress-alt fa-fw"></i>
-          Kollapsa...
+        <!--<button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
+          <i class="fa fa-calendar-plus fa-fw" data-toggle="tooltip" data-placement="bottom" title="Spara tillstånd"></i>
+        </button>-->
+        <button type="button" class="btn btn-light" onmousedown="event.preventDefault()">
+          <i class="fa fa-camera fa-fw" data-toggle="tooltip" data-placement="bottom" title="Ta ögonblicksbild" (click)="makeScreenshot()"></i>
         </button>
-        <div class="dropdown-menu" aria-labelledby="collapseBtnGroup">
-          <button class="dropdown-item" (click)="collapseAll()">Kollapsa allt</button>
-          <button class="dropdown-item" (click)="collapseThemes()">Kollapsa teman</button>
-          <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
-        </div>
-      </div>
-      <div class="btn-group" role="group">
-        <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
-          <i class="fas fa-eye-slash fa-fw"></i>
-          Dölj...
-        </button>
-        <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
-          <div class="dropdown-item" onmousedown="event.preventDefault()">
-            <label for="hideExcludedCheckbox">
-              <input #hideExcludedCheckbox type="checkbox" class="mr-1" id="hideExcludedCheckbox" name="hideExcluded" value="hideExcluded" [checked]="hideExcluded" (change)="onHideExcludedChanged(hideExcludedCheckbox.checked)">Exkluderade aktiviteter
-            </label>
-          </div>
-          <div class="dropdown-item">
-            <label for="hideFinishedCheckbox">
-              <input #hideFinishedCheckbox type="checkbox" class="mr-1" id="hideFinishedCheckbox" name="hideFinished" value="hideFinished" [checked]="hideFinished" (change)="onHideFinishedChanged(hideFinishedCheckbox.checked)">Avslutade aktiviteter
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center im-toolbar" id="searchBar">
-        <input type="text" class="form-control form-control-sm" placeholder="Sök...">
-        <div class="input-group-append">
-          <button class="btn btn-light btn-sm" type="button" id="searchButton">
-            <i class="fa fa-search"></i>
+        <div class="btn-group" role="group">
+          <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
+            <i class="fas fa-expand-alt fa-fw"></i>
+            Expandera...
           </button>
+          <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
+            <button class="dropdown-item" (click)="expandAll()">Expandera allt</button>
+            <button class="dropdown-item" (click)="expandThemes()">Expandera teman</button>
+            <button class="dropdown-item" (click)="expandActivities()">Expandera aktiviteter</button>
+          </div>
         </div>
-      </div>
-      <div class="w-100 btn btn-light btn-static">
-      </div>
+        <div class="btn-group" role="group">
+          <button id="collapseBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
+            <i class="fas fa-compress-alt fa-fw"></i>
+            Kollapsa...
+          </button>
+          <div class="dropdown-menu" aria-labelledby="collapseBtnGroup">
+            <button class="dropdown-item" (click)="collapseAll()">Kollapsa allt</button>
+            <button class="dropdown-item" (click)="collapseThemes()">Kollapsa teman</button>
+            <button class="dropdown-item" (click)="collapseActivities()">Kollapsa aktiviteter</button>
+          </div>
+        </div>
+        <div class="btn-group" role="group">
+          <button id="expandBtnGroup" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onmousedown="event.preventDefault()">
+            <i class="fas fa-eye-slash fa-fw"></i>
+            Dölj...
+          </button>
+          <div class="dropdown-menu" aria-labelledby="expandBtnGroup">
+            <div class="dropdown-item" onmousedown="event.preventDefault()">
+              <label for="hideExcludedCheckbox">
+                <input #hideExcludedCheckbox type="checkbox" class="mr-1" id="hideExcludedCheckbox" name="hideExcluded" value="hideExcluded" [checked]="hideExcluded" (change)="onHideExcludedChanged(hideExcludedCheckbox.checked)">Exkluderade aktiviteter
+              </label>
+            </div>
+            <div class="dropdown-item">
+              <label for="hideFinishedCheckbox">
+                <input #hideFinishedCheckbox type="checkbox" class="mr-1" id="hideFinishedCheckbox" name="hideFinished" value="hideFinished" [checked]="hideFinished" (change)="onHideFinishedChanged(hideFinishedCheckbox.checked)">Avslutade aktiviteter
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="input-group pl-2 col-3 pr-2 justify-content-center align-items-center im-toolbar" id="searchBar">
+          <input type="text" class="form-control form-control-sm" placeholder="Sök...">
+          <div class="input-group-append">
+            <button class="btn btn-light btn-sm" type="button" id="searchButton">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="w-100 btn btn-light btn-static">
+        </div>
 
+      </div>
     </div>
   </div>
-</div>
   <div class="row mr-3">
-    <table #imTableView class="table ml-3 m-0"  [ngClass]="{'animate': isScreenshotting === true}" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
+    <table #imTableView class="table ml-3 m-0" [ngClass]="{'animate': isScreenshotting === true}" style="border-collapse:collapse;border-bottom: 1px solid lightgray">
 
       <!-- TABLE HEADER (PHASES) -->
       <thead class="thead-dark">
@@ -80,20 +81,20 @@
           <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
 
             <!--
-  <div class="dropdown w-100">
-    <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      2021-01-28
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#">2020-08-15</a>
-      <a class="dropdown-item" href="#">2020-01-18</a>
-      <a class="dropdown-item" href="#">2019-09-07</a>
-    </div>
-  </div>
-    -->
+            <div class="dropdown w-100">
+              <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                2021-01-28
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">2020-08-15</a>
+                <a class="dropdown-item" href="#">2020-01-18</a>
+                <a class="dropdown-item" href="#">2019-09-07</a>
+              </div>
+            </div>
+              -->
           </th>
           <ng-container *ngFor="let phase of phases | enumToArray">
-            <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase}}</th>
+            <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase | numberToPhase: phase}}</th>
           </ng-container>
         </tr>
       </thead>
@@ -101,7 +102,6 @@
       <tbody>
         <!-- THEME ROWS -->
         <ng-container *ngFor="let theme of themes; let i = index">
-
           <!-- MAIN ROW -->
           <tr #themeElement data-toggle="collapse" [attr.data-target]="'#collapsedRow'+i" aria-expanded="false" class="accordion-toggle parent im-theme-{{i}}" id="parent-{{i}}" title="Klicka för att expandera/kollapsa">
             <!-- FIRST COLUMN (THEME NAME) -->
@@ -117,7 +117,7 @@
             <ng-container *ngFor="let phase of phases | enumToArray; let l = index">
               <td colspan="1" class="align-middle d-none d-md-table-cell">
                 <div class="progress" [style.visibility]="hasActivities(theme, phase) ? 'visible' : 'hidden'">
-                  <div id="row{{i}}col{{l}}-progress" class="im-theme-{{i}}" [class]="containsOngoingAcitvities(theme, phase) ? 'progress-bar progress-bar-striped' : 'progress-bar'" [style.width]="getProgress(theme, phase) + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  <div id="row{{i}}col{{l}}-progress" class="im-theme-{{i}}" [class]="containsOngoingActivities(theme, phase) ? 'progress-bar progress-bar-striped' : 'progress-bar'" [style.width]="getProgress(theme, phase) + '%'" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
               </td>
             </ng-container>
@@ -136,15 +136,17 @@
                       <!-- ACTIVITES -->
                       <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
                         <td class="col-xs-1 im-cell im-inner-col">
-                          <div *ngFor="let activity of (activities | matchesPhase: phase); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
-                            <div class="panel panel-default" [style.display]="activity.isExcluded == true && hideExcluded == true || activity.status == 'checked' && hideFinished == true ? 'none' : 'block'">
+                          <div *ngFor="let activity of (activities | matchesPhaseAndTheme: phase : theme); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
+                            <div class="panel panel-default" [style.display]="activity.isExcluded == true && hideExcluded == true || (activity.status | numberToStatus) == 'checked' && hideFinished == true ? 'none' : 'block'">
                               <div class="panel-heading">
                                 <h3 class="panel-title">
                                   <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
                                     <label>
                                       <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
-                                      <input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
-                                      {{activity.baseactivityinfo.name}}
+                                      <input type="checkbox" [indeterminate]="(activity.status | numberToStatus) === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation();" (ngModelChange)="updateStatus(activity)" [ngModel]="(activity.status | numberToStatus) === 'checked'" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
+                                      <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status | numberToStatus === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
+                                      <!--<input type="checkbox" [indeterminate]="activity.status == 1" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stoppropagation()" [ngmodel]="activity.status == 2" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
+                                      {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}}
                                     </label>
                                   </a>
                                 </h3>
@@ -154,7 +156,7 @@
                                 <div class="panel-body im-theme-{{i}}">
 
                                   <p class="mb-2 p-0">
-                                    {{activity.baseactivityinfodescription}}
+                                    {{activity.baseactivityinfo?.description}}{{activity.customactivityinfo?.description}}
                                   </p>
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />
@@ -191,10 +193,10 @@
                                           <div class="modal-body">
                                             <div class="row">
                                               <!--
-            <div class="col-12 mb-3">
-              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
-            </div>
-              -->
+                                              <div class="col-12 mb-3">
+                                                <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+                                              </div>
+                                                -->
                                               <div class="col-12">
                                                 <div class="row">
                                                   <div class="col-2 mr-1">
@@ -279,10 +281,10 @@
                                             </form>
                                           </div>
                                           <!--
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
-        </div>
-          -->
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+                                          </div>
+                                            -->
                                         </div>
                                       </div>
                                     </div>
@@ -343,8 +345,7 @@
                 </table>
               </div>
             </td>
-
-        </ng-container>
+       </ng-container>
       </tbody>
     </table>
   </div>
@@ -352,4 +353,5 @@
   <div id="download">
     <img style="background: red" #canvas>
     <a style="background: red" #downloadLink></a>
+  </div>
   </div>

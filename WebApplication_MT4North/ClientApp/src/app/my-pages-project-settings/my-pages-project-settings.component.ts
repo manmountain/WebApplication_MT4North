@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AlertService, AccountService, ProjectService } from '@app/_services';
-import { User, UserProject, Project } from '../_models';
+import { User, UserProject, Project, ProjectRights, ProjectRole } from '../_models';
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -42,7 +42,8 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => {
       console.log('X: ', x);
       this.userProjects = x;
-      this.hasRights = (this.userProjects.filter(x => x.userid == this.currentUser.id)[0].rights == 'RW');
+      let user = this.userProjects.filter(x => x.userid == this.currentUser.id)[0];
+      this.hasRights = user.rights == ProjectRights.READWRITE && user.role == ProjectRole.OWNER;
     });
 
     //console.log('**currentUser: ', this.currentUser);

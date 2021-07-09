@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { Project, UserProject, Theme, Activity, ActivityInfo } from '@app/_models';
+import { Project, UserProject, Theme, Activity, ActivityInfo, ProjectRole, ProjectRights } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -27,6 +27,24 @@ export class ProjectService {
   public activities: Observable<Activity[]>;
 
   constructor(private http: HttpClient) {
+    //this.projectSubjects = new BehaviorSubject<Project[]>(new Array<Project>());
+    //this.projects = this.projectSubjects.asObservable();
+
+    //this.userProjectsSubject = new BehaviorSubject<UserProject[]>(new Array<UserProject>());
+    //this.userProjects = this.userProjectsSubject.asObservable();
+
+    //this.selectedProjectSubject = new BehaviorSubject<Project>(new Project());
+    //this.selectedProject = this.selectedProjectSubject.asObservable();
+
+    //this.invitationsSubject = new BehaviorSubject<UserProject[]>(new Array<UserProject>());
+    //this.invitations = this.invitationsSubject.asObservable();
+
+    this.themesSubject = new BehaviorSubject<Theme[]>(new Array<Theme>());
+    this.themes = this.themesSubject.asObservable();
+
+    this.activitiesSubject = new BehaviorSubject<Activity[]>(new Array<Activity>());
+    this.activities = this.activitiesSubject.asObservable();
+
     this.projectSubjects = new BehaviorSubject<Project[]>(JSON.parse(localStorage.getItem('currentProjects')));
     this.projects = this.projectSubjects.asObservable();
 
@@ -39,11 +57,11 @@ export class ProjectService {
     this.invitationsSubject = new BehaviorSubject<UserProject[]>(JSON.parse(localStorage.getItem('invitations')));
     this.invitations = this.invitationsSubject.asObservable();
 
-    this.themesSubject = new BehaviorSubject<Theme[]>(JSON.parse(localStorage.getItem('themes')));
-    this.themes = this.themesSubject.asObservable();
+    //this.themesSubject = new BehaviorSubject<Theme[]>(JSON.parse(localStorage.getItem('themes')));
+    //this.themes = this.themesSubject.asObservable();
 
-    this.activitiesSubject = new BehaviorSubject<Activity[]>(JSON.parse(localStorage.getItem('activities')));
-    this.activities = this.activitiesSubject.asObservable();
+    //this.activitiesSubject = new BehaviorSubject<Activity[]>(JSON.parse(localStorage.getItem('activities')));
+    //this.activities = this.activitiesSubject.asObservable();
   }
 
   public get currentProjectsValue(): Project[] {
@@ -85,8 +103,6 @@ export class ProjectService {
     }));
   }
 
-
-
   getProjects() {
     console.log('getting projects ');
 
@@ -94,7 +110,7 @@ export class ProjectService {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       console.log('projects value in service: ', this.currentProjectsValue);
 
-      //localStorage.setItem('currentProjects', JSON.stringify(projects));
+      localStorage.setItem('currentProjects', JSON.stringify(projects));
       this.projectSubjects.next(projects);
       return projects;
     }));;
@@ -116,7 +132,7 @@ export class ProjectService {
 
     return this.http.get<UserProject[]>(`${environment.apiUrl}/UserProjects/Project/${projectId}`).pipe(map(userProjects => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      console.log('selected project value in service: ', this.userProjectsValue);
+      //console.log('selected project value in service: ', this.userProjectsValue);
       const getCircularReplacer = () => {
         const seen = new WeakSet();
         return (key, value) => {
@@ -224,7 +240,7 @@ export class ProjectService {
     }));
   }
 
-  inviteMember(projectId: string, email: string, role: string, permissions: string) {
+  inviteMember(projectId: string, email: string, role: ProjectRole, permissions: ProjectRights) {
     return this.http.post<any>(`${environment.apiUrl}/UserProjects/${email}/${projectId}/${role}/${permissions}`, '').pipe(map(userProject => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
 
@@ -305,11 +321,49 @@ export class ProjectService {
         };
       };
       localStorage.setItem('activities', JSON.stringify(getCircularReplacer()));
-      this.activitiesSubject.next(activities);
+      this.activitiesSubject.next(Array.from(activities.values()));
 
-      return activities;
+      return Array.from(activities.values());
     }));
   }
+
+  updateActivity(activityid: string, params) {
+    return this.http.put(`${environment.apiUrl}/Activities/${activityid}`, params).pipe(map(activity => {
+      {
+
+        let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
+        let index = this.activitiesValue.indexOf(activityToUpdate);
+
+        this.activitiesValue[index] = params;
+
+        const getCircularReplacer = () => {
+          const seen = new WeakSet();
+          return (key, value) => {
+            if (typeof value === "object" && value !== null) {
+              if (seen.has(value)) {
+                return;
+              }
+              seen.add(value);
+            }
+            return value;
+          };
+        };
+
+        // update local storage
+        localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+
+        // publish updated user to subscribers
+        this.activitiesSubject.next(this.activitiesValue);
+
+      }
+      return activity;
+    }));
+  }
+
+  addNote() {
+
+  }
+
 
   //update(id, params) {
   //  return this.http.put(`${environment.apiUrl}/users/${id}`, params)

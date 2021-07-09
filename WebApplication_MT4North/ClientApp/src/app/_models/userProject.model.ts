@@ -1,9 +1,9 @@
-import { User, Project } from '@app/_models';
+import { User, Project, ProjectRole } from '@app/_models';
 
 export class UserProject {
   userprojectid: string;
-  role: string;
-  rights: string;
+  role: ProjectRole;
+  rights: number;
   projectid: string;
   userid: string;
   user: User;

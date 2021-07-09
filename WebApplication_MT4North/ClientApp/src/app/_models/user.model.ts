@@ -5,9 +5,10 @@ export class User {
   companyName?: string;
   country?: string;
   profilePicture?: string;
-  userType?: string;
+  usertype?: string;
+  userrole?: string;
   id: string;
-  username?: string;
+  userName?: string;
   normalizedUserName?: string;
   email: string;
   normalizedEmail?: string;

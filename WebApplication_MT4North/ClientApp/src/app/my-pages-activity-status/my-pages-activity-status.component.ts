@@ -24,6 +24,7 @@ export class MyPagesActivityStatusComponent {
   isScreenshotting: boolean = false;
   themesSubscription: Subscription;
   activitiesSubscription: Subscription;
+  isDataLoaded = false;
 
   error = '';
 
@@ -40,12 +41,23 @@ export class MyPagesActivityStatusComponent {
     private viewService: ViewService,
     private projectService: ProjectService,
     private alertService: AlertService) {
-    this.themesSubscription = this.projectService.themes.subscribe(x => { this.themes = x; console.log('THEMES IN DB:', x); });
+    this.themesSubscription = this.projectService.themes.subscribe(x => { this.themes = x;});
     this.projectService.getThemes().pipe(first())
       .subscribe(
         data => {
-          console.log('DATA themes: ', data);
-        },
+          this.activitiesSubscription = this.projectService.activities.subscribe(x => { this.activities = x; });
+          this.projectService.getActivities().pipe(first())
+            .subscribe(
+              data => {
+                this.isDataLoaded = true;
+
+              },
+
+              error => {
+                console.log('error getting activities: ', error);
+                this.error = error;
+                this.alertService.error(error);
+              });        },
 
         error => {
           console.log('error getting themes: ', error);
@@ -53,23 +65,10 @@ export class MyPagesActivityStatusComponent {
           this.alertService.error(error);
         });
 
-    this.activitiesSubscription = this.projectService.activities.subscribe(x => { this.activities = x; console.log('ACTIVITIES IN DB:', x); });
-    this.projectService.getActivities().pipe(first())
-      .subscribe(
-        data => {
-        },
 
-        error => {
-          this.error = error;
-          this.alertService.error(error);
-        });
   }
 
   ngOnInit() {
-  }
-
-  getPhases() {
-    
   }
 
   ngOnDestroy() {
@@ -78,26 +77,27 @@ export class MyPagesActivityStatusComponent {
   }
 
   getProgress(theme: Theme, phase: ActivityPhase): number {
-    let activityValBase = 100 / this.activities.filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
-    var nrOfStarted = this.activities.filter(x => x.baseactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
+    let nrOfBaseActivities = this.activities.filter(x => x.baseactivityinfo != null).filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
+    let activityValBase = nrOfBaseActivities > 0 ? 100 / nrOfBaseActivities : 0;
+    var nrOfStarted = this.activities.filter(x => x.baseactivityinfo != null).filter(x => x.baseactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
 
-    let activityValCustom = 100 / this.activities.filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
-    nrOfStarted += this.activities.filter(x => x.customactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
+    let nrOfCustomActivities = this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false).length 
+    let activityValCustom = nrOfCustomActivities > 0 ? 100 / nrOfCustomActivities : 0;
+    nrOfStarted += this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
 
-    return (activityValBase+activityValCustom) * nrOfStarted;
+    return (activityValBase + activityValCustom) * nrOfStarted;
   }
 
   isBaseActivity(activity: Activity) {
     return activity.baseactivityinfoid != null;
   }
 
-  containsOngoingAcitvities(theme: Theme, phase: ActivityPhase): boolean {
-    //for (let activity of this.activities) {
-    //}
-    let ongoingBaseActivities = this.activities.filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.status == ActivityStatus.ONGOING && x.isexcluded == false);
-    let ongoingCustomActivities = this.activities.filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.status == ActivityStatus.ONGOING && x.isexcluded == false);
+  containsOngoingActivities(theme: Theme, phase: ActivityPhase): boolean {
 
-    return ongoingBaseActivities.length > 0 || ongoingCustomActivities.length > 0;
+    let ongoingBaseActivities = this.activities.filter(x => x.baseactivityinfo != null).filter(x =>  x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.status == ActivityStatus.ONGOING && x.isexcluded == false);
+    let ongoingcustomactivities = this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.status == ActivityStatus.ONGOING && x.isexcluded == false);
+
+    return ongoingBaseActivities.length > 0 || ongoingcustomactivities.length > 0;
   }
 
   onHideExcludedChanged(value: boolean) {
@@ -108,21 +108,42 @@ export class MyPagesActivityStatusComponent {
     this.hideFinished = value;
   }
 
-  checkStatus(activity: Activity) {
+  updateStatus(activity: Activity) {
     switch (activity.status) {
-      case 0: {
-        activity.status = ActivityStatus.NOTSTARTED;
-        break;
-      }
-      case 1: {
+      case ActivityStatus.NOTSTARTED: {
         activity.status = ActivityStatus.ONGOING;
+        this.updateActivity(activity);
+
         break;
       }
-      case 2: {
+      case ActivityStatus.ONGOING: {
         activity.status = ActivityStatus.FINISHED;
+        this.updateActivity(activity);
+
+        break;
+      }
+      case ActivityStatus.FINISHED: {
+        activity.status = ActivityStatus.NOTSTARTED;
+        this.updateActivity(activity);
+
         break;
       }
     }
+  }
+
+  updateActivity(activity: Activity) {
+    this.projectService.updateActivity(activity.activityid, activity)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log('activity updated: ', data);
+          this.alertService.success('Aktiviteten har uppdaterats', { keepAfterRouteChange: true });
+        },
+        error => {
+          console.log('activity NOT updated. error: ', error);
+
+          this.alertService.error(error);
+        });
   }
 
   toggleActivityIsExcluded(activity: Activity) {
@@ -130,11 +151,12 @@ export class MyPagesActivityStatusComponent {
   }
 
   hasActivities(theme: Theme, phase: ActivityPhase) {
-    console.log('ACTIVITIES: ', this.activities);
-    let baseActivities = this.activities.filter(x => x.baseactivityinfo != null && x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false);
-    let customActivities = this.activities.filter(x => x.customactivityinfo != null && x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false);
+    let baseActivities = this.activities.filter(x => x.baseactivityinfo != null).filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false);
+    let customActivities = this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false);
 
     return baseActivities.length > 0 || customActivities.length > 0;
+    //return baseActivities.length > 0;
+
   }
 
   expandAll() {

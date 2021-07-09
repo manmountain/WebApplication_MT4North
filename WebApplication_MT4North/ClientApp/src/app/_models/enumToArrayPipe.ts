@@ -6,6 +6,11 @@ import { PipeTransform, Pipe } from '@angular/core';
 })
 export class EnumToArrayPipe implements PipeTransform {
   transform(data: Object) {
-    return Object.values(data);;
+    if (!data) {
+      return [];
+    }
+    //return Object.values(data);;
+    const values = Object.values(data);
+    return values.slice(values.length / 2);
   }
 }

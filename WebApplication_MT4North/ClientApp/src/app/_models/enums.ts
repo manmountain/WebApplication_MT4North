@@ -20,7 +20,7 @@ export enum ActivityStatus {
 //  ONGOING = "crossed",
 //  FINISHED = "checked"
 
-export enum Rights {
+export enum ProjectRights {
   READ = 0,
   WRITE = 1,
   READWRITE = 2
@@ -30,7 +30,7 @@ export enum Rights {
 //  WRITE = "W",
 //  READWRITE = "RW"
 
-export enum Role {
+export enum ProjectRole {
   OWNER = 0,
   PARTICIPANT = 1
 }

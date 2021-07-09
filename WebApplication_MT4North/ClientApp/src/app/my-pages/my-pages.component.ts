@@ -1,10 +1,11 @@
 import { Component, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ViewService } from "../_services";
 import { AlertService, AccountService, ProjectService } from '@app/_services';
-import { User, Project, UserInvitation } from '../_models';
+import { User, Project, UserInvitation, ProjectRole, ProjectRights } from '../_models';
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-my-pages',
@@ -27,6 +28,8 @@ export class MyPagesComponent implements OnDestroy {
   projectsSubscription: Subscription;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private viewService: ViewService,
     private alertService: AlertService,
     private accountService: AccountService,
@@ -34,6 +37,7 @@ export class MyPagesComponent implements OnDestroy {
     private formBuilder: FormBuilder
   ) {
     this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; console.log('subscribe user: ', this.currentUser); }, e => console.log(JSON.stringify(e)));
+    this.projectsSubscription = this.projectService.projects.subscribe(x => this.projects = x);
     this.projectService.getProjects()
       .pipe(first())
       .subscribe(
@@ -43,7 +47,6 @@ export class MyPagesComponent implements OnDestroy {
           this.error = error;
           this.alertService.error(error);
         });
-    this.projectsSubscription = this.projectService.projects.subscribe(x => this.projects = x);
     //console.log("projects in my-pages: ", this.projects[0].name);
 
   }
@@ -72,7 +75,44 @@ export class MyPagesComponent implements OnDestroy {
       .pipe(first())
       .subscribe(
         data => {
+          this.projectService.getUserProjects(projectid)
+            .pipe(first())
+            .subscribe(
+              data => {
 
+                this.projectService.getThemes().pipe(first())
+                  .subscribe(
+                    data => {
+
+                      this.projectService.getActivities().pipe(first())
+                        .subscribe(
+                          data => {
+                            //this.router.navigate(["/projects/" + projectid + "/activity-status"]);
+                            this.router.navigate(['projects', projectid, 'activity-status'], { relativeTo: this.route });
+
+
+                            //"./projects/{{project?.projectid}}/activity-status"
+                          },
+
+                          error => {
+                            this.error = error;
+                            this.alertService.error(error);
+                          });
+                    },
+
+                    error => {
+                      this.error = error;
+                      this.alertService.error(error);
+                    });
+
+
+
+              },
+
+              error => {
+                this.error = error;
+                this.alertService.error(error);
+              });
         },
 
         error => {
@@ -80,17 +120,9 @@ export class MyPagesComponent implements OnDestroy {
           this.alertService.error(error);
         });
 
-    this.projectService.getUserProjects(projectid)
-      .pipe(first())
-      .subscribe(
-        data => {
 
-        },
 
-        error => {
-          this.error = error;
-          this.alertService.error(error);
-        });
+
   }
 
   // convenience getter for easy access to form fields
@@ -145,8 +177,8 @@ export class MyPagesComponent implements OnDestroy {
     this.loading = true;
     for (var userInvitation of this.userInvitations) {
       console.log('user permissions: ', userInvitation.permissions);
-      let permissions = userInvitation.permissions == "Kan endast läsa" ? "R" : "RW";
-      this.projectService.inviteMember(this.newProjectId, userInvitation.email, userInvitation.role, permissions)
+      //let permissions = userInvitation.permissions == "Kan endast läsa" ? "R" : "RW";
+      this.projectService.inviteMember(this.newProjectId, userInvitation.email, userInvitation.role, userInvitation.permissions)
         .pipe(first())
         .subscribe(
           data => {
@@ -170,7 +202,7 @@ export class MyPagesComponent implements OnDestroy {
     this.userInvitations = [];
   }
 
-  addMember(email: string, role: string, permissions: string) {
+  addMember(email: string, role: ProjectRole, permissions: ProjectRights) {
     this.userInvitations.push(new UserInvitation(this.userInvitations.length + 1, email, role, permissions));
     console.log('invitations: ', this.userInvitations);
   }

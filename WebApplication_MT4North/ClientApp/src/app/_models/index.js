@@ -18,6 +18,7 @@ __exportStar(require("./project.model"), exports);
 __exportStar(require("./activity.model"), exports);
 __exportStar(require("./activityInfo.model"), exports);
 __exportStar(require("./theme.model"), exports);
+__exportStar(require("./note.model"), exports);
 __exportStar(require("./enums"), exports);
 __exportStar(require("./enumToArrayPipe"), exports);
 __exportStar(require("./matchesPhaseAndThemePipe"), exports);

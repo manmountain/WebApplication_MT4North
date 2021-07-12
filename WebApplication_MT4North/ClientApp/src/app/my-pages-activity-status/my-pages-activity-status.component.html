@@ -140,12 +140,13 @@
                               <div class="panel-heading">
                                 <h3 class="panel-title">
                                   <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
-                                    <label>
+                                    <label class="vertical-nav align-items-center d-flex">
                                       <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
                                       <input type="checkbox" [indeterminate]="(activity.status | numberToStatus) === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation();" (ngModelChange)="updateStatus(activity)" [ngModel]="(activity.status | numberToStatus) === 'checked'" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
                                       <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status | numberToStatus === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
                                       <!--<input type="checkbox" [indeterminate]="activity.status == 1" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stoppropagation()" [ngmodel]="activity.status == 2" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
                                       {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}}
+                                        <span class="badge badge-pill badge-secondary r-0 float-right mr-auto align-middle" style="max-height:15px; margin-top: -0.5em">B</span>
                                     </label>
                                   </a>
                                 </h3>
@@ -265,25 +266,25 @@
                                             </button>
                                           </div>
                                           <div class="modal-body">
-                                            <div class="card im-theme-{{i}}">
-                                              <h6 class="card-header mt-0 mb-0 pt-1 pb-1">
-                                                <small class="align-middle"><span class="mr-4">2020-01-01</span><span><i>Tillagd av: </i></span><span>Test Testsson</span><a class="btn icon-btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
-                                              </h6>
-                                              <div class="card-body">
-                                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                                            <ng-container *ngFor="let note of activity.notes; let m = index">
+                                              <div class="card im-theme-{{i}}">
+                                                <h6 class="card-header mt-0 mb-0 pt-1 pb-1">
+                                                  <small class="align-middle"><span class="mr-4">{{note.timestamp}}</span><span><i>Tillagd av: </i></span><span>{{note.userid}}</span><a class="btn icon-btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
+                                                </h6>
+                                                <div class="card-body">
+                                                  <p class="card-text">{{note.text}}</p>
+                                                </div>
                                               </div>
-                                            </div>
-                                            <form ngNativeValidate class="form-group mt-2" id="noteForm-r{{i}}c{{j}}-{{k}}">
-                                              <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}" class="col-form-label">Ny anteckning:</label></p>
-                                              <textarea class="form-control" id="note-text-r{{i}}c{{j}}-{{k}}" maxlength="250" required></textarea>
-                                              <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
-                                            </form>
+                                            </ng-container>
+                                            <ng-container *ngIf="activity.notes.length == 0">
+                                              <p>Inga anteckningar har lagts till.</p>
+                                            </ng-container>
+                                              <form [formGroup]="noteForm" ngNativeValidate class="form-group mt-2" id="noteForm-r{{i}}c{{j}}-{{k}}-{{m}}" (ngSubmit)="addNote(activity)">
+                                                <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Ny anteckning:</label></p>
+                                                <textarea class="form-control" formControlName="text" id="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required></textarea>
+                                                <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
+                                              </form>
                                           </div>
-                                          <!--
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
-                                        </div>
-                                          -->
                                         </div>
                                       </div>
                                     </div>

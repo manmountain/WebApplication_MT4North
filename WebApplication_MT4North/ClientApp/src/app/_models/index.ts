@@ -6,6 +6,7 @@ export * from './project.model';
 export * from './activity.model';
 export * from './activityInfo.model';
 export * from './theme.model';
+export * from './note.model';
 export * from './enums';
 export * from './enumToArrayPipe';
 export * from './matchesPhaseAndThemePipe';

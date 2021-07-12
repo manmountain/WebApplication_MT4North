@@ -360,8 +360,36 @@ export class ProjectService {
     }));
   }
 
-  addNote() {
+  addNote(activityid: string, params) {
+    console.log('test');
+    return this.http.post<any>(`${environment.apiUrl}/Activity/${activityid}`, params).pipe(map(note => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
 
+      let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
+      let index = this.activitiesValue.indexOf(activityToUpdate);
+
+      this.activitiesValue[index].notes.push(params);
+
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+
+      // update local storage
+      localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+
+      this.activitiesSubject.next(this.activitiesValue);
+
+      return note;
+    }));
   }
 
 

@@ -1,4 +1,4 @@
-import { ActivityInfo } from '@app/_models';
+import { ActivityInfo, Note } from '@app/_models';
 import { ActivityStatus } from "./enums";
 
 
@@ -15,4 +15,5 @@ export class Activity {
   customactivityinfoid: string;
   baseactivityinfo: ActivityInfo;
   customactivityinfo: ActivityInfo;
+  notes: Note[];
 }

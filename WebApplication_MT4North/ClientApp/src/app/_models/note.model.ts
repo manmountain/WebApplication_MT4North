@@ -1,7 +1,7 @@
-export class note {
+export class Note {
   noteid: string;
-  projektid: string;
-  note: string;
-  date: string;
+  activityid: string;
   userid: string;
+  text: string;
+  timestamp: string;
 }

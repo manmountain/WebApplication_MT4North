@@ -1,8 +1,10 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Theme, Activity, ActivityPhase, ActivityStatus } from "../_models";
-import { AlertService, ViewService, ProjectService } from "../_services";
+import { Theme, Activity, ActivityPhase, ActivityStatus, Note } from "../_models";
+import { AlertService, ViewService, ProjectService, AccountService } from "../_services";
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 //import html2canvas from 'html2canvas';
 
@@ -11,12 +13,13 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-my-pages-activity-status',
   templateUrl: './my-pages-activity-status.component.html',
-  styleUrls: ['./my-pages-activity-status.component.css']
+  styleUrls: ['./my-pages-activity-status.component.css'],
 })
 
 export class MyPagesActivityStatusComponent {
   phases = ActivityPhase;
   themes: Theme[] = [];
+  noteForm: FormGroup;
   activities: Activity[] = [];
   testThemes: Theme[] = [];
   hideExcluded: boolean = false;
@@ -40,7 +43,10 @@ export class MyPagesActivityStatusComponent {
   constructor(
     private viewService: ViewService,
     private projectService: ProjectService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private formBuilder: FormBuilder,
+    private accountService: AccountService,
+    private datePipe: DatePipe) {
     this.themesSubscription = this.projectService.themes.subscribe(x => { this.themes = x;});
     this.projectService.getThemes().pipe(first())
       .subscribe(
@@ -65,15 +71,24 @@ export class MyPagesActivityStatusComponent {
           this.alertService.error(error);
         });
 
+    //this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
 
   }
 
   ngOnInit() {
+    this.noteForm = this.formBuilder.group({
+      noteid: [0, Validators.required],
+      activityid: ['', Validators.required],
+      userid: [this.accountService.currentUserValue.id, Validators.required],
+      timestamp: ['', Validators.required],
+      text: ['', Validators.required]
+    });
   }
 
   ngOnDestroy() {
     this.themesSubscription.unsubscribe();
     this.activitiesSubscription.unsubscribe();
+    //this.accountSubscription.unsubscribe();
   }
 
   getProgress(theme: Theme, phase: ActivityPhase): number {
@@ -142,6 +157,26 @@ export class MyPagesActivityStatusComponent {
         error => {
           console.log('activity NOT updated. error: ', error);
 
+          this.alertService.error(error);
+        });
+  }
+
+  addNote(activity: Activity) {
+
+    this.noteForm.controls.timestamp.setValue(new Date().toDateString());
+    this.noteForm.controls.activityid.setValue(activity.activityid);
+
+    if (this.noteForm.invalid) {
+      return;
+    }
+
+    this.projectService.addNote(activity.activityid, this.noteForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Anteckningen har lagts till', { keepAfterRouteChange: true });
+        },
+        error => {
           this.alertService.error(error);
         });
   }

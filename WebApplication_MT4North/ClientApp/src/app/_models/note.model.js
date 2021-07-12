@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.note = void 0;
-var note = /** @class */ (function () {
-    function note() {
+exports.Note = void 0;
+var Note = /** @class */ (function () {
+    function Note() {
     }
-    return note;
+    return Note;
 }());
-exports.note = note;
+exports.Note = Note;
 //# sourceMappingURL=note.model.js.map

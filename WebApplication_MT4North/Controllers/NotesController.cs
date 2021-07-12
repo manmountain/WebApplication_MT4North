@@ -178,13 +178,17 @@ namespace WebApplication_MT4North.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize()]
-        [HttpPost("/Activity/{activityId}")]
+        [HttpPost("Activity/{activityId}")]
         public async Task<ActionResult<Note>> PosNote(int activityId, Note note)
         {
-
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user != null)
+            {
+                BadRequest();
+            }
+            
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(activityId);
             if (activity == null)

@@ -261,7 +261,7 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the WRITE rights! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
-            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE));
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && p.Role == UserProjectRoles.OWNER /*&& (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)*/);
             if (callerUserProject == null)
             {
                 // The caller doesnt have WRITE rights to this project
@@ -274,8 +274,22 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
 
+            // Remove all activities for this project
+            var activities = await _context.Activities.Where(p => p.ProjectId == id).ToListAsync<Activity>(); 
+            var customActivityInfos = new List<CustomActivityInfo>();
+            foreach(var activity in activities)
+            {
+                if (activity.CustomActivityInfoId != null)
+                {
+                    var customActivityInfo = await _context.CustomActivityInfos.FirstAsync(a => a.CustomActivityInfoId == activity.CustomActivityInfoId);
+                    customActivityInfos.Add(customActivityInfo);
+                }
+            }
+            _context.CustomActivityInfos.RemoveRange(customActivityInfos);
+            _context.Activities.RemoveRange(activities);
+
             // Remove UserProjects for this project
-            var userprojects = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id);
+            var userprojects = await _context.UserProjects.Where<UserProject>(p => p.ProjectId == id).ToListAsync<UserProject>();
             _context.UserProjects.RemoveRange(userprojects);
             // Remove project
             _context.Projects.Remove(project);

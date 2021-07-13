@@ -80,17 +80,17 @@
           <th scope="col" class="im-header im-header-first border-top-0" style=" border-radius: 6px 0 0 0;border-bottom: 1px solid white; margin-bottom: -1px;">
 
             <!--
-          <div class="dropdown w-100">
-            <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              2021-01-28
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">2020-08-15</a>
-              <a class="dropdown-item" href="#">2020-01-18</a>
-              <a class="dropdown-item" href="#">2019-09-07</a>
+            <div class="dropdown w-100">
+              <button class="btn thead-dark white-text p-0 m-0 btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                2021-01-28
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">2020-08-15</a>
+                <a class="dropdown-item" href="#">2020-01-18</a>
+                <a class="dropdown-item" href="#">2019-09-07</a>
+              </div>
             </div>
-          </div>
-            -->
+              -->
           </th>
           <ng-container *ngFor="let phase of phases | enumToArray">
             <th scope="col" class="im-header border-top-0 im-left-border triangle" style="border-left: 1px solid white;border-bottom: 1px solid white;" data-toggle="tooltip" title="Klicka för att markera/avmarkera">{{phase | numberToPhase: phase}}</th>
@@ -136,7 +136,7 @@
                       <ng-container *ngFor="let phase of phases | enumToArray; let j = index">
                         <td class="col-xs-1 im-cell im-inner-col">
                           <div *ngFor="let activity of (activities | matchesPhaseAndTheme: phase : theme); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
-                            <div class="panel panel-default" [style.display]="activity.isExcluded == true && hideExcluded == true || (activity.status | numberToStatus) == 'checked' && hideFinished == true ? 'none' : 'block'">
+                            <div class="panel panel-default" [style.display]="activity.isexcluded == true && hideExcluded == true || (activity.status | numberToStatus) == 'checked' && hideFinished == true ? 'none' : 'block'">
                               <div class="panel-heading">
                                 <h3 class="panel-title">
                                   <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
@@ -146,7 +146,7 @@
                                       <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status | numberToStatus === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
                                       <!--<input type="checkbox" [indeterminate]="activity.status == 1" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stoppropagation()" [ngmodel]="activity.status == 2" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
                                       {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}}
-                                        <span class="badge badge-pill badge-secondary r-0 float-right mr-auto align-middle" style="max-height:15px; margin-top: -0.5em">B</span>
+                                      <span class="badge badge-pill r-0 float-right mr-auto align-middle im-badge-{{i}}" [class.excluded-badge]="activity.isexcluded" style="max-height:15px; margin-top: -0.5em">B</span>
                                     </label>
                                   </a>
                                 </h3>
@@ -193,10 +193,10 @@
                                           <div class="modal-body">
                                             <div class="row">
                                               <!--
-                                            <div class="col-12 mb-3">
-                                              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
-                                            </div>
-                                              -->
+                                              <div class="col-12 mb-3">
+                                                <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+                                              </div>
+                                                -->
                                               <div class="col-12">
                                                 <div class="row">
                                                   <div class="col-2 mr-1">
@@ -253,7 +253,7 @@
 
                                     <!-- Modal -->
                                     <div class="modal fade" [attr.id]="'notesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'notesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
+                                      <div class="modal-dialog" id="notes-modal" role="document">
                                         <div class="modal-content">
                                           <div class="modal-header">
                                             <h5 class="modal-title" id="notesModalLabel-r{{i}}c{{j}}-{{k}}">
@@ -265,29 +265,57 @@
                                               <span aria-hidden="true">&times;</span>
                                             </button>
                                           </div>
-                                          <div class="modal-body">
-                                            <ng-container *ngFor="let note of activity.notes; let m = index">
-                                              <div class="card im-theme-{{i}}">
-                                                <h6 class="card-header mt-0 mb-0 pt-1 pb-1">
-                                                  <small class="align-middle"><span class="mr-4">{{note.timestamp}}</span><span><i>Tillagd av: </i></span><span>{{note.userid}}</span><a class="btn icon-btn p-0 align-middle float-right" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning"><i class="fa fa-trash-alt"></i></a></small>
-                                                </h6>
-                                                <div class="card-body">
+                                          <div class="modal-body" id="notes-modal-body">
+                                            <ng-container *ngFor="let note of sortNotes(activity.notes); let m = index" class="notes">
+                                              <div class="card im-theme-{{i}} mb-3">
+                                                <div class="card-header p-2 container-fluid">
+                                                  <div class="row align-middle">
+                                                    <div class="col-7 float-left">
+                                                      <h6>
+                                                        <small>
+                                                          <span><b class="mr-4">{{getUserName(note.userid)}}</b>{{note.timestamp | jsonToDate}}</span>
+                                                        </small>
+                                                      </h6>
+                                                    </div>
+                                                    <div class="col-5 d-flex justify-content-end">
+                                                      <h6>
+                                                        <small>
+                                                          <!--<a *ngIf="note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Redigera anteckning" ng-click="editNote(activity, note)"><i class="fa fa-edit"></a>
+
+                                                          <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
+
+                                                          <a *ngIf="note.userid == currentUser.id" class="align-middle im-link-btn mr-3" role="button" title="Redigera anteckning" (click)="editNote(activity, note)">Redigera</a>
+
+                                                          <a *ngIf="hasRights || note.userid == currentUser.id" role="button" class="align-middle im-link-btn" data-target="#deleteNoteModal" data-toggle="modal" (click)="setCurrentNote(note, activity)">Ta bort</a>
+
+                                                        </small>
+                                                      </h6>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="card-body p-2">
                                                   <p class="card-text">{{note.text}}</p>
                                                 </div>
                                               </div>
                                             </ng-container>
-                                            <ng-container *ngIf="activity.notes.length == 0">
-                                              <p>Inga anteckningar har lagts till.</p>
-                                            </ng-container>
-                                              <form [formGroup]="noteForm" ngNativeValidate class="form-group mt-2" id="noteForm-r{{i}}c{{j}}-{{k}}-{{m}}" (ngSubmit)="addNote(activity)">
-                                                <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Ny anteckning:</label></p>
-                                                <textarea class="form-control" formControlName="text" id="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required></textarea>
-                                                <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
-                                              </form>
+
+                                            <p *ngIf="activity.notes.length == 0">Inga anteckningar har lagts till.</p>
+                                          </div>
+                                          <div class="modal-footer">
+
+                                            <form *ngIf="hasRights" [formGroup]="noteForm" ngNativeValidate class="form-group mt-2 w-100" id="noteForm-r{{i}}c{{j}}-{{k}}-{{m}}" (ngSubmit)="addNote(activity)">
+                                              <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Ny anteckning:</label></p>
+                                              <textarea class="form-control" formControlName="text" id="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required></textarea>
+                                              <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
+                                            </form>
+                                            <p *ngIf="!hasRights" class="text-center w-100">Du har inte behörighet att lägga till anteckningar.</p>
                                           </div>
                                         </div>
+
                                       </div>
                                     </div>
+
+
 
 
                                     <div class="col-12">
@@ -327,7 +355,7 @@
                                     <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="toggleActivityIsExcluded(activity)">
                                         <p>
-                                          <i class="fa fa-fw" [ngClass]="(activity.isExcluded == true) ? 'fa-check-circle' : 'fa-times-circle'"></i><span class="ml-1">{{ activity.isExcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
+                                          <i class="fa fa-fw" [ngClass]="(activity.isexcluded == true) ? 'fa-check-circle' : 'fa-times-circle'"></i><span class="ml-1">{{ activity.isexcluded == true ? 'Inkludera' : 'Exkludera' }}</span>
                                         </p>
                                       </a>
                                     </div>
@@ -337,9 +365,13 @@
                               </div>
                             </div>
                           </div>
+                          <div class="row mt-1 ml-1">
+                            <button class="btn w-100 p-1 text-left im-theme-add-btn-{{i}}"><h6><small><span><i class="fa fa-plus"></i> Skapa ny aktivitet</span></small></h6></button>
+                          </div>
+
+
                         </td>
                       </ng-container>
-
                     </tr>
                   </tbody>
                 </table>
@@ -353,8 +385,60 @@
     </div>
   </div>
 
+  <div class="modal" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
+      <div class="modal-content">
+        <!--<div class="modal-header">
+          <h5 class="modal-title">
+            Nollställ projekt
+          </h5>
+          <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>-->
+        <div class="modal-body">
+          <h6 class="text-wrap">
+            Är du säker på att du vill ta bort anteckningen?
+          </h6>
+          <p>Anteckningen kommer tas bort permanent. Åtgärden går inte att ångra.</p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Nej, avbryt</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="removeNote()">Ja, ta bort</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addActivityModal" tabindex="-1" role="dialog" aria-labelledby="addActivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Nollställ projekt
+          </h5>
+          <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6 class="text-wrap">
+            Är du säker på att du vill ta bort anteckningen?
+          </h6>
+          <p>Anteckningen kommer tas bort permanent. Åtgärden går inte att ångra.</p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Nej, avbryt</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="removeNote()">Ja, ta bort</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="download">
     <img style="background: red" #canvas>
     <a style="background: red" #downloadLink></a>
   </div>
-  </div>
+</div>

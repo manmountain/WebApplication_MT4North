@@ -88,6 +88,7 @@
     <None Remove="ClientApp\src\app\_models\alert.ts" />
     <None Remove="ClientApp\src\app\_models\enums.ts" />
     <None Remove="ClientApp\src\app\_models\enumToArrayPipe.ts" />
+    <None Remove="ClientApp\src\app\_models\jsonToDatePipe.ts" />
     <None Remove="ClientApp\src\app\_models\matchesPhaseAndThemePipe.ts" />
     <None Remove="ClientApp\src\app\_models\numberToPhasePipe.ts" />
     <None Remove="ClientApp\src\app\_models\numberToRightsPipe.ts" />

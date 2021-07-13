@@ -21,6 +21,20 @@ im-background-color {
    color: #8ed694;
 }
 
+.im-link-primary {
+  color: #8ed694;
+}
+
+.im-link-btn:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  filter: brightness(0.6);
+}
+
+.im-modal-small {
+    max-height: 250px;
+}
+
 .im-link-secondary {
   color: white;
 }

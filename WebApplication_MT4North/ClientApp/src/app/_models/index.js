@@ -26,5 +26,6 @@ __exportStar(require("./numberToPhasePipe"), exports);
 __exportStar(require("./numberToRightsPipe"), exports);
 __exportStar(require("./numberToRolePipe"), exports);
 __exportStar(require("./numberToStatusPipe"), exports);
+__exportStar(require("./jsonToDatePipe"), exports);
 __exportStar(require("./alert"), exports);
 //# sourceMappingURL=index.js.map

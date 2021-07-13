@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Theme, Activity, ActivityPhase, ActivityStatus, Note } from "../_models";
+import { Theme, Activity, ActivityPhase, ActivityStatus, UserProject, User, ProjectRights, ProjectRole, Note } from "../_models";
 import { AlertService, ViewService, ProjectService, AccountService } from "../_services";
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -27,8 +27,13 @@ export class MyPagesActivityStatusComponent {
   isScreenshotting: boolean = false;
   themesSubscription: Subscription;
   activitiesSubscription: Subscription;
+  userProjectsSubscription: Subscription;
   isDataLoaded = false;
-
+  userProjects: UserProject[];
+  hasRights = false;
+  currentUser: User;
+  currentNote: Note;
+  currentActivity: Activity;
   error = '';
 
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
@@ -71,6 +76,13 @@ export class MyPagesActivityStatusComponent {
           this.alertService.error(error);
         });
 
+    this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => {
+      this.userProjects = x;
+      this.currentUser = this.accountService.currentUserValue;
+      let currentUserProject = this.userProjects.filter(x => x.userid == this.currentUser.id)[0];
+      this.hasRights = currentUserProject.rights == ProjectRights.READWRITE && currentUserProject.role == ProjectRole.OWNER;
+    });
+
     //this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
 
   }
@@ -79,7 +91,7 @@ export class MyPagesActivityStatusComponent {
     this.noteForm = this.formBuilder.group({
       noteid: [0, Validators.required],
       activityid: ['', Validators.required],
-      userid: [this.accountService.currentUserValue.id, Validators.required],
+      userid: [this.currentUser.id, Validators.required],
       timestamp: ['', Validators.required],
       text: ['', Validators.required]
     });
@@ -89,6 +101,12 @@ export class MyPagesActivityStatusComponent {
     this.themesSubscription.unsubscribe();
     this.activitiesSubscription.unsubscribe();
     //this.accountSubscription.unsubscribe();
+  }
+
+  sortNotes(notes) {
+    return notes.sort((a, b) => {
+      return <any>new Date(b.timestamp) - <any>new Date(a.timestamp);
+    });
   }
 
   getProgress(theme: Theme, phase: ActivityPhase): number {
@@ -105,6 +123,11 @@ export class MyPagesActivityStatusComponent {
 
   isBaseActivity(activity: Activity) {
     return activity.baseactivityinfoid != null;
+  }
+
+  getUserName(userid: string): String {
+    let user = this.userProjects.filter(x => x.user.id == userid)[0].user;
+    return user.firstname + " " + user.lastname;
   }
 
   containsOngoingActivities(theme: Theme, phase: ActivityPhase): boolean {
@@ -146,7 +169,13 @@ export class MyPagesActivityStatusComponent {
     }
   }
 
+  addActivity(activity: Activity) {
+
+  }
+
   updateActivity(activity: Activity) {
+    this.alertService.clear();
+
     this.projectService.updateActivity(activity.activityid, activity)
       .pipe(first())
       .subscribe(
@@ -163,18 +192,39 @@ export class MyPagesActivityStatusComponent {
 
   addNote(activity: Activity) {
 
-    this.noteForm.controls.timestamp.setValue(new Date().toDateString());
+    this.noteForm.controls.timestamp.setValue(new Date().toJSON());
     this.noteForm.controls.activityid.setValue(activity.activityid);
 
     if (this.noteForm.invalid) {
       return;
     }
 
+    this.alertService.clear();
+
     this.projectService.addNote(activity.activityid, this.noteForm.value)
       .pipe(first())
       .subscribe(
         data => {
           this.alertService.success('Anteckningen har lagts till', { keepAfterRouteChange: true });
+          this.noteForm.controls.text.setValue('');
+        },
+        error => {
+          this.alertService.error(error);
+        });
+  }
+
+  editNote(activity: Activity, note: Note) {
+
+  }
+
+  removeNote() {
+    this.alertService.clear();
+
+    this.projectService.removeNote(this.currentActivity.activityid, this.currentNote.noteid)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Anteckningen har tagits bort', { keepAfterRouteChange: true });
         },
         error => {
           this.alertService.error(error);
@@ -183,6 +233,8 @@ export class MyPagesActivityStatusComponent {
 
   toggleActivityIsExcluded(activity: Activity) {
     activity.isexcluded = !activity.isexcluded;
+
+    this.updateActivity(activity);
   }
 
   hasActivities(theme: Theme, phase: ActivityPhase) {
@@ -192,6 +244,11 @@ export class MyPagesActivityStatusComponent {
     return baseActivities.length > 0 || customActivities.length > 0;
     //return baseActivities.length > 0;
 
+  }
+
+  setCurrentNote(note: Note, activity: Activity) {
+    this.currentNote = note;
+    this.currentActivity = activity;
   }
 
   expandAll() {

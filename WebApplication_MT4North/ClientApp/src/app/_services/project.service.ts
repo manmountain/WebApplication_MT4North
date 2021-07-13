@@ -327,6 +327,39 @@ export class ProjectService {
     }));
   }
 
+  addActivity(params) {
+    //return this.http.post(`${environment.apiUrl}/Activities/${activityid}`, params).pipe(map(activity => {
+    //  {
+
+    //    let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
+    //    let index = this.activitiesValue.indexOf(activityToUpdate);
+
+    //    this.activitiesValue[index] = params;
+
+    //    const getCircularReplacer = () => {
+    //      const seen = new WeakSet();
+    //      return (key, value) => {
+    //        if (typeof value === "object" && value !== null) {
+    //          if (seen.has(value)) {
+    //            return;
+    //          }
+    //          seen.add(value);
+    //        }
+    //        return value;
+    //      };
+    //    };
+
+    //    // update local storage
+    //    localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+
+    //    // publish updated user to subscribers
+    //    this.activitiesSubject.next(this.activitiesValue);
+
+    //  }
+    //  return activity;
+    //}));
+  }
+
   updateActivity(activityid: string, params) {
     return this.http.put(`${environment.apiUrl}/Activities/${activityid}`, params).pipe(map(activity => {
       {
@@ -362,13 +395,46 @@ export class ProjectService {
 
   addNote(activityid: string, params) {
     console.log('test');
-    return this.http.post<any>(`${environment.apiUrl}/Activity/${activityid}`, params).pipe(map(note => {
+    return this.http.post<any>(`${environment.apiUrl}/Notes/Activity/${activityid}`, params).pipe(map(note => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
 
       let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
       let index = this.activitiesValue.indexOf(activityToUpdate);
 
-      this.activitiesValue[index].notes.push(params);
+      this.activitiesValue[index].notes.push(note);
+
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+
+      // update local storage
+      localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+
+      this.activitiesSubject.next(this.activitiesValue);
+
+      return note;
+    }));
+  }
+
+  removeNote(activityid: string, noteid:string) {
+    return this.http.delete<any>(`${environment.apiUrl}/Notes/${noteid}`).pipe(map(note => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
+      let index = this.activitiesValue.indexOf(activityToUpdate);
+
+      let noteToRemove = this.activitiesValue[index].notes.find(x => x.noteid == noteid);
+      let noteIndex = this.activitiesValue[index].notes.indexOf(noteToRemove);
+      this.activitiesValue[index].notes.splice(noteIndex, 1);
 
       const getCircularReplacer = () => {
         const seen = new WeakSet();

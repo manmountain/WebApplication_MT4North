@@ -14,4 +14,5 @@ export * from './numberToPhasePipe';
 export * from './numberToRightsPipe';
 export * from './numberToRolePipe';
 export * from './numberToStatusPipe';
+export * from './jsonToDatePipe';
 export * from './alert';

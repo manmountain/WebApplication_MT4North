@@ -41,7 +41,7 @@ export class MyPagesMembersComponent implements OnDestroy {
 
   ngOnInit() {
     this.invitationForm = this.formBuilder.group({
-      email: ['', Validators.required, Validators.email],
+      email: ['', [Validators.required, Validators.email]],
       role: [this.roles.PARTICIPANT],
       permissions: [this.permissions.READ]
     });
@@ -90,8 +90,7 @@ export class MyPagesMembersComponent implements OnDestroy {
             this.resetInvitations();
           },
           error => {
-            console.log('user NOT invited from my pages. error: ', error);
-
+            this.resetInvitations();
             this.alertService.error(error);
           });
 

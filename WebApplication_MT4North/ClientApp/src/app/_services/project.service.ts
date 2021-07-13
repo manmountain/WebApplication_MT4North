@@ -327,40 +327,21 @@ export class ProjectService {
     }));
   }
 
-  addActivity(params) {
-    //return this.http.post(`${environment.apiUrl}/Activities/${activityid}`, params).pipe(map(activity => {
-    //  {
+  createActivity(params) {
+    return this.http.post<any>(`${environment.apiUrl}/Activities`, params).pipe(map(activity => {
+      {
 
-    //    let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
-    //    let index = this.activitiesValue.indexOf(activityToUpdate);
+        this.activitiesValue.push(activity);
+        const activities = { ...this.activitiesValue, ...activity };
 
-    //    this.activitiesValue[index] = params;
-
-    //    const getCircularReplacer = () => {
-    //      const seen = new WeakSet();
-    //      return (key, value) => {
-    //        if (typeof value === "object" && value !== null) {
-    //          if (seen.has(value)) {
-    //            return;
-    //          }
-    //          seen.add(value);
-    //        }
-    //        return value;
-    //      };
-    //    };
-
-    //    // update local storage
-    //    localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
-
-    //    // publish updated user to subscribers
-    //    this.activitiesSubject.next(this.activitiesValue);
-
-    //  }
-    //  return activity;
-    //}));
+        localStorage.setItem('activities', JSON.stringify(activities));
+        this.activitiesSubject.next(this.activitiesValue);
+      }
+      return activity;
+    }));
   }
 
-  updateActivity(activityid: string, params) {
+  updateActivity(activityid: number, params) {
     return this.http.put(`${environment.apiUrl}/Activities/${activityid}`, params).pipe(map(activity => {
       {
 
@@ -393,7 +374,7 @@ export class ProjectService {
     }));
   }
 
-  addNote(activityid: string, params) {
+  addNote(activityid: number, params) {
     console.log('test');
     return this.http.post<any>(`${environment.apiUrl}/Notes/Activity/${activityid}`, params).pipe(map(note => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -425,7 +406,7 @@ export class ProjectService {
     }));
   }
 
-  removeNote(activityid: string, noteid:string) {
+  removeNote(activityid: number, noteid:string) {
     return this.http.delete<any>(`${environment.apiUrl}/Notes/${noteid}`).pipe(map(note => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
 

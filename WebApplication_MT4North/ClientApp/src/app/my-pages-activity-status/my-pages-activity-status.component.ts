@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Theme, Activity, ActivityPhase, ActivityStatus, UserProject, User, ProjectRights, ProjectRole, Note } from "../_models";
+import { Theme, Activity, ActivityPhase, ActivityStatus, ActivityInfo, UserProject, User, ProjectRights, ProjectRole, Note } from "../_models";
+import { AddActivityModal } from "../_modals";
 import { AlertService, ViewService, ProjectService, AccountService } from "../_services";
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -20,6 +21,7 @@ export class MyPagesActivityStatusComponent {
   phases = ActivityPhase;
   themes: Theme[] = [];
   noteForm: FormGroup;
+  activityInfoForm: FormGroup;
   activities: Activity[] = [];
   testThemes: Theme[] = [];
   hideExcluded: boolean = false;
@@ -30,17 +32,23 @@ export class MyPagesActivityStatusComponent {
   userProjectsSubscription: Subscription;
   isDataLoaded = false;
   userProjects: UserProject[];
-  hasRights = false;
+  hasEditRights = false;
+  hasAdminRights = false;
+  isAdmin = false;
   currentUser: User;
   currentNote: Note;
   currentActivity: Activity;
+  currentTheme: Theme;
+  currentPhase: ActivityPhase;
   error = '';
+  submittedActivity = false;
 
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
   @ViewChild('imTableView', { static: false }) imTableView: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('downloadLink', { static: false }) downloadLink: ElementRef;
+  @ViewChild('closeAddActivityModal', { static: false }) closeAddActivityModal; 
 
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
@@ -80,7 +88,9 @@ export class MyPagesActivityStatusComponent {
       this.userProjects = x;
       this.currentUser = this.accountService.currentUserValue;
       let currentUserProject = this.userProjects.filter(x => x.userid == this.currentUser.id)[0];
-      this.hasRights = currentUserProject.rights == ProjectRights.READWRITE && currentUserProject.role == ProjectRole.OWNER;
+      this.hasEditRights = currentUserProject.rights == ProjectRights.READWRITE;
+      this.hasAdminRights = currentUserProject.role == ProjectRole.OWNER;
+
     });
 
     //this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
@@ -95,11 +105,18 @@ export class MyPagesActivityStatusComponent {
       timestamp: ['', Validators.required],
       text: ['', Validators.required]
     });
+
+    this.activityInfoForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      isBaseActivity: [false]
+    });
   }
 
   ngOnDestroy() {
     this.themesSubscription.unsubscribe();
     this.activitiesSubscription.unsubscribe();
+    this.userProjectsSubscription.unsubscribe();
     //this.accountSubscription.unsubscribe();
   }
 
@@ -111,14 +128,15 @@ export class MyPagesActivityStatusComponent {
 
   getProgress(theme: Theme, phase: ActivityPhase): number {
     let nrOfBaseActivities = this.activities.filter(x => x.baseactivityinfo != null).filter(x => x.baseactivityinfo.themeid == theme.themeid && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
-    let activityValBase = nrOfBaseActivities > 0 ? 100 / nrOfBaseActivities : 0;
-    var nrOfStarted = this.activities.filter(x => x.baseactivityinfo != null).filter(x => x.baseactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
+    let nrOfStartedBase = this.activities.filter(x => x.baseactivityinfo != null).filter(x => x.baseactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.baseactivityinfo.phase == phase && x.isexcluded == false).length;
 
     let nrOfCustomActivities = this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.customactivityinfo.phase == phase && x.isexcluded == false).length 
-    let activityValCustom = nrOfCustomActivities > 0 ? 100 / nrOfCustomActivities : 0;
-    nrOfStarted += this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
+    let nrOfStartedCustom = this.activities.filter(x => x.customactivityinfo != null).filter(x => x.customactivityinfo.themeid == theme.themeid && x.status != ActivityStatus.NOTSTARTED && x.customactivityinfo.phase == phase && x.isexcluded == false).length;
 
-    return (activityValBase + activityValCustom) * nrOfStarted;
+    let totalNrOfActivities = nrOfBaseActivities + nrOfCustomActivities
+    let activityVal = totalNrOfActivities > 0 ? 100 / totalNrOfActivities : 0;
+
+    return totalNrOfActivities * activityVal;
   }
 
   isBaseActivity(activity: Activity) {
@@ -169,8 +187,52 @@ export class MyPagesActivityStatusComponent {
     }
   }
 
-  addActivity(activity: Activity) {
+  // convenience getter for easy access to form fields
+  get f() { return this.activityInfoForm.controls; }
 
+  addActivity() {
+    this.submittedActivity = true;
+
+    console.log('adding activity');
+    if (this.activityInfoForm.invalid) {
+      return;
+    }
+    this.alertService.clear();
+
+    let activity = new Activity();
+    activity.projectid = this.userProjects[0].projectid;
+
+    if (this.activityInfoForm.controls.isBaseActivity.value) {
+      activity.baseactivityinfo = new ActivityInfo();
+      activity.baseactivityinfoid = 0;
+      activity.baseactivityinfo.baseactivityid = 0;
+      activity.baseactivityinfo.name = this.activityInfoForm.controls.name.value;
+      activity.baseactivityinfo.description = this.activityInfoForm.controls.description.value;
+      activity.baseactivityinfo.themeid = this.currentTheme.themeid;
+      activity.baseactivityinfo.phase = this.currentPhase;
+    } else {
+      activity.customactivityinfo = new ActivityInfo();
+      activity.customactivityinfoid = 0;
+      activity.customactivityinfo.customactivityid = 0;
+      activity.customactivityinfo.name = this.activityInfoForm.controls.name.value;
+      activity.customactivityinfo.description = this.activityInfoForm.controls.description.value;
+      activity.customactivityinfo.themeid = this.currentTheme.themeid;
+      activity.customactivityinfo.phase = this.currentPhase = this.currentPhase;
+    }
+
+    this.projectService.createActivity(activity)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.clearAddActivityForm();
+          this.closeAddActivityModal.nativeElement.click();
+          this.alertService.success('Dina ändringar har sparats.', { keepAfterRouteChange: true });
+        },
+        error => {
+          this.clearAddActivityForm();
+          this.closeAddActivityModal.nativeElement.click();
+          this.alertService.error(error);
+        });
   }
 
   updateActivity(activity: Activity) {
@@ -188,6 +250,11 @@ export class MyPagesActivityStatusComponent {
 
           this.alertService.error(error);
         });
+  }
+
+  clearAddActivityForm() {
+    this.activityInfoForm.controls.name.setValue('');
+    this.activityInfoForm.controls.description.setValue('');
   }
 
   addNote(activity: Activity) {
@@ -249,6 +316,11 @@ export class MyPagesActivityStatusComponent {
   setCurrentNote(note: Note, activity: Activity) {
     this.currentNote = note;
     this.currentActivity = activity;
+  }
+
+  setCurrentThemeAndPhase(theme: Theme, phase: ActivityPhase) {
+    this.currentTheme = theme;
+    this.currentPhase = phase;
   }
 
   expandAll() {

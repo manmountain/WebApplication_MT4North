@@ -82,6 +82,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-edit-account\my-pages-edit-account.component.ts" />
+    <None Remove="ClientApp\src\app\_components\addActivityModal.component.ts" />
     <None Remove="ClientApp\src\app\_components\alert.component.ts" />
     <None Remove="ClientApp\src\app\_models\activity.model.ts" />
     <None Remove="ClientApp\src\app\_models\activityInfo.model.ts" />
@@ -136,6 +137,7 @@
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\error.interceptor.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\jwt.interceptor.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_modals\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_models\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\account.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\alert.service.ts" />

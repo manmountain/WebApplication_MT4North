@@ -5,7 +5,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
-
 //import { ConnectionService } from './connection.service';
 
 import { AppComponent } from './app.component';
@@ -26,6 +25,7 @@ import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pa
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
 import { MyPagesEditAccountComponent } from './my-pages-edit-account';
 import { MatchesPhaseAndThemePipe, EnumToArrayPipe, NumberToPhasePipe, NumberToRolePipe, NumberToRightsPipe, NumberToStatusPipe, JsonToDatePipe } from './_models';
+import { AddActivityModal } from './_modals';
 import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
 import { RegisterComponent } from './register/register.component';
 
@@ -103,7 +103,11 @@ const routes: Routes = [
     NumberToStatusPipe,
     RegisterComponent,
     AlertComponent,
-    JsonToDatePipe
+    JsonToDatePipe,
+    AddActivityModal
+  ],
+  entryComponents: [
+    AddActivityModal
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -111,8 +115,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
    // ConnectionServiceModule,
-    RouterModule.forRoot(routes)
-    
+    RouterModule.forRoot(routes)    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

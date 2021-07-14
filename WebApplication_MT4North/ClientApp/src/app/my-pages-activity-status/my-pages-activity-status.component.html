@@ -138,18 +138,18 @@
                           <div *ngFor="let activity of (activities | matchesPhaseAndTheme: phase : theme); let k = index" class="panel-group" id="accordion-r{{i}}c{{j}}-{{k}}">
                             <div class="panel panel-default" [style.display]="activity.isexcluded == true && hideExcluded == true || (activity.status | numberToStatus) == 'checked' && hideFinished == true ? 'none' : 'block'">
                               <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                      <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
-                                        <label class="vertical-nav align-items-center d-flex">
-                                          <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
-                                          <input *ngIf="hasEditRights" type="checkbox" [indeterminate]="(activity.status | numberToStatus) === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation();" (ngModelChange)="updateStatus(activity)" [ngModel]="(activity.status | numberToStatus) === 'checked'" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
-                                          <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status | numberToStatus === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
-                                          <!--<input type="checkbox" [indeterminate]="activity.status == 1" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stoppropagation()" [ngmodel]="activity.status == 2" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
-                                        {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}}
-                                        <span *ngIf="isBaseActivity(activity)" class="badge badge-pill float-right ml-auto align-middle im-badge-{{i}}" [class.excluded-badge]="activity.isexcluded">B</span>
-                                        </label>
-                                      </a>
-                                    </h3>
+                                <h3 class="panel-title">
+                                  <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
+                                    <label class="vertical-nav align-items-center d-flex">
+                                      <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
+                                      <input *ngIf="hasEditRights" type="checkbox" [indeterminate]="(activity.status | numberToStatus) === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation();" (ngModelChange)="updateStatus(activity)" [ngModel]="(activity.status | numberToStatus) === 'checked'" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
+                                      <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status | numberToStatus === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
+                                      <!--<input type="checkbox" [indeterminate]="activity.status == 1" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stoppropagation()" [ngmodel]="activity.status == 2" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
+                                      {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}}
+                                      <span *ngIf="isBaseActivity(activity)" class="badge badge-pill float-right ml-auto align-middle im-badge-{{i}}" data-toggle="tooltip" data-placement="bottom" data-trigger="hover" data-container="body" title="Basaktvitet – kan endast redigeras av systemadministratör" [class.excluded-badge]="activity.isexcluded">B</span>
+                                    </label>
+                                  </a>
+                                </h3>
                               </div>
 
                               <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
@@ -184,7 +184,7 @@
                                             <h5 class="modal-title" id="datesModalLabel-r{{i}}c{{j}}-{{k}}">
                                               Datum
                                               <br />
-                                              <small>{{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}} i {{theme.name}}</small>
+                                              <small>för {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}} i {{theme.name}}</small>
                                             </h5>
                                             <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
@@ -193,10 +193,10 @@
                                           <div class="modal-body">
                                             <div class="row">
                                               <!--
-                                              <div class="col-12 mb-3">
-                                                <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
-                                              </div>
-                                                -->
+            <div class="col-12 mb-3">
+              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
+            </div>
+              -->
                                               <div class="col-12">
                                                 <div class="row">
                                                   <div class="col-2 mr-1">
@@ -282,7 +282,7 @@
                                                         <small>
                                                           <!--<a *ngIf="note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Redigera anteckning" ng-click="editNote(activity, note)"><i class="fa fa-edit"></a>
 
-                                                          <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
+                        <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
 
                                                           <a *ngIf="note.userid == currentUser.id" class="align-middle im-link-btn mr-3" role="button" title="Redigera anteckning" (click)="editNote(activity, note)">Redigera</a>
 
@@ -359,6 +359,16 @@
                                         </p>
                                       </a>
                                     </div>
+
+                                    <div class="col-12">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="setCurrentActivityInfo(activity)">
+                                        <p>
+                                          <i class="fa fa-book fa-fw"></i><span class="ml-1">Redigera</span>
+                                        </p>
+                                      </a>
+                                    </div>
+                                    <button #openEditActivityModalButton [hidden]="true" data-toggle="modal" data-target="#editActivityModal"></button>
+
                                   </div>
 
                                 </div>
@@ -411,27 +421,44 @@
 
   <form [formGroup]="activityInfoForm" (ngSubmit)="addActivity()">
     <div class="modal fade" id="addActivityModal" tabindex="-1" role="dialog" aria-labelledby="addActivityModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
+      <div class="modal-dialog" style="top: 10%" role="dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
               Skapa ny aktivitet
+              <br />
+              <small>i {{currentTheme?.name}} under {{currentPhase | numberToPhase}}</small>
             </h5>
             <button #closeAddActivityModal type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
+            <div *ngIf="currentUser.userrole?.includes('AdminUser')" class="form-group">
+              <div class="form-check">
+                <input formControlName="type" class="form-check-input from-control" type="radio" name="flexRadioDefault" id="flexRadioDefault1" [value]="true" checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                  Basktivititet (visas för alla projekt)
+                </label>
+              </div>
+              <div class="form-check">
+                <input formControlName="type" class="form-check-input form-control" type="radio" name="flexRadioDefault" id="flexRadioDefault2" [value]="false">
+                <label class="form-check-label" for="flexRadioDefault2">
+                  Egen aktivitet (visas endast för aktuellt projekt)
+                </label>
+              </div>
+              <small>...</small>
+            </div>
             <div class="form-group">
-              <label for="name">Namn</label>
-              <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submittedActivity && f.name.errors }" />
+              <label for="activityName">Namn</label>
+              <input id="activityName" type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submittedActivity && f.name.errors }" />
               <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                 <div *ngIf="f.name.errors.required">Namn är obligatoriskt</div>
               </div>
             </div>
             <div class="form-group">
-              <label for="description">Beskrivning</label>
-              <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submittedActivity && f.description.errors }" />
+              <label for="activityDescription">Beskrivning</label>
+              <textarea id="activityDescription" type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submittedActivity && f.description.errors }"></textarea>
               <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
                 <div *ngIf="f.description.errors.required">Beskrivning är obligatoriskt</div>
               </div>
@@ -441,6 +468,81 @@
             <div class="form-group">
               <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
               <button type="submit" [disabled]="!activityInfoForm.valid" class="btn btn-primary btn-sm">Spara</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="editActivityInfoForm" (ngSubmit)="editActivity()">
+    <div class="modal fade" id="editActivityModal" tabindex="-1" role="dialog" [attr.aria-labelledby]="editActivityInfoModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="top: 10%" role="dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Redigera aktivitet
+              <br />
+              <small>{{currentActivityInfo?.name}} i {{currentActivityInfo?.theme?.name}}</small>
+            </h5>
+            <button #closeEditActivityModal type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngIf="currentUser.userrole?.includes('AdminUser')" class="form-group">
+              <div class="form-check">
+                <input formControlName="type" class="form-check-input from-control" type="radio" name="flexRadioDefault" id="flexRadioDefault1" [value]="true" checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                  Basktivititet (visas för alla projekt)
+                </label>
+              </div>
+              <div class="form-check">
+                <input formControlName="type" class="form-check-input form-control" type="radio" name="flexRadioDefault" id="flexRadioDefault2" [value]="false">
+                <label class="form-check-label" for="flexRadioDefault2">
+                  Egen aktivitet (visas endast för aktuellt projekt)
+                </label>
+              </div>
+              <small>...</small>
+            </div>
+            <div class="form-group">
+              <label for="name">Namn</label>
+              <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submittedActivity && fEdit.name.errors }" [value]="currentActivityInfo?.name" />
+              <div *ngIf="submitted && fEdit.name.errors" class="invalid-feedback">
+                <div *ngIf="fEdit.name.errors.required">Namn är obligatoriskt</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Beskrivning</label>
+              <textarea type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submittedActivity && fEdit.description.errors }" [value]="currentActivityInfo?.description"></textarea>
+              <div *ngIf="submitted && fEdit.description.errors" class="invalid-feedback">
+                <div *ngIf="fEdit.description.errors.required">Beskrivning är obligatoriskt</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label [attr.for]="'theme-sel-r'+i+'c'+j+'-'+k">Tema</label>
+              <select [attr.id]="'theme-sel-r'+i+'c'+j+'-'+k" class="form-control" formControlName="theme">
+                <option *ngFor="let optionTheme of themes" [ngValue]="optionTheme" [selected]="optionTheme.themeid === currentActivityInfo?.theme?.themeid">{{optionTheme.name}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label [attr.for]="'phase-sel-r'+i+'c'+j+'-'+k">Fas</label>
+              <select [attr.id]="'phase-sel-r'+i+'c'+j+'-'+k" class="form-control" formControlName="phase">
+                <option *ngFor="let optionPhase of phases | enumToArray; let idx = index" [ngValue]="optionPhase" [selected]="optionPhase === currentActivityInfo?.phase">{{idx+1}}. {{optionPhase | numberToPhase}}</option>
+              </select>
+            </div>
+            <!--<div *ngIf="!isBaseActivity(activity)" class="form-group m-0">
+              <label [attr.for]="'theme-sel-r'+i+'c'+j+'-'+k">Tema</label>
+              <select [attr.id]="'theme-sel-r'+i+'c'+j+'-'+k" class="form-control" formControlName="theme">
+                <option *ngFor="let currentTheme of themes" [ngValue]="currentTheme" [selected]="isCurrentTheme(currentTheme, activity)">{{theme.name}}</option>
+              </select>
+            </div>-->
+          </div>
+          <div class="modal-footer">
+            <div class="form-group">
+              <button type="button" class="btn btn-danger btn-sm mr-1 float-left" data-dismiss="modal">Ta bort</button>
+              <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
+              <button type="submit" [disabled]="!editActivityInfoForm.valid" class="btn btn-primary btn-sm">Spara</button>
             </div>
           </div>
         </div>

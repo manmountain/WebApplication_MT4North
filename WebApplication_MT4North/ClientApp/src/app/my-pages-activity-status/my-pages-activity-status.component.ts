@@ -22,6 +22,7 @@ export class MyPagesActivityStatusComponent {
   themes: Theme[] = [];
   noteForm: FormGroup;
   activityInfoForm: FormGroup;
+  editActivityInfoForm: FormGroup;
   activities: Activity[] = [];
   testThemes: Theme[] = [];
   hideExcluded: boolean = false;
@@ -38,6 +39,7 @@ export class MyPagesActivityStatusComponent {
   currentUser: User;
   currentNote: Note;
   currentActivity: Activity;
+  currentActivityInfo = new ActivityInfo();
   currentTheme: Theme;
   currentPhase: ActivityPhase;
   error = '';
@@ -49,6 +51,8 @@ export class MyPagesActivityStatusComponent {
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('downloadLink', { static: false }) downloadLink: ElementRef;
   @ViewChild('closeAddActivityModal', { static: false }) closeAddActivityModal; 
+  @ViewChild('closeEditActivityModal', { static: false }) closeEditActivityModal; 
+  @ViewChild('openEditActivityModalButton', { static: false }) openEditActivityModalButton;
 
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
@@ -97,6 +101,11 @@ export class MyPagesActivityStatusComponent {
 
   }
 
+  equalsCurrentPhase(a: ActivityPhase, b: ActivityPhase) {
+    console.log(a + '==' + b + ':' + a.toString() == b.toString());
+    return (a.toString() == b.toString());
+  }
+
   ngOnInit() {
     this.noteForm = this.formBuilder.group({
       noteid: [0, Validators.required],
@@ -111,6 +120,15 @@ export class MyPagesActivityStatusComponent {
       description: ['', Validators.required],
       isBaseActivity: [false]
     });
+
+    this.editActivityInfoForm = this.formBuilder.group({
+      name: [Validators.required],
+      description: [Validators.required],
+      phase: [Validators.required],
+      theme: [Validators.required],
+      isBaseActivity: [false]
+    });
+
   }
 
   ngOnDestroy() {
@@ -136,11 +154,20 @@ export class MyPagesActivityStatusComponent {
     let totalNrOfActivities = nrOfBaseActivities + nrOfCustomActivities
     let activityVal = totalNrOfActivities > 0 ? 100 / totalNrOfActivities : 0;
 
-    return totalNrOfActivities * activityVal;
+    return (nrOfStartedBase + nrOfStartedCustom) * activityVal;
   }
 
   isBaseActivity(activity: Activity) {
     return activity.baseactivityinfoid != null;
+  }
+
+  isCurrentTheme(optionTheme: Theme, currentActivity: Activity) {
+    if (this.isBaseActivity(currentActivity)) {
+      return optionTheme.name == currentActivity.baseactivityinfo.theme.name;
+      } else {
+      return optionTheme.name == currentActivity.customactivityinfo.theme.name;
+
+    }
   }
 
   getUserName(userid: string): String {
@@ -189,6 +216,7 @@ export class MyPagesActivityStatusComponent {
 
   // convenience getter for easy access to form fields
   get f() { return this.activityInfoForm.controls; }
+  get fEdit() { return this.editActivityInfoForm.controls; }
 
   addActivity() {
     this.submittedActivity = true;
@@ -257,6 +285,24 @@ export class MyPagesActivityStatusComponent {
     this.activityInfoForm.controls.description.setValue('');
   }
 
+  editActivity() {
+    // Fixa så att det inte blir null ifall ingen ändring görs i ett fält.
+    if (this.isBaseActivity(this.currentActivity)) {
+      this.currentActivity.baseactivityinfo.name = this.editActivityInfoForm.controls.name.value;
+      this.currentActivity.baseactivityinfo.description = this.editActivityInfoForm.controls.description.value;
+      this.currentActivity.baseactivityinfo.theme = this.editActivityInfoForm.controls.theme.value;
+      this.currentActivity.baseactivityinfo.themeid = this.currentActivity.baseactivityinfo.theme.themeid
+      this.currentActivity.baseactivityinfo.phase = this.editActivityInfoForm.controls.phase.value;
+    } else {
+      this.currentActivity.customactivityinfo.name = this.editActivityInfoForm.controls.name.value;
+      this.currentActivity.customactivityinfo.description = this.editActivityInfoForm.controls.description.value;
+      this.currentActivity.customactivityinfo.theme = this.editActivityInfoForm.controls.theme.value;
+      this.currentActivity.customactivityinfo.themeid = this.currentActivity.customactivityinfo.theme.themeid
+      this.currentActivity.customactivityinfo.phase = this.editActivityInfoForm.controls.phase.value;
+    }
+    this.updateActivity(this.currentActivity)
+  }
+
   addNote(activity: Activity) {
 
     this.noteForm.controls.timestamp.setValue(new Date().toJSON());
@@ -316,6 +362,12 @@ export class MyPagesActivityStatusComponent {
   setCurrentNote(note: Note, activity: Activity) {
     this.currentNote = note;
     this.currentActivity = activity;
+  }
+
+  setCurrentActivityInfo(activity: Activity) {
+    this.currentActivity = activity;
+    this.currentActivityInfo = (activity.baseactivityinfoid != null) ? activity.baseactivityinfo : activity.customactivityinfo;
+    this.openEditActivityModalButton.nativeElement.click();
   }
 
   setCurrentThemeAndPhase(theme: Theme, phase: ActivityPhase) {

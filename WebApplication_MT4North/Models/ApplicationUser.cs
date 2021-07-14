@@ -33,6 +33,9 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("userrole")]
         public string UserRole { get; set; }
 
+        /*[JsonPropertyName("userroles")]
+        public List<string> UserRole { get; set; }*/
+
         [JsonPropertyName("id")]
         public override string Id
         {

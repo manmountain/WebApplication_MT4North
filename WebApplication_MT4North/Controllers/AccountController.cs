@@ -291,13 +291,15 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            var roles = await _userManager.GetRolesAsync(user);
+            //var roles = await _userManager.GetRolesAsync(user);
+            List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
 
             if (user == null)
             {
                 return NotFound();
             }
 
+            user.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
             return Ok(user);
         }
 
@@ -324,7 +326,7 @@ namespace WebApplication_MT4North.Controllers
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
             var roles = await _userManager.GetRolesAsync(user);
-            
+
             if (!string.IsNullOrWhiteSpace(request.Email))
             {
                 //TODO: Can a user A change email to the same email as another user? ...
@@ -349,6 +351,7 @@ namespace WebApplication_MT4North.Controllers
 
             if (updateResult.Succeeded)
             {
+                user.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
                 return Ok(user);
             }
 
@@ -366,6 +369,7 @@ namespace WebApplication_MT4North.Controllers
         public async Task<ActionResult> UpdateUserAsync(string userEmail, [FromBody] UserRequest request)
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
+            var roles = await _userManager.GetRolesAsync(user);
 
             if (!string.IsNullOrWhiteSpace(request.Email))
             {
@@ -393,6 +397,7 @@ namespace WebApplication_MT4North.Controllers
 
             if (updateResult.Succeeded)
             {
+                //updateResult.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
                 return Ok(updateResult);
             }
 
@@ -410,6 +415,7 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            var roles = await _userManager.GetRolesAsync(user);
             var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword); 
             if (result.Succeeded)
             {

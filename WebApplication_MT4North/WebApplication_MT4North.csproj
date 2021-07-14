@@ -210,9 +210,6 @@
     <None Update="ClientApp\src\app\_models\userProject - Copy.js">
       <DependentUpon>userProject.model.js</DependentUpon>
     </None>
-    <None Update="Models\medtechinnovationmodel_v3.mdf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

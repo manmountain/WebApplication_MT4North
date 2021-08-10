@@ -23,7 +23,7 @@ export class AccountService {
 
   }
 
-    public get currentUserValue(): User {
+  public get currentUserValue(): User {
         return this.currentUserSubject.value;
   }
 
@@ -34,14 +34,14 @@ export class AccountService {
     login(email: string, password: string) {
           return this.http.post<any>(`${environment.apiUrl}/Account/login`, { email, password })
               .pipe(map(user => {
-                  // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  
-                  localStorage.setItem('currentUserAuth', JSON.stringify(user));
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                localStorage.setItem('currentUserAuth', JSON.stringify(user));
                 this.currentUserAuthSubject.next(user);
 
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
-                  return user;
+                this.startRefreshTokenTimer();
+                return user;
               }));
       }
 
@@ -49,9 +49,10 @@ export class AccountService {
         // remove user from local storage to log user out
       localStorage.removeItem('currentUserAuth');
       localStorage.removeItem('currentUser');
-        this.currentUserAuthSubject.next(null);
+      this.stopRefreshTokenTimer();
 
-        this.currentUserSubject.next(null);
+      this.currentUserAuthSubject.next(null);
+      this.currentUserSubject.next(null);
     }
 
     register(user: User) {
@@ -80,7 +81,7 @@ export class AccountService {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;
-      }));;
+      }));
   }
 
   update(params) {
@@ -97,7 +98,39 @@ export class AccountService {
           }
           return x;
         }));
-    }
+  }
+
+  refreshToken() {
+    return this.http.post<any>(`${environment.apiUrl}/Account/refresh-token`, { refreshToken: this.currentUserAuthValue.refreshToken}, { withCredentials: true }) 
+      .pipe(map((user) => {
+        console.log('refreshToken response:' + user)
+        localStorage.setItem('currentUserAuth', JSON.stringify(user));
+        this.currentUserAuthSubject.next(user);
+        //this.currentUserSubject.next(user);
+        this.startRefreshTokenTimer();
+        return user;
+      }));
+  }
+
+  // helper methods
+
+  private refreshTokenTimeout;
+
+  private startRefreshTokenTimer() {
+    // parse json object from base64 encoded jwt token
+    const jwtToken = JSON.parse(atob(this.currentUserAuthValue.accessToken.split('.')[1]));
+    // set a timeout to refresh the token a minute before it expires
+    const expires = new Date(jwtToken.exp * 1000);
+    const timeout = expires.getTime() - Date.now() - (60 * 1000);
+    // console.log('refresh-token expires: ' + expires);
+    // console.log('refresh-token timeout: ' + timeout);
+    // 
+    this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+  }
+
+  private stopRefreshTokenTimer() {
+    clearTimeout(this.refreshTokenTimeout);
+  }
 
     //update(id, params) {
     //  return this.http.put(`${environment.apiUrl}/users/${id}`, params)

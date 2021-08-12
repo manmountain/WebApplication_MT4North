@@ -264,7 +264,7 @@ namespace WebApplication_MT4North.Controllers
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && p.Role == UserProjectRoles.OWNER /*&& (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)*/);
             if (callerUserProject == null)
             {
-                // The caller doesnt have WRITE rights to this project
+                // The caller is not a owner to this project
                 return Forbid();
             }
 

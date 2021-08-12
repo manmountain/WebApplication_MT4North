@@ -491,8 +491,11 @@ namespace WebApplication_MT4North.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<UserProject>> DeleteUserProject(int id)
         {
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
+            //string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            //var user = await _userManager.FindByEmailAsync(userEmail);
+
+            string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var caller = await _userManager.FindByEmailAsync(callerEmail);
 
             var userProject = await _context.UserProjects.FindAsync(id);
             if (userProject == null)
@@ -500,17 +503,47 @@ namespace WebApplication_MT4North.Controllers
                 return NotFound();
             }
 
-            if (userProject.UserId != user.Id)
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == userProject.ProjectId && p.UserId == caller.Id);
+            var projectOwners = await _context.UserProjects.Where(p => p.ProjectId == userProject.ProjectId && p.Role == UserProjectRoles.OWNER).ToListAsync<UserProject>();
+
+            // Is the caller the owner of the project?
+            if (callerUserProject.Role == UserProjectRoles.OWNER)
             {
-                return BadRequest();
+                // Is the owner trying to remove their own userProject?
+                if (callerUserProject.UserProjectId == id)
+                {
+                    // delete if more then one owner
+                    if (callerUserProject.UserProjectId == id && projectOwners.Count > 1)
+                    {
+                        // delete. The owner can remove their own user-project if another owner exists
+                        _context.UserProjects.Remove(userProject);
+                        await _context.SaveChangesAsync();
+                        return Ok(userProject);
+                    }
+                }
+                else
+                {
+                    // delete the UserProject. The owner can delete others participants user-projects
+                    _context.UserProjects.Remove(userProject);
+                    await _context.SaveChangesAsync();
+                    return Ok(userProject);
+                }
+                
+            }
+            else
+            {
+                // Is the caller trying to remove their own user-project?
+                if (callerUserProject.UserProjectId == id)
+                {
+                    // delete. A user can delete their own user-project
+                    _context.UserProjects.Remove(userProject);
+                    await _context.SaveChangesAsync();
+                    return Ok(userProject);
+                }
             }
 
-            //TODO: Permission?!
-
-            _context.UserProjects.Remove(userProject);
-            await _context.SaveChangesAsync();
-
-            return Ok(userProject);
+            // If no case above is satisfied. It must be forbidden
+            return Forbid();
         }
 
         private bool UserProjectExists(int id)

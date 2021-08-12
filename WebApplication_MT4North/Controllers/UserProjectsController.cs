@@ -506,6 +506,19 @@ namespace WebApplication_MT4North.Controllers
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == userProject.ProjectId && p.UserId == caller.Id);
             var projectOwners = await _context.UserProjects.Where(p => p.ProjectId == userProject.ProjectId && p.Role == UserProjectRoles.OWNER).ToListAsync<UserProject>();
 
+            // set the user of notes created by the user of the user-project to null. Just in case we want to remove the user-project
+            // the changes to the notes is only saved to the database if and only if we choose to delete the user-project
+            var projectActivities = await _context.Activities.Where(a => a.ProjectId == userProject.ProjectId).ToListAsync<Activity>();
+            var userNotes = new List<Note>();
+            foreach(var activity in projectActivities)
+            {
+                var notes = await _context.Notes.Where(n => n.UserId == userProject.UserId && n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+                userNotes.AddRange(notes);
+            }
+            foreach(var note in userNotes)
+            {
+                note.UserId = null;
+            }
             // Is the caller the owner of the project?
             if (callerUserProject.Role == UserProjectRoles.OWNER)
             {
@@ -517,6 +530,7 @@ namespace WebApplication_MT4North.Controllers
                     {
                         // delete. The owner can remove their own user-project if another owner exists
                         _context.UserProjects.Remove(userProject);
+                        _context.Entry(userNotes).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         return Ok(userProject);
                     }
@@ -525,6 +539,7 @@ namespace WebApplication_MT4North.Controllers
                 {
                     // delete the UserProject. The owner can delete others participants user-projects
                     _context.UserProjects.Remove(userProject);
+                    _context.Entry(userNotes).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     return Ok(userProject);
                 }
@@ -532,11 +547,12 @@ namespace WebApplication_MT4North.Controllers
             }
             else
             {
-                // Is the caller trying to remove their own user-project?
+                // Is a project participant trying to remove their own user-project?
                 if (callerUserProject.UserProjectId == id)
                 {
                     // delete. A user can delete their own user-project
                     _context.UserProjects.Remove(userProject);
+                    _context.Entry(userNotes).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     return Ok(userProject);
                 }

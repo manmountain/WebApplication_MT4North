@@ -116,4 +116,31 @@ export class MyPagesMembersComponent implements OnDestroy {
     return this.invitationForm.controls;
   }
 
+  leaveProject(userProjectId: string) {
+    this.projectService.leaveProject(userProjectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          // tell user that everything worked. User project deleted
+          this.alertService.success('Medlem borttagen', { keepAfterRouteChange: true });
+          // TODO:
+          // redirect to 'mina-sidor' if a User have removed their own UserProject (i.e left the project)
+          // How do we remove the project from the side-nav?
+        },
+        error => {
+          if (error.status == 403) {
+            const reason = (this.currentUserProject.role == ProjectRole.OWNER)?("Det måste finnas minst en projekt ägare"):("Som deltagare kan du bara ta bort dig själv") 
+            this.alertService.error('Otillåtet. ' + reason, { keepAfterRouteChange: true });
+            // if user is owner => owner can only leave if their is another owner
+            // if not owner, you can only delete your self
+          }
+        });
+  }
+
+  isCurrentUserOnlyOwner() {
+    var nOwners = 0
+    this.userProjects.forEach(u => { if (u.role == ProjectRole.OWNER) { nOwners++; } } );
+    return (this.currentUserProject.role == ProjectRole.OWNER) && nOwners<2;
+  }
+
 }

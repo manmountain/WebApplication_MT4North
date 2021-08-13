@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+//import { throwError } from 'rxjs'; 
+import { map, tap, catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { Project, UserProject, Theme, Activity, ActivityInfo, ProjectRole, ProjectRights } from '@app/_models';
@@ -195,6 +196,30 @@ export class ProjectService {
         return x;
       }));
   }
+
+  leaveProject(userProjectId: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/UserProjects/${userProjectId}`, { observe: 'response' })
+      .pipe(
+        tap(
+          userProject => {
+            // remove from localstorage
+            let userProjectToDelete = this.userProjectsValue.find(y => y.userprojectid == userProjectId);
+            let index = this.userProjectsValue.indexOf(userProjectToDelete);
+            if (index > -1) {
+              this.userProjectsValue.splice(index, 1);
+            }
+            localStorage.setItem('userProjects', JSON.stringify(this.userProjectsValue));
+            // publish updated userProjects to subscribers
+            this.userProjectsSubject.next(this.userProjectsValue);
+            return userProject;
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
+  } 
 
   updateProjectMember(userProjectId: string, params) {
     console.log(params);

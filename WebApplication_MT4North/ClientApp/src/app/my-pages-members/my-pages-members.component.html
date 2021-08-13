@@ -49,10 +49,12 @@
       </div>
     </div>-->
             </td>
-            <td class="align-middle" >
+            <td class="align-middle">
               <p *ngIf="userProject.status == 0" class="font-italic float-left">Inbjudan skickad</p>
-              <button class="btn btn-danger btn-sm float-right" [hidden]="!hasRights || userProject.isEditable || currentUser.id == userProject.user.id">Ta bort</button>
-              <button class="btn btn-danger btn-sm float-right" *ngIf="currentUser.id == userProject.user.id">Lämna</button>
+              <button class="btn btn-danger btn-sm float-right" [hidden]="!hasRights || userProject.isEditable || currentUser.id == userProject.user.id" (click)="leaveProject(userProject.userprojectid)">Ta bort</button>
+              <button class="btn btn-danger btn-sm float-right" [disabled]="isCurrentUserOnlyOwner()" *ngIf="currentUser.id == userProject.user.id" (click)="leaveProject(userProject.userprojectid)">Lämna</button>
+
+              
 
               <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || userProject.isEditable || userProject.status == 0" (click)="userProject.isEditable = true">Ändra</button>
               <input type="submit" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!userProject.isEditable" value="Spara" (click)="updateProjectMember(userProject)">

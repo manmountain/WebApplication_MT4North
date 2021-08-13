@@ -530,7 +530,7 @@ namespace WebApplication_MT4North.Controllers
                     {
                         // delete. The owner can remove their own user-project if another owner exists
                         _context.UserProjects.Remove(userProject);
-                        _context.Entry(userNotes).State = EntityState.Modified;
+                        //_context.Entry(userNotes).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         return Ok(userProject);
                     }
@@ -539,7 +539,7 @@ namespace WebApplication_MT4North.Controllers
                 {
                     // delete the UserProject. The owner can delete others participants user-projects
                     _context.UserProjects.Remove(userProject);
-                    _context.Entry(userNotes).State = EntityState.Modified;
+                    //_context.Entry(userNotes).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     return Ok(userProject);
                 }
@@ -552,13 +552,13 @@ namespace WebApplication_MT4North.Controllers
                 {
                     // delete. A user can delete their own user-project
                     _context.UserProjects.Remove(userProject);
-                    _context.Entry(userNotes).State = EntityState.Modified;
+                    //_context.Entry(userNotes).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     return Ok(userProject);
                 }
             }
 
-            // If no case above is satisfied. It must be forbidden
+            // If no case above is satisfied. It must be forbidden (insufficient permissions or not allowed"
             return Forbid();
         }
 

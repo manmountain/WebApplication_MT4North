@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { Alert, AlertType } from '@app/_models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AlertService {
@@ -19,8 +20,8 @@ export class AlertService {
     this.alert(new Alert({ ...options, type: AlertType.Success, message }));
   }
 
-  error(message: string, options?: any) {
-    this.alert(new Alert({ ...options, type: AlertType.Error, message }));
+  error(err: string, options?: any) {
+    this.alert(new Alert({ ...options, type: AlertType.Error, err }));
   }
 
   info(message: string, options?: any) {

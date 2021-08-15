@@ -31,8 +31,9 @@ export class MyPagesStartComponent implements OnDestroy {
         data => { },
 
         error => {
-          this.error = error;
-          //this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.error = err;
+          //this.alertService.error(err);
         });
 
     this.invitationsSubscription = this.projectService.invitations.subscribe(x => { this.invitations = x; });
@@ -44,10 +45,11 @@ export class MyPagesStartComponent implements OnDestroy {
         },
 
         error => {
-          console.log('error: ', error);
+          const err = error.error.message || error.statusText;
+          console.log('error: ', err);
 
-          this.error = error;
-          //this.alertService.error(error);
+          this.error = err;
+          //this.alertService.error(err);
         });
 
     console.log('invitations: ', this.invitations);
@@ -74,9 +76,10 @@ export class MyPagesStartComponent implements OnDestroy {
           //this.loading = false;
         },
         error => {
-          console.log('invitation accepted not working: ', error);
+          const err = error.error.message || error.statusText;
+          console.log('invitation accepted not working: ', err);
 
-          //this.alertService.error(error);
+          //this.alertService.error(err);
           //this.loading = false;
         });
   }
@@ -98,9 +101,10 @@ export class MyPagesStartComponent implements OnDestroy {
           //this.loading = false;
         },
         error => {
-          console.log('invitation rejected not working: ', error);
+          const err = error.error.message || error.statusText;
+          console.log('invitation rejected not working: ', err);
 
-          //this.alertService.error(error);
+          //this.alertService.error(err);
           //this.loading = false;
         });
   }

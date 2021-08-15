@@ -89,6 +89,10 @@ export class ProjectService {
     return this.activitiesSubject.value;
   }
 
+  public get projectValue(): Project[] {
+    return this.projectSubjects.value;
+  }
+
   createProject(name: string, description: string) {
     return this.http.post<any>(`${environment.apiUrl}/Projects`, { name, description }).pipe(map(project => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -463,6 +467,33 @@ export class ProjectService {
       return note;
     }));
   }
+
+  deleteProject(projectId: string): Observable<any> {
+    console.log("project.service delete project with id: " + projectId);
+    return this.http.delete(`${environment.apiUrl}/Projects/${projectId}`, { observe: 'response' })
+      .pipe(
+        tap(
+          project => {
+            // remove from localstorage
+            let projectToDelete = this.projectValue.find(y => y.projectid == projectId);
+            let index = this.projectValue.indexOf(projectToDelete);
+            if (index > -1) {
+              this.projectValue.splice(index, 1);
+            }
+            localStorage.setItem('userProjects', JSON.stringify(this.projectValue));
+            // publish updated userProjects to subscribers
+            this.projectSubjects.next(this.projectValue);
+            return project;
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
+  } 
+
+
 
 
   //update(id, params) {

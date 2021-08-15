@@ -72,7 +72,8 @@ export class MyPagesEditAccountComponent implements OnDestroy {
           this.loading = false;
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
           this.loading = false;
         });
   }

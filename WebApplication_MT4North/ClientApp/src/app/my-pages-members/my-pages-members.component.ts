@@ -64,7 +64,8 @@ export class MyPagesMembersComponent implements OnDestroy {
           this.alertService.success('Projektmedlemmen har uppdaterats', { keepAfterRouteChange: true });
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
         });
   }
 
@@ -91,7 +92,8 @@ export class MyPagesMembersComponent implements OnDestroy {
           },
           error => {
             this.resetInvitations();
-            this.alertService.error(error);
+            const err = error.error.message || error.statusText;
+            this.alertService.error(err);
           });
 
     }

@@ -100,8 +100,31 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
           this.editModeIsOn = false;
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
           this.loading = false;
         });
   }
+
+  deleteProject(projectId: string) {
+    console.log("delete project with id: " + projectId);
+    this.projectService.deleteProject(projectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log("ok");
+          this.alertService.success('Projektet tagits bort', { keepAfterRouteChange: true });
+        },
+        error => {
+          if (error.status == 403) {
+            this.alertService.error('Otillåtet. Du måste vara projektägare för att ta bort projektet');
+          }
+          if (error.status == 404) {
+            this.alertService.error('Projektet hittades inte. Försök igen senare');
+          }
+          console.log("error"+error);
+        }
+      );
+  }
+
 }

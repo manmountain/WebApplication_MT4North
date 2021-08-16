@@ -4,6 +4,7 @@ import { User, UserProject, Project, ProjectRights, ProjectRole } from '../_mode
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer-component',
@@ -28,7 +29,8 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     private alertService: AlertService,
     private accountService: AccountService,
     private projectService: ProjectService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     this.accountService.getCurrentUser();
 
@@ -107,13 +109,14 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
   }
 
   deleteProject(projectId: string) {
-    console.log("delete project with id: " + projectId);
     this.projectService.deleteProject(projectId)
       .pipe(first())
       .subscribe(
         data => {
           console.log("ok");
           this.alertService.success('Projektet tagits bort', { keepAfterRouteChange: true });
+          // redirect to 'mina-sidor'
+          this.router.navigate(['/my-pages/start']);
         },
         error => {
           if (error.status == 403) {

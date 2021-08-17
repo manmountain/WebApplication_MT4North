@@ -4,7 +4,7 @@ import { User, UserProject, UserInvitation, ProjectRights, ProjectRole } from '.
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,14 +28,17 @@ export class MyPagesMembersComponent implements OnDestroy {
     private projectService: ProjectService,
     private alertService: AlertService,
     private accountService: AccountService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private router: Router  ) {
 
     this.accountService.getCurrentUser();
     this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; });
     this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => {
       this.userProjects = x;
       this.currentUserProject = this.userProjects.filter(x => x.userid == this.currentUser.id)[0];
-      this.hasRights = this.currentUserProject.rights == ProjectRights.READWRITE && this.currentUserProject.role == ProjectRole.OWNER;
+      if (this.currentUserProject) {
+        this.hasRights = this.currentUserProject.rights == ProjectRights.READWRITE && this.currentUserProject.role == ProjectRole.OWNER;
+      }
     });
   }
 
@@ -64,7 +67,8 @@ export class MyPagesMembersComponent implements OnDestroy {
           this.alertService.success('Projektmedlemmen har uppdaterats', { keepAfterRouteChange: true });
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
         });
   }
 
@@ -91,7 +95,8 @@ export class MyPagesMembersComponent implements OnDestroy {
           },
           error => {
             this.resetInvitations();
-            this.alertService.error(error);
+            const err = error.error.message || error.statusText;
+            this.alertService.error(err);
           });
 
     }
@@ -114,6 +119,37 @@ export class MyPagesMembersComponent implements OnDestroy {
 
   get fi() {
     return this.invitationForm.controls;
+  }
+
+  leaveProject(userProjectId: string) {
+    this.projectService.leaveProject(userProjectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log('ok delete userproject id: ' + userProjectId)
+          // tell user that everything worked. User project deleted
+          this.alertService.success('Medlem borttagen', { keepAfterRouteChange: true });
+          // redirect to 'mina-sidor' if a User have removed their own UserProject (i.e left the project)
+          if (this.currentUser.id == data.body.userid) {
+            this.currentUserProject = null;
+            this.router.navigate(['/my-pages/start']);
+            // How do we remove the project from the side-nav?
+          }
+        },
+        error => {
+          if (error.status == 403) {
+            const reason = (this.currentUserProject.role == ProjectRole.OWNER)?("Det måste finnas minst en projekt ägare"):("Som deltagare kan du bara ta bort dig själv") 
+            this.alertService.error('Otillåtet. ' + reason, { keepAfterRouteChange: true });
+            // if user is owner => owner can only leave if their is another owner
+            // if not owner, you can only delete your self
+          }
+        });
+  }
+
+  isCurrentUserOnlyOwner() {
+    var nOwners = 0
+    this.userProjects.forEach(u => { if (u.role == ProjectRole.OWNER) { nOwners++; } } );
+    return (this.currentUserProject.role == ProjectRole.OWNER) && nOwners<2;
   }
 
 }

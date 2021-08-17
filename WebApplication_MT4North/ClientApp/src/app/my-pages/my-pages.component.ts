@@ -46,8 +46,9 @@ export class MyPagesComponent implements OnDestroy {
         data => { console.log('reloaded nav menu');},
 
         error => {
-          this.error = error;
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.error = err;
+          this.alertService.error(err);
         });
     //console.log("projects in my-pages: ", this.projects[0].name);
 
@@ -97,14 +98,16 @@ export class MyPagesComponent implements OnDestroy {
                           },
 
                           error => {
-                            this.error = error;
-                            this.alertService.error(error);
+                            const err = error.error.message || error.statusText;
+                            this.error = err;
+                            this.alertService.error(err);
                           });
                     },
 
                     error => {
-                      this.error = error;
-                      this.alertService.error(error);
+                      const err = error.error.message || error.statusText;
+                      this.error = err;
+                      this.alertService.error(err);
                     });
 
 
@@ -112,14 +115,16 @@ export class MyPagesComponent implements OnDestroy {
               },
 
               error => {
-                this.error = error;
-                this.alertService.error(error);
+                const err = error.error.message || error.statusText;
+                this.error = err;
+                this.alertService.error(err);
               });
         },
 
         error => {
-          this.error = error;
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.error = err;
+          this.alertService.error(err);
         });
 
 
@@ -160,7 +165,8 @@ export class MyPagesComponent implements OnDestroy {
           this.loading = false;
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
           this.loading = false;
         });
     this.isFirstStepModal = false;
@@ -189,9 +195,10 @@ export class MyPagesComponent implements OnDestroy {
             this.loading = false;
           },
           error => {
-            console.log('user NOT invited from my pages. error: ', error);
+            const err = error.error.message || error.statusText;
+            console.log('user NOT invited from my pages. error: ', err);
 
-            this.alertService.error(error);
+            this.alertService.error(err);
             this.loading = false;
           });
       this.isFirstStepModal = false;

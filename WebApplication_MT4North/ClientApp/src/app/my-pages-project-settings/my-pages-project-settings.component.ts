@@ -4,6 +4,7 @@ import { User, UserProject, Project, ProjectRights, ProjectRole } from '../_mode
 import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer-component',
@@ -28,7 +29,8 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
     private alertService: AlertService,
     private accountService: AccountService,
     private projectService: ProjectService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     this.accountService.getCurrentUser();
 
@@ -100,8 +102,32 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
           this.editModeIsOn = false;
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
           this.loading = false;
         });
   }
+
+  deleteProject(projectId: string) {
+    this.projectService.deleteProject(projectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log("ok");
+          this.alertService.success('Projektet tagits bort', { keepAfterRouteChange: true });
+          // redirect to 'mina-sidor'
+          this.router.navigate(['/my-pages/start']);
+        },
+        error => {
+          if (error.status == 403) {
+            this.alertService.error('Otillåtet. Du måste vara projektägare för att ta bort projektet');
+          }
+          if (error.status == 404) {
+            this.alertService.error('Projektet hittades inte. Försök igen senare');
+          }
+          console.log("error"+error);
+        }
+      );
+  }
+
 }

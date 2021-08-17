@@ -54,7 +54,7 @@
       </tbody>
     </table>
     <hr />
-    <button class="btn btn-danger btn-sm float-left mr-3" type="button" [hidden]="!hasRights">Ta bort projektet</button>
+    <button class="btn btn-danger btn-sm float-left mr-3" type="button" [hidden]="!hasRights"  (click)="deleteProject(selectedProject.projectid)">Ta bort projektet</button>
     <button type="button" class="btn btn-secondary btn-sm float-left mr-2" [hidden]="!hasRights" onmousedown="event.preventDefault()" data-toggle="modal" data-target="#resetModal">Nollställ projektet</button>
     <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || editModeIsOn" (click)="activateEditMode(true)">Ändra</button>
     <input type="submit" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!editModeIsOn" value="Spara">

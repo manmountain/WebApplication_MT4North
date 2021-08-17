@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+//import { throwError } from 'rxjs'; 
+import { map, tap, catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { Project, UserProject, Theme, Activity, ActivityInfo, ProjectRole, ProjectRights } from '@app/_models';
@@ -86,6 +87,10 @@ export class ProjectService {
 
   public get activitiesValue(): Activity[] {
     return this.activitiesSubject.value;
+  }
+
+  public get projectValue(): Project[] {
+    return this.projectSubjects.value;
   }
 
   createProject(name: string, description: string) {
@@ -195,6 +200,36 @@ export class ProjectService {
         return x;
       }));
   }
+
+  leaveProject(userProjectId: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/UserProjects/${userProjectId}`, { observe: 'response' })
+      .pipe(
+        tap(
+          data => {
+            // remove from localstorage
+            let userProjectToDelete = this.userProjectsValue.find(y => y.userprojectid == userProjectId);
+            let index = this.userProjectsValue.indexOf(userProjectToDelete);
+            if (index > -1) {
+              this.userProjectsValue.splice(index, 1);
+            }
+            localStorage.setItem('userProjects', JSON.stringify(this.userProjectsValue));
+            // publish updated userProjects to subscribers
+            this.userProjectsSubject.next(this.userProjectsValue);
+            // if the current user removed them self, remove the project from the projects array
+            let projectToRemove = this.projectValue.find(p => p.projectid == userProjectToDelete.projectid);
+            let projectIndex = this.projectValue.indexOf(projectToRemove);
+            if (projectIndex > -1) {
+              this.projectValue.splice(projectIndex, 1);
+            }
+            return data;
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
+  } 
 
   updateProjectMember(userProjectId: string, params) {
     console.log(params);
@@ -438,6 +473,32 @@ export class ProjectService {
       return note;
     }));
   }
+
+  deleteProject(projectId: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/Projects/${projectId}`, { observe: 'response' })
+      .pipe(
+        tap(
+          project => {
+            // remove from localstorage
+            let projectToDelete = this.projectValue.find(y => y.projectid == projectId);
+            let index = this.projectValue.indexOf(projectToDelete);
+            if (index > -1) {
+              this.projectValue.splice(index, 1);
+            }
+            localStorage.setItem('userProjects', JSON.stringify(this.projectValue));
+            // publish updated userProjects to subscribers
+            this.projectSubjects.next(this.projectValue);
+            return project;
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
+  } 
+
+
 
 
   //update(id, params) {

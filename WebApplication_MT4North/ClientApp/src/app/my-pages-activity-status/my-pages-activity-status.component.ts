@@ -77,15 +77,17 @@ export class MyPagesActivityStatusComponent {
               },
 
               error => {
-                console.log('error getting activities: ', error);
-                this.error = error;
-                this.alertService.error(error);
+                const err = error.error.message || error.statusText;
+                console.log('error getting activities: ', err);
+                this.error = err;
+                this.alertService.error(err);
               });        },
 
         error => {
-          console.log('error getting themes: ', error);
-          this.error = error;
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          console.log('error getting themes: ', err);
+          this.error = err;
+          this.alertService.error(err);
         });
 
     this.userProjectsSubscription = this.projectService.userProjects.subscribe(x => {
@@ -259,7 +261,8 @@ export class MyPagesActivityStatusComponent {
         error => {
           this.clearAddActivityForm();
           this.closeAddActivityModal.nativeElement.click();
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
         });
   }
 
@@ -274,9 +277,9 @@ export class MyPagesActivityStatusComponent {
           this.alertService.success('Dina ändringar har sparats.', { keepAfterRouteChange: true });
         },
         error => {
-          console.log('activity NOT updated. error: ', error);
-
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          console.log('activity NOT updated. error: ', err);
+          this.alertService.error(err);
         });
   }
 
@@ -322,7 +325,8 @@ export class MyPagesActivityStatusComponent {
           this.noteForm.controls.text.setValue('');
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
         });
   }
 
@@ -340,7 +344,8 @@ export class MyPagesActivityStatusComponent {
           this.alertService.success('Anteckningen har tagits bort', { keepAfterRouteChange: true });
         },
         error => {
-          this.alertService.error(error);
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
         });
   }
 

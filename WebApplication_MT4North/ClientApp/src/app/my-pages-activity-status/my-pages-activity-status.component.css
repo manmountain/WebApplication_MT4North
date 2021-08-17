@@ -420,11 +420,6 @@ a.im-checkbox {
   color: #f77780;
 }
 
-.im-badge-0 {
-  background: #f77780 !important;
-  color: #feeff0;
-}
-
 /*
 .card.im-theme-0 {
   background-color: #feeff0;
@@ -443,15 +438,20 @@ a.im-checkbox {
   background: #faa7ad !important;
 }
 
-.im-theme-add-btn-0 {
+.activity-add-btn {
     color: #676767;
 }
 
-  .im-theme-add-btn-0:hover {
-    /*    background-color: #fde3e6;
-    color: black;*/
-    color: #f77780;
-  }
+.im-theme-add-btn-0:hover {
+  /*    background-color: #fde3e6;
+  color: black;*/
+  color: #f77780;
+}
+
+.im-badge-0 {
+  background: #f77780 !important;
+  color: #feeff0;
+}
 
 .red {
     background: red !important;
@@ -481,6 +481,18 @@ a.im-checkbox {
 .panel-body.im-theme-1 {
   background: white !important;
 }
+
+.im-theme-add-btn-1:hover {
+  /*    background-color: #fde3e6;
+  color: black;*/
+  color: #f6987e;
+}
+
+.im-badge-1 {
+  background: #f6987e !important;
+  color: #fef7f5;
+}
+
 /*
    .progress-bar.im-theme-2 {
    background-color: #f6987e !important;
@@ -504,6 +516,17 @@ a.im-checkbox {
 
 .panel-body.im-theme-2 {
   background: white !important;
+}
+
+.im-theme-add-btn-2:hover {
+  /*    background-color: #fde3e6;
+  color: black;*/
+  color: #f4af7b;
+}
+
+.im-badge-2 {
+  background: #f4af7b !important;
+  color: #fef6f1;
 }
 /*
    .progress-bar.im-theme-3 {

@@ -306,6 +306,29 @@ export class MyPagesActivityStatusComponent {
     this.updateActivity(this.currentActivity)
   }
 
+  deleteActivity(activityid: string, activityinfoid: string, isBaseActivity: boolean) {
+    this.projectService.deleteActivity(parseInt(activityid), isBaseActivity)
+      .pipe(first())
+      .subscribe(
+        activity => {
+          this.alertService.success('Aktiviteten har tagits bort', { keepAfterRouteChange: true });
+        },
+        error => {
+          if (error.status == 403) {
+            if (isBaseActivity) {
+              this.alertService.error('Otillåtet. Du måste ha Administrations rättigheter för att ta bort en bas aktivitet');
+            } else {
+              this.alertService.error('Otillåtet. Du måste ha läs och skriv rättigheter för att ta bort aktiviteten');
+            }
+          } else if (error.status == 404) {
+            this.alertService.error('Aktiviteten hittades inte. Försök igen senare');
+          } else {
+            this.alertService.error('Okänt fel. Kontakta support eller försök igen senare. Felkod: ', error.status);
+          }
+        }
+      );
+  }
+
   addNote(activity: Activity) {
 
     this.noteForm.controls.timestamp.setValue(new Date().toJSON());

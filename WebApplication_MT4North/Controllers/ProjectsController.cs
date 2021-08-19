@@ -109,7 +109,7 @@ namespace WebApplication_MT4North.Controllers
             if (callerUserProject == null)
             {
                 // The user doesnt have READ rights to this project
-                return Unauthorized();
+                return Forbid();
             }
 
             if (project == null)

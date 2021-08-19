@@ -326,6 +326,10 @@ namespace WebApplication_MT4North.Controllers
                 return BadRequest();
             }
 
+            if (userproject.Role == UserProjectRoles.OWNER && userproject.Rights != UserProjectPermissions.READWRITE)
+            {
+                userproject.Rights = UserProjectPermissions.READWRITE;
+            }
             if (callerUserProject.UserProjectId == userproject.UserProjectId)
             {
                 callerUserProject.Role = userproject.Role;

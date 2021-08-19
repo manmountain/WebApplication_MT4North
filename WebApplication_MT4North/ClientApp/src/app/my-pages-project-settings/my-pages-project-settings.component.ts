@@ -113,7 +113,6 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
       .pipe(first())
       .subscribe(
         data => {
-          console.log("ok");
           this.alertService.success('Projektet tagits bort', { keepAfterRouteChange: true });
           // redirect to 'mina-sidor'
           this.router.navigate(['/my-pages/start']);

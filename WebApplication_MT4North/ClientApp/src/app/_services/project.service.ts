@@ -357,7 +357,6 @@ export class ProjectService {
       };
       localStorage.setItem('activities', JSON.stringify(getCircularReplacer()));
       this.activitiesSubject.next(Array.from(activities.values()));
-
       return Array.from(activities.values());
     }));
   }
@@ -407,6 +406,44 @@ export class ProjectService {
       }
       return activity;
     }));
+  }
+
+  deleteActivity(activityid: number, isBaseActivity: boolean) {
+    return this.http.delete(`${environment.apiUrl}/Activities/${activityid}`, { observe: 'response' })
+      .pipe(
+        tap(
+          data => {
+            // remove activity from localstorage
+            let activityToDelete = this.activitiesValue.find(y => y.activityid == activityid);
+            let index = this.activitiesValue.indexOf(activityToDelete);
+            if (index > -1) {
+              this.activitiesValue.splice(index, 1);
+            }
+            // Circular replace for converting activities to JSON
+            const getCircularReplacer = () => {
+              const seen = new WeakSet();
+              return (key, value) => {
+                if (typeof value === "object" && value !== null) {
+                  if (seen.has(value)) {
+                    return;
+                  }
+                  seen.add(value);
+                }
+                return value;
+              };
+            };
+
+            localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+            // publish updated userProjects to subscribers
+            this.activitiesSubject.next(this.activitiesValue);
+            return data.body;
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
   }
 
   addNote(activityid: number, params) {

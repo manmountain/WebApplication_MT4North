@@ -351,26 +351,36 @@ namespace WebApplication_MT4North.Controllers
 
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            var roles = await _userManager.GetRolesAsync(user);
+
             if (user == null)
             {
                 return NotFound();
             }
+
+            // Check if its a baseactivity, then require that the user got AdminUser-Role
+            if (activity.BaseActivityInfoId != null && !roles.Contains("AdminUser"))
+            {
+                return Forbid();
+            }
+
             // Check if user got W or RW permissions for the project the activity belongs to
             var userproject = await _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
-                                                                p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
-            if (userproject == null)
+                                                            p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
+            if (userproject?.Count < 1)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             // Remove custom activity info if we got one
             if (activity.CustomActivityInfoId != null)
             {
-                _context.CustomActivityInfos.Remove(activity.CustomActivityInfo);
+                var customActivityToDelete = await _context.CustomActivityInfos.FindAsync(activity.CustomActivityInfoId);
+                _context.CustomActivityInfos.Remove(customActivityToDelete);// activity.CustomActivityInfo);
             }
             if (activity.Notes.Count > 0)
             {
-                _context.Notes.RemoveRange(activity.Notes); 
+                _context.Notes.RemoveRange(activity.Notes);
             }
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();

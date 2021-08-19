@@ -124,7 +124,6 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
           if (error.status == 404) {
             this.alertService.error('Projektet hittades inte. Försök igen senare');
           }
-          console.log("error"+error);
         }
       );
   }

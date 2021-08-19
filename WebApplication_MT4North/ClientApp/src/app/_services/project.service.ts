@@ -122,40 +122,67 @@ export class ProjectService {
   }
 
   selectProject(projectId: string) {
-    return this.http.get<Project>(`${environment.apiUrl}/Projects/${projectId}`).pipe(map(project => {
-
-      localStorage.setItem('selectedProject', JSON.stringify(project));
-
-      this.selectedProjectSubject.next(project);
-
-      return project;
-    }));
+    return this.http.get<Project>(`${environment.apiUrl}/Projects/${projectId}`)
+      .pipe(
+        tap(
+          project => {
+           localStorage.setItem('selectedProject', JSON.stringify(project));
+           this.selectedProjectSubject.next(project);
+           return project;
+          },
+          error => {
+            if (error.status == 403) {
+              console.log('Otillåtet. Du måste ha läs rättigheter för att besöka projektet');
+            } else if (error.status == 404) {
+              console.log('Projektet hittades inte');
+            } else {
+              console.log('Okänt fel. Kontakta support eller försök igen senare');
+            }
+            console.log("error" + error);
+          }
+        )
+      );
   }
 
   getUserProjects(projectId: string) {
     console.log('getting user projects ');
 
-    return this.http.get<UserProject[]>(`${environment.apiUrl}/UserProjects/Project/${projectId}`).pipe(map(userProjects => {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
-      //console.log('selected project value in service: ', this.userProjectsValue);
-      const getCircularReplacer = () => {
-        const seen = new WeakSet();
-        return (key, value) => {
-          if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-              return;
+    return this.http.get<UserProject[]>(`${environment.apiUrl}/UserProjects/Project/${projectId}`)
+      .pipe(
+        tap(
+          userProjects => {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            //console.log('selected project value in service: ', this.userProjectsValue);
+            const getCircularReplacer = () => {
+              const seen = new WeakSet();
+              return (key, value) => {
+                if (typeof value === "object" && value !== null) {
+                  if (seen.has(value)) {
+                    return;
+                  }
+                  seen.add(value);
+                }
+                return value;
+              };
+            };
+            localStorage.setItem('userProjects', JSON.stringify(userProjects, getCircularReplacer()));
+
+            this.userProjectsSubject.next(userProjects);
+
+            return userProjects;
+          },
+          error => {
+            if (error.status == 403) {
+              console.log('Otillåtet. Du måste ha läs rättigheter för att se projektmedlemmar projektet');
+            } else if (error.status == 404) {
+              console.log('Projektets medlemmar hittades inte');
+            } else {
+              console.log('Okänt fel. Kontakta support eller försök igen senare');
             }
-            seen.add(value);
+            console.log("error" + error);
           }
-          return value;
-        };
-      };
-      localStorage.setItem('userProjects', JSON.stringify(userProjects, getCircularReplacer()));
-
-      this.userProjectsSubject.next(userProjects);
-
-      return userProjects;
-    }));;
+        )
+      );
   }
 
   updateProject(params) {

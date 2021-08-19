@@ -1,4 +1,4 @@
-#home {
+#intro {
   background: #336699 !important;
   overflow: hidden;
 }
@@ -7,3 +7,15 @@ section {
   scroll-margin-top: 75px;
 }
 
+img {
+  width: 25vw;
+  height: 100%;
+  border-radius: 3%;
+}
+
+a.anchor {
+  display: block;
+  position: relative;
+  top: -60px;
+  visibility: hidden;
+}

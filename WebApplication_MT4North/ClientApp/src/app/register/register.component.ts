@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-
+import { Subscription } from 'rxjs';
 import { AccountService, AlertService } from '@app/_services';
 
 @Component({ templateUrl: 'register.component.html' })
@@ -10,6 +10,8 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   loading = false;
   submitted = false;
+  email = '';
+  sub: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -20,13 +22,23 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      //username: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]]
-    });
+    this.sub = this.route
+      .queryParams
+      .subscribe((params) => {
+        console.log(params['email']);
+
+        this.email = params['email'];
+        console.log(this.email);
+        this.form = this.formBuilder.group({
+          firstName: ['', Validators.required],
+          lastName: ['', Validators.required],
+          //username: ['', Validators.required],
+          email: [this.email, Validators.required],
+          password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]]
+        });
+      }
+      );
+
   }
 
   // convenience getter for easy access to form fields

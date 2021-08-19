@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { ViewService, AccountService } from "../_services";
 import { HostListener } from '@angular/core';
 
@@ -41,6 +40,13 @@ export class NavMenuComponent {
   makeActive(navItem: string) {
     this.selectedNavItem = navItem;
   }
+
+  //isCurrentLocation(location: string) {
+  //  var url = $location.url();
+  //  if (url = location)
+  //    return true
+  //  return false
+  //}
 
   logout() {
     this.accountService.logout();

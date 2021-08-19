@@ -37,6 +37,14 @@ header {
 .nav-body_width {
   width: 100%; 
 }
+
+a.anchor {
+  display: block;
+  position: relative;
+  top: -60px;
+  visibility: hidden;
+}
+
 .nav_title{
   justify-content:center;
 
@@ -46,6 +54,10 @@ header {
   padding-right:2rem;
   text-align:left;
   padding-bottom: 0px;
+}
+
+.nav-item, .navbar-brand {
+  border-bottom: 3px solid #336699;
 }
 
 .nav-item.active {

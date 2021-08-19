@@ -127,6 +127,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.spec.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\home\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\login\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\my-pages-edit-account\index.ts" />

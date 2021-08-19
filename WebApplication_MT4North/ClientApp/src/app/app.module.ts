@@ -16,6 +16,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './login';
 import { FooterComponent } from './footer/footer.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { HelpComponent } from './help/help.component';
 import { MyPagesComponent } from './my-pages/my-pages.component';
 import { MyPagesMembersComponent } from './my-pages-members/my-pages-members.component';
 import { MyPagesProjectSettingsComponent } from './my-pages-project-settings/my-pages-project-settings.component';
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'counter', component: CounterComponent },
+  { path: 'help', component: HelpComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   { path: 'login', component: LoginComponent },
   { path: 'footer', component: FooterComponent },
@@ -86,6 +88,7 @@ const routes: Routes = [
     CounterComponent,
     FetchDataComponent,
     LoginComponent,
+    HelpComponent,
     ContactUsComponent,
     MyPagesComponent,
     MyPagesStartComponent,
@@ -115,7 +118,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
    // ConnectionServiceModule,
-    RouterModule.forRoot(routes)    
+    RouterModule.forRoot(routes, { anchorScrolling: 'enabled' })    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -183,9 +183,9 @@ namespace WebApplication_MT4North.Controllers
             // Check if user got W or RW permissions for the project the activity belongs to
             var userproject = await _context.UserProjects.Where(p => p.ProjectId == activity.ProjectId &&
                                                                 p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
-            if (userproject == null)
+            if (userproject.Count == 0)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             _context.Entry(activity).State = EntityState.Modified;
@@ -207,7 +207,6 @@ namespace WebApplication_MT4North.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 

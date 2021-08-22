@@ -161,94 +161,22 @@
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />
                                   <div class="row">
+                                    <!-- Edit Activity Dates --> 
                                     <div class="col-12">
-                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#datesModal-r'+i+'c'+j+'-'+k">
+                                      <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="setCurrentActivityDates(activity)">
                                         <p>
                                           <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum</span>
                                         </p>
                                       </a>
                                     </div>
-
+                                    <button #openEditActivityDatesModalButton [hidden]="true" data-toggle="modal" data-target="#editActivityDatesModal"></button>
+                                    <!-- Edit Activity Notes -->
                                     <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#notesModal-r'+i+'c'+j+'-'+k">
                                         <p>
                                           <i class="fa fa-pen-square fa-fw"></i><span class="ml-1">Anteckningar ({{activity.notes.length}})</span>
                                         </p>
                                       </a>
-                                    </div>
-
-                                    <div class="modal fade" [attr.id]="'datesModal-r'+i+'c'+j+'-'+k" tabindex="-1" role="dialog" [attr.aria-labelledby]="'datesModalLabel-r'+i+'c'+j+'-'+k" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h5 class="modal-title" id="datesModalLabel-r{{i}}c{{j}}-{{k}}">
-                                              Datum
-                                              <br />
-                                              <small>för {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}} i {{theme.name}}</small>
-                                            </h5>
-                                            <button type="button" class="closeModal mr-0" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                            </button>
-                                          </div>
-                                          <div class="modal-body">
-                                            <div class="row">
-                                              <!--
-            <div class="col-12 mb-3">
-              <p>Genom att sätta en deadline för när aktiviteten ska vara genomförd, samt ange när aktiviteten påbörjades respektive avslutades får ni en bättre möjlighet att följa projektets utveckling över tid.</p>
-            </div>
-              -->
-                                              <div class="col-12">
-                                                <div class="row">
-                                                  <div class="col-2 mr-1">
-                                                    <h5>
-                                                      <small>
-                                                        <span>Deadline:</span>
-                                                      </small>
-                                                    </h5>
-                                                  </div>
-                                                  <div class="col my-auto">
-                                                    <input type="date" class="rounded" id="deadline" />
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div class="col-12">
-                                                <div class="row">
-                                                  <div class="col-2 mr-1">
-                                                    <h5>
-                                                      <small>
-                                                        <span>Påbörjad:</span>
-                                                      </small>
-                                                    </h5>
-                                                  </div>
-                                                  <div class="col my-auto">
-                                                    <input type="date" class="rounded" id="started" />
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div class="col-12">
-                                                <div class="row">
-                                                  <div class="col-2 mr-1">
-                                                    <h5>
-                                                      <small>
-                                                        <span>Avslutad:</span>
-                                                      </small>
-                                                    </h5>
-                                                  </div>
-                                                  <div class="col my-auto">
-                                                    <input type="date" class="rounded" id="finished" />
-                                                  </div>
-                                                </div>
-                                              </div>
-
-                                            </div>
-                                          </div>
-
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Spara</button>
-                                          </div>
-                                        </div>
-                                      </div>
                                     </div>
 
                                     <!-- Modal -->
@@ -549,6 +477,47 @@
       </div>
     </div>
   </form>
+
+  <!---->
+  <form [formGroup]="editActivityDatesForm" (ngSubmit)="editActivityDates()">
+    <div class="modal fade" id="editActivityDatesModal" tabindex="-1" role="dialog" [attr.aria-labelledby]="editActivityDatesModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="top: 10%" role="dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Datum 
+              <br />
+              <small>för {{currentActivityInfo?.name}} i {{currentActivityInfo?.theme?.name}}</small>
+            </h5>
+            <button #closeEditActivityDatesModal type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="activityDeadlineDate">Deadline</label>
+              <input id="activityDeadlineDate" type="text" formControlName="deadline" class="form-control rounded" type="date" [value]="currentActivity?.deadlinedate?.split('T')[0]" />
+            </div>
+            <div class="form-group">
+              <label for="activityStartedDate">Påbörjad</label>
+              <input id="activityStartedDate" type="text" formControlName="started" class="form-control rounded" type="date" [value]="currentActivity?.startdate?.split('T')[0]" />
+            </div>
+            <div class="form-group">
+              <label for="activityFinishedDate">Avslutad</label>
+              <input id="activityFinishedDate" type="text" formControlName="finished" class="form-control rounded" type="date" [value]="currentActivity?.finishdate?.split('T')[0]" />
+            </div>
+          <div class="modal-footer">
+            <div class="form-group">
+              <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
+              <button type="submit" class="btn btn-primary btn-sm" >Spara</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+  <!---->
 
   <div id="download">
     <img style="background: red" #canvas>

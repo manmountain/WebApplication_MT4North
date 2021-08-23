@@ -188,6 +188,11 @@ namespace WebApplication_MT4North.Controllers
                 return Forbid();
             }
 
+            if (activity.CustomActivityInfo != null)
+            {
+                _context.Entry(activity.CustomActivityInfo).State = EntityState.Modified;
+            }
+
             _context.Entry(activity).State = EntityState.Modified;
 
             try

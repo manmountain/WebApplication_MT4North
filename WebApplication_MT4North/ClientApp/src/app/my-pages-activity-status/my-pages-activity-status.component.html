@@ -470,7 +470,7 @@
             <div class="form-group">
               <button type="button" class="btn btn-danger btn-sm mr-1 float-left" data-dismiss="modal" (click)="deleteActivity(currentActivity.activityid, currentActivityInfo.customactivityinfoid || currentActivityInfo.baseactivityid, currentActivityInfo.hasOwnProperty('baseactivityid'));">Ta bort</button>
               <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
-              <button type="submit" [disabled]="!editActivityInfoForm.valid" class="btn btn-primary btn-sm">Spara</button>
+              <button type="submit" [disabled]="!editActivityInfoForm.valid || !editActivityInfoForm.dirty" class="btn btn-primary btn-sm">Spara</button>
             </div>
           </div>
         </div>

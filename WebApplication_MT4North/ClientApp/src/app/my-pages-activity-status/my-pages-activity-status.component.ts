@@ -305,19 +305,21 @@ export class MyPagesActivityStatusComponent {
   editActivity() {
     // Fixa så att det inte blir null ifall ingen ändring görs i ett fält.
     if (this.isBaseActivity(this.currentActivity)) {
-      this.currentActivity.baseactivityinfo.name = this.editActivityInfoForm.controls.name.value;
-      this.currentActivity.baseactivityinfo.description = this.editActivityInfoForm.controls.description.value;
-      this.currentActivity.baseactivityinfo.theme = this.editActivityInfoForm.controls.theme.value;
-      this.currentActivity.baseactivityinfo.themeid = this.currentActivity.baseactivityinfo.theme.themeid
-      this.currentActivity.baseactivityinfo.phase = this.editActivityInfoForm.controls.phase.value;
+      this.currentActivity.baseactivityinfo.name = this.editActivityInfoForm.controls.name.dirty ? this.editActivityInfoForm.controls.name.value : this.currentActivity.baseactivityinfo.name;
+      this.currentActivity.baseactivityinfo.description = this.editActivityInfoForm.controls.description.dirty ? this.editActivityInfoForm.controls.description.value : this.currentActivity.baseactivityinfo.description;
+      this.currentActivity.baseactivityinfo.theme = this.editActivityInfoForm.controls.theme.dirty ? this.editActivityInfoForm.controls.theme.value : this.currentActivity.baseactivityinfo.theme;
+      this.currentActivity.baseactivityinfo.themeid = this.editActivityInfoForm.controls.theme.dirty ? this.editActivityInfoForm.controls.theme.value.themeid : this.currentActivity.baseactivityinfo.theme.themeid;
+      this.currentActivity.baseactivityinfo.phase = this.editActivityInfoForm.controls.phase.dirty ? this.editActivityInfoForm.controls.phase.value : this.currentActivity.baseactivityinfo.phase;
     } else {
-      this.currentActivity.customactivityinfo.name = this.editActivityInfoForm.controls.name.value;
-      this.currentActivity.customactivityinfo.description = this.editActivityInfoForm.controls.description.value;
-      this.currentActivity.customactivityinfo.theme = this.editActivityInfoForm.controls.theme.value;
-      this.currentActivity.customactivityinfo.themeid = this.currentActivity.customactivityinfo.theme.themeid
-      this.currentActivity.customactivityinfo.phase = this.editActivityInfoForm.controls.phase.value;
-    }
-    this.updateActivity(this.currentActivity)
+      this.currentActivity.customactivityinfo.name = this.editActivityInfoForm.controls.name.dirty ? this.editActivityInfoForm.controls.name.value : this.currentActivity.customactivityinfo.name;
+      this.currentActivity.customactivityinfo.description = this.editActivityInfoForm.controls.description.dirty ? this.editActivityInfoForm.controls.description.value : this.currentActivity.customactivityinfo.description;
+      this.currentActivity.customactivityinfo.theme = this.editActivityInfoForm.controls.theme.dirty ? this.editActivityInfoForm.controls.theme.value : this.currentActivity.customactivityinfo.theme;
+      this.currentActivity.customactivityinfo.themeid = this.editActivityInfoForm.controls.theme.dirty ? this.editActivityInfoForm.controls.theme.value.themeid : this.currentActivity.customactivityinfo.theme.themeid
+      this.currentActivity.customactivityinfo.phase = this.editActivityInfoForm.controls.phase.dirty ? this.editActivityInfoForm.controls.phase.value : this.currentActivity.customactivityinfo.phase;
+    } 
+    this.updateActivity(this.currentActivity);
+    this.closeEditActivityModal.nativeElement.click();
+
   }
 
   isActivityDatesClean() {

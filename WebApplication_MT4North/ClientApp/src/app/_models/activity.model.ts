@@ -6,7 +6,7 @@ export class Activity {
   activityid: number;
   isexcluded: Boolean;
   status: ActivityStatus;
-  startdata: string;
+  startdate: string;
   finishdate: string;
   deadlinedate: string;
   resources: string;
@@ -22,7 +22,7 @@ export class Activity {
     this.activityid = 0;
     this.isexcluded = false;
     this.status = ActivityStatus.NOTSTARTED;
-    this.startdata = null;
+    this.startdate = null;
     this.finishdate = null;
     this.deadlinedate = null;
     this.resources = null;

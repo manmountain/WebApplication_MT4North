@@ -23,6 +23,7 @@ export class MyPagesActivityStatusComponent {
   noteForm: FormGroup;
   activityInfoForm: FormGroup;
   editActivityInfoForm: FormGroup;
+  editActivityDatesForm: FormGroup;
   activities: Activity[] = [];
   testThemes: Theme[] = [];
   hideExcluded: boolean = false;
@@ -51,8 +52,11 @@ export class MyPagesActivityStatusComponent {
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
   @ViewChild('downloadLink', { static: false }) downloadLink: ElementRef;
   @ViewChild('closeAddActivityModal', { static: false }) closeAddActivityModal; 
-  @ViewChild('closeEditActivityModal', { static: false }) closeEditActivityModal; 
+  @ViewChild('closeEditActivityModal', { static: false }) closeEditActivityModal;
+  @ViewChild('closeEditActivityDatesModal', { static: false }) closeEditActivityDatesModal; 
   @ViewChild('openEditActivityModalButton', { static: false }) openEditActivityModalButton;
+  @ViewChild('openEditActivityDatesModalButton', { static: false }) openEditActivityDatesModalButton;
+  
 
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
@@ -129,6 +133,12 @@ export class MyPagesActivityStatusComponent {
       phase: [Validators.required],
       theme: [Validators.required],
       isBaseActivity: [false]
+    });
+
+    this.editActivityDatesForm = this.formBuilder.group({
+      deadline: [],
+      started: [],
+      finished: []
     });
 
   }
@@ -219,6 +229,7 @@ export class MyPagesActivityStatusComponent {
   // convenience getter for easy access to form fields
   get f() { return this.activityInfoForm.controls; }
   get fEdit() { return this.editActivityInfoForm.controls; }
+  get fEditDates() { return this.editActivityDatesForm.controls; }
 
   addActivity() {
     this.submittedActivity = true;
@@ -268,18 +279,21 @@ export class MyPagesActivityStatusComponent {
 
   updateActivity(activity: Activity) {
     this.alertService.clear();
-
     this.projectService.updateActivity(activity.activityid, activity)
       .pipe(first())
       .subscribe(
         data => {
-          console.log('activity updated: ', data);
+          // console.log('activity updated: ', data);
           this.alertService.success('Dina ändringar har sparats.', { keepAfterRouteChange: true });
         },
         error => {
-          const err = error.error.message || error.statusText;
-          console.log('activity NOT updated. error: ', err);
-          this.alertService.error(err);
+          if (error.status == 403) {
+              this.alertService.error('Otillåtet. Du måste ha läs och skriv rättigheter för att ta ändra aktiviteten');
+          } else if (error.status == 404) {
+            this.alertService.error('Aktiviteten hittades inte. Försök igen senare');
+          } else {
+            this.alertService.error('Okänt fel. Kontakta support eller försök igen senare. Felkod: ', error.status);
+          }
         });
   }
 
@@ -306,6 +320,30 @@ export class MyPagesActivityStatusComponent {
     this.updateActivity(this.currentActivity)
   }
 
+  editActivityDates() {
+    let edits = 0;
+    if (this.editActivityDatesForm.controls.deadline.value && this.editActivityDatesForm.controls.deadline.value.trim().length > 0) {
+      this.currentActivity.deadlinedate = this.editActivityDatesForm.controls.deadline.value;
+      edits++;
+    }
+    if (this.editActivityDatesForm.controls.started.value && this.editActivityDatesForm.controls.started.value.trim().length > 0) {
+      this.currentActivity.startdate = this.editActivityDatesForm.controls.started.value;
+      edits++;
+    }
+    if (this.editActivityDatesForm.controls.finished.value && this.editActivityDatesForm.controls.finished.value.trim().length > 0) {
+      this.currentActivity.finishdate = this.editActivityDatesForm.controls.finished.value;
+      edits++;
+    }
+    if (edits > 0) {
+      // console.log(edits + 'st ändringar sparas');
+      this.updateActivity(this.currentActivity);
+    } /*else {
+      console.log('Inga ändringar sparas');
+      //this.alertService.error('Inga ändringar sparades');
+    }*/
+    this.closeEditActivityDatesModal.nativeElement.click();
+  }
+
   deleteActivity(activityid: string, activityinfoid: string, isBaseActivity: boolean) {
     this.projectService.deleteActivity(parseInt(activityid), isBaseActivity)
       .pipe(first())
@@ -323,7 +361,7 @@ export class MyPagesActivityStatusComponent {
           } else if (error.status == 404) {
             this.alertService.error('Aktiviteten hittades inte. Försök igen senare');
           } else {
-            this.alertService.error('Okänt fel. Kontakta support eller försök igen senare. Felkod: ', error.status);
+            this.alertService.error('Okänt fel. Kontakta support eller försök igen senare. Felkod: ' + error.status);
           }
         }
       );
@@ -385,6 +423,12 @@ export class MyPagesActivityStatusComponent {
     return baseActivities.length > 0 || customActivities.length > 0;
     //return baseActivities.length > 0;
 
+  }
+
+  setCurrentActivityDates(activity: Activity) {
+    this.currentActivity = activity;
+    this.currentActivityInfo = (activity.baseactivityinfoid != null) ? activity.baseactivityinfo : activity.customactivityinfo;
+    this.openEditActivityDatesModalButton.nativeElement.click();
   }
 
   setCurrentNote(note: Note, activity: Activity) {

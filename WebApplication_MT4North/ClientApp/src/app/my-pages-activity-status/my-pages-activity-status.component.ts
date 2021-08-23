@@ -320,27 +320,49 @@ export class MyPagesActivityStatusComponent {
     this.updateActivity(this.currentActivity)
   }
 
+  isActivityDatesClean() {
+    return !(this.editActivityDatesForm.controls.deadline.dirty ||
+             this.editActivityDatesForm.controls.started.dirty  ||
+             this.editActivityDatesForm.controls.finished.dirty );
+  }
+
   editActivityDates() {
     let edits = 0;
-    if (this.editActivityDatesForm.controls.deadline.value && this.editActivityDatesForm.controls.deadline.value.trim().length > 0) {
-      this.currentActivity.deadlinedate = this.editActivityDatesForm.controls.deadline.value;
+    if (this.editActivityDatesForm.controls.deadline.dirty) {
+      if (this.editActivityDatesForm.controls.deadline.value.length > 0) {
+        this.currentActivity.deadlinedate = this.editActivityDatesForm.controls.deadline.value;
+      } else {
+        this.currentActivity.deadlinedate = null;
+      }
       edits++;
     }
-    if (this.editActivityDatesForm.controls.started.value && this.editActivityDatesForm.controls.started.value.trim().length > 0) {
-      this.currentActivity.startdate = this.editActivityDatesForm.controls.started.value;
+    if (this.editActivityDatesForm.controls.started.dirty) {
+      if (this.editActivityDatesForm.controls.started.value.length > 0) {
+        this.currentActivity.startdate = this.editActivityDatesForm.controls.started.value;
+      } else {
+        this.currentActivity.startdate = null;
+      }
       edits++;
     }
-    if (this.editActivityDatesForm.controls.finished.value && this.editActivityDatesForm.controls.finished.value.trim().length > 0) {
-      this.currentActivity.finishdate = this.editActivityDatesForm.controls.finished.value;
+    if (this.editActivityDatesForm.controls.finished.dirty) {
+      if (this.editActivityDatesForm.controls.finished.value.length > 0) {
+        this.currentActivity.finishdate = this.editActivityDatesForm.controls.finished.value;
+      } else {
+        this.currentActivity.finishdate = null;
+      }
       edits++;
     }
+    this.editActivityDatesForm.controls.deadline.markAsPristine();
+    this.editActivityDatesForm.controls.started.markAsPristine();
+    this.editActivityDatesForm.controls.finished.markAsPristine();
+
     if (edits > 0) {
       // console.log(edits + 'st ändringar sparas');
       this.updateActivity(this.currentActivity);
-    } /*else {
-      console.log('Inga ändringar sparas');
+    } else {
+      // console.log('Inga ändringar sparas');
       //this.alertService.error('Inga ändringar sparades');
-    }*/
+    }
     this.closeEditActivityDatesModal.nativeElement.click();
   }
 

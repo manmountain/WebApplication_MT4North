@@ -509,7 +509,7 @@
           <div class="modal-footer">
             <div class="form-group">
               <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
-              <button type="submit" class="btn btn-primary btn-sm" >Spara</button>
+              <button type="submit" class="btn btn-primary btn-sm" [disabled]="isActivityDatesClean()">Spara</button>
             </div>
           </div>
         </div>

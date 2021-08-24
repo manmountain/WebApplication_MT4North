@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { MarkdownModule } from 'ngx-markdown';
 
 //import { ConnectionService } from './connection.service';
 
@@ -118,6 +119,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
    // ConnectionServiceModule,
+    MarkdownModule.forRoot(),
     RouterModule.forRoot(routes, { anchorScrolling: 'enabled' })    
   ],
   providers: [

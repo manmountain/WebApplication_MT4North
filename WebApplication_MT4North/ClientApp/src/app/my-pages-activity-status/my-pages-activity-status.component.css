@@ -1090,3 +1090,13 @@ input.rounded {
       border-bottom: none !important;
     }
   }
+
+/* works */
+.markdown-description {
+  font-size: 12px;
+}
+
+/* DONT work -something wrong with the selector */
+.markdown-description ul {
+  padding-inline-start: 16px;
+}

@@ -154,14 +154,11 @@
 
                               <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
                                 <div class="panel-body im-theme-{{i}}">
-
-                                  <p class="mb-2 p-0">
-                                    {{activity.baseactivityinfo?.description}}{{activity.customactivityinfo?.description}}
-                                  </p>
+                                  <div class="markdown-description" markdown ngPreserveWhitespaces [data]="(activity.baseactivityinfo)?(activity.baseactivityinfo?.description):(activity.customactivityinfo?.description)"></div>
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />
                                   <div class="row">
-                                    <!-- Edit Activity Dates --> 
+                                    <!-- Edit Activity Dates -->
                                     <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="setCurrentActivityDates(activity)">
                                         <p>
@@ -210,7 +207,7 @@
                                                         <small>
                                                           <!--<a *ngIf="note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Redigera anteckning" ng-click="editNote(activity, note)"><i class="fa fa-edit"></a>
 
-                        <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
+                          <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
 
                                                           <a *ngIf="note.userid == currentUser.id" class="align-middle im-link-btn mr-3" role="button" title="Redigera anteckning" (click)="editNote(activity, note)">Redigera</a>
 

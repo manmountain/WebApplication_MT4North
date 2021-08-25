@@ -4,4 +4,5 @@ export class Note {
   userid: string;
   text: string;
   timestamp: string;
+  isEditable = false;
 }

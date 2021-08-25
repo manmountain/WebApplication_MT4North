@@ -21,6 +21,7 @@ export class MyPagesActivityStatusComponent {
   phases = ActivityPhase;
   themes: Theme[] = [];
   noteForm: FormGroup;
+  resourcesForm: FormGroup;
   activityInfoForm: FormGroup;
   editActivityInfoForm: FormGroup;
   editActivityDatesForm: FormGroup;
@@ -45,6 +46,7 @@ export class MyPagesActivityStatusComponent {
   currentPhase: ActivityPhase;
   error = '';
   submittedActivity = false;
+  isEditingNote = false;
 
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
@@ -141,6 +143,9 @@ export class MyPagesActivityStatusComponent {
       finished: []
     });
 
+    this.resourcesForm = this.formBuilder.group({
+      url: []
+    });
   }
 
   ngOnDestroy() {
@@ -418,9 +423,50 @@ export class MyPagesActivityStatusComponent {
         });
   }
 
-  editNote(activity: Activity, note: Note) {
+  toggleEditNote(activity: Activity, note: Note) {
+    note.isEditable = !note.isEditable;
+    this.isEditingNote = !this.isEditingNote;
 
   }
+
+
+  updateNote(activity: Activity, note: Note) {
+    note.isEditable = false;
+
+    this.alertService.clear();
+
+    this.projectService.updateNote(activity.activityid, note.noteid, note)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Anteckningen har uppdaterats', { keepAfterRouteChange: true });
+          this.isEditingNote = false;
+        },
+        error => {
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
+          this.isEditingNote = false;
+
+        });
+
+  }
+
+  resetNote(activity: Activity, note: Note) {
+    this.toggleEditNote(activity, note);
+
+    this.projectService.getNote(activity.activityid, note.noteid)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Anteckningen har inte ändrats', { keepAfterRouteChange: true });
+        },
+        error => {
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
+        });
+
+  }
+
 
   removeNote() {
     this.alertService.clear();

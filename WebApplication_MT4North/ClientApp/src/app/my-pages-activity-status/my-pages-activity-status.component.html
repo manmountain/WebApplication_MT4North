@@ -215,11 +215,15 @@
                                                         <small>
                                                           <!--<a *ngIf="note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Redigera anteckning" ng-click="editNote(activity, note)"><i class="fa fa-edit"></a>
 
-                                                          <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
+  <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
 
-                                                          <a *ngIf="note.userid == currentUser.id" class="align-middle im-link-btn mr-3" role="button" title="Redigera anteckning" (click)="editNote(activity, note)">Redigera</a>
+                                                          <a *ngIf="note.userid == currentUser.id && !note.isEditable" id="note-r{{i}}c{{j}}-{{k}}-{{m}}" class="align-middle im-link-btn mr-3" role="button" title="Redigera anteckning" (click)="toggleEditNote(activity, note)">Redigera</a>
 
-                                                          <a *ngIf="hasAdminRights || note.userid == currentUser.id" role="button" class="align-middle im-link-btn" data-target="#deleteNoteModal" data-toggle="modal" (click)="setCurrentNote(note, activity)">Ta bort</a>
+                                                          <a *ngIf="note.userid == currentUser.id && note.isEditable" class="align-middle im-link-btn mr-3" role="button" title="Spara anteckning" (click)="updateNote(activity, note)" >Spara</a>
+
+                                                          <a *ngIf="note.userid == currentUser.id && note.isEditable" class="align-middle im-link-btn mr-3" role="button" title="Avbryt redigera anteckning" (click)="resetNote(activity, note)">Avbryt</a>
+
+                                                          <a *ngIf="!note.isEditable && hasAdminRights || note.userid == currentUser.id && !note.isEditable" role="button" class="align-middle im-link-btn" data-target="#deleteNoteModal" data-toggle="modal" (click)="setCurrentNote(note, activity)">Ta bort</a>
 
                                                         </small>
                                                       </h6>
@@ -227,7 +231,9 @@
                                                   </div>
                                                 </div>
                                                 <div class="card-body p-2">
-                                                  <p class="card-text">{{note.text}}</p>
+                                                  <p *ngIf="!note.isEditable" class="card-text">{{note.text}}</p>
+
+                                                    <textarea *ngIf="note.isEditable" type="text" style="font-size: 12px;" class="w-100" maxlength="250" [(ngModel)]="note.text" required>{{note.text}}</textarea>
                                                 </div>
                                               </div>
                                             </ng-container>
@@ -239,7 +245,7 @@
                                             <form *ngIf="hasEditRights" [formGroup]="noteForm" ngNativeValidate class="form-group mt-2 w-100" id="noteForm-r{{i}}c{{j}}-{{k}}-{{m}}" (ngSubmit)="addNote(activity)">
                                               <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Ny anteckning:</label></p>
                                               <textarea class="form-control" formControlName="text" id="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required></textarea>
-                                              <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
+                                              <input type="submit" class="btn btn-primary mt-2 float-right" [disabled] ="!noteForm.dirty && isEditingNote" value="Lägg till" />
                                             </form>
                                             <p *ngIf="!hasEditRights" class="text-center w-100">Du har inte behörighet att lägga till anteckningar.</p>
                                           </div>
@@ -273,13 +279,22 @@
                                             </button>
                                           </div>
                                           <div class="modal-body">
-                                            <h6>
+                                            <h6 *ngIf="">
                                               <small>Resurser saknas för denna aktivitet.</small>
                                             </h6>
+                                            <!--<h6 *ngIf="activity.resources.length == 0">
+                                              <small>Resurser saknas för denna aktivitet.</small>
+                                            </h6>-->
 
                                           </div>
                                           <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Stäng</button>
+
+                                            <form *ngIf="hasEditRights" [formGroup]="resourcesForm" ngNativeValidate class="form-group mt-2 w-100" id="noteForm-r{{i}}c{{j}}-{{k}}-{{m}}" (ngSubmit)="addResource(activity)">
+                                              <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Ny resurs:</label></p>
+                                              <input type="text" class="form-control" formControlName="url" id="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required />
+                                              <input type="submit" class="btn btn-primary mt-2 float-right" value="Lägg till" />
+                                            </form>
+                                            <p *ngIf="!hasEditRights" class="text-center w-100">Du har inte behörighet att lägga till resurser.</p>
                                           </div>
                                         </div>
                                       </div>
@@ -296,7 +311,7 @@
                                     <div class="col-12">
                                       <a *ngIf="!isBaseActivity(activity)" class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="setCurrentActivityInfo(activity)">
                                         <p>
-                                          <i class="fa fa-book fa-fw"></i><span class="ml-1">Redigera</span>
+                                          <i class="fa fa-edit fa-fw"></i><span class="ml-1">Redigera</span>
                                         </p>
                                       </a>
                                     </div>

@@ -505,6 +505,74 @@ export class ProjectService {
     }));
   }
 
+  updateNote(activityid: number, noteid: string, params) {
+    return this.http.put<any>(`${environment.apiUrl}/Notes/${noteid}`, params).pipe(map(note => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
+      let index = this.activitiesValue.indexOf(activityToUpdate);
+
+      let noteToUpdate = activityToUpdate.notes.find(x => x.noteid == note.noteid);
+      let noteIndex = activityToUpdate.notes.indexOf(noteToUpdate);
+
+      this.activitiesValue[index].notes[noteIndex] = params;
+
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+
+      // update local storage
+      localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+
+      this.activitiesSubject.next(this.activitiesValue);
+
+      return note;
+    }));
+  }
+
+  getNote(activityid: number, noteid: string) {
+    return this.http.get<any>(`${environment.apiUrl}/Notes/${noteid}`).pipe(map(note => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+
+      let activityToUpdate = this.activitiesValue.find(x => x.activityid == activityid);
+      let index = this.activitiesValue.indexOf(activityToUpdate);
+
+      let noteToUpdate = activityToUpdate.notes.find(x => x.noteid == note.noteid);
+      let noteIndex = activityToUpdate.notes.indexOf(noteToUpdate);
+
+      this.activitiesValue[index].notes[noteIndex] = note;
+
+      const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+          if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        };
+      };
+
+      // update local storage
+      localStorage.setItem('activities', JSON.stringify(this.activities, getCircularReplacer()));
+
+      this.activitiesSubject.next(this.activitiesValue);
+
+      return note;
+    }));
+  }
+
   removeNote(activityid: number, noteid:string) {
     return this.http.delete<any>(`${environment.apiUrl}/Notes/${noteid}`).pipe(map(note => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes

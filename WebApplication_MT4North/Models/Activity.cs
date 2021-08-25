@@ -39,7 +39,7 @@ namespace WebApplication_MT4North.Models
         public DateTime? DeadlineDate { get; set; }
 
         [JsonPropertyName("resources")]
-        public string Resources { get; set; }
+        public virtual ICollection<Resource> Resources { get; set; }
 
         [JsonPropertyName("projectid")]
         public int ProjectId { get; set; }

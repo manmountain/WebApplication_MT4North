@@ -146,7 +146,7 @@ namespace WebApplication_MT4North.Models
                         StartDate = DateTime.Now,
                         FinishDate = DateTime.Now.AddDays(10),
                         DeadlineDate = DateTime.Now.AddDays(14),
-                        Resources = "",
+                        Resources = null, // new List<Resource>(),
                         Project = project
                     };
                     context.Activities.Add(activity);

@@ -27,6 +27,7 @@ namespace WebApplication_MT4North.Models
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<UserProject> UserProjects { get; set; }
         public virtual DbSet<Theme> Themes { get; set; }
+        public virtual DbSet<Resource> Resources { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -42,58 +43,6 @@ namespace WebApplication_MT4North.Models
         {
             base.OnModelCreating(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
-
-            /* Seed data */
-            //var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            //var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            /*modelBuilder.Entity<Project>().HasData(
-                new Project
-                {
-                    ProjectId = 1,
-                    Name = "Projekt1",
-                    Description = "Projectet handlar om rävar"
-                },
-                new Project
-                {
-                ProjectId = 2,
-                    Name = "Projekt2",
-                    Description = "Projectet handlar om björnar"
-                },
-                new Project
-                {
-                    ProjectId = 3,
-                    Name = "Projekt3",
-                    Description = "Projectet handlar om vargar"
-                }
-            );
-
-            modelBuilder.Entity<UserProject>().HasData(
-                new UserProject
-                {
-                    UserProjectId = 1,
-                    ProjectId = 1,
-                    UserId = 1,
-                    Role = "",
-                    Rights = ""
-                },
-                new UserProject
-                {
-                    UserProjectId = 2,
-                    ProjectId = 1,
-                    UserId = 2,
-                    Role = "",
-                    Rights = ""
-                },
-                new UserProject
-                {
-                    UserProjectId = 3,
-                    ProjectId = 1,
-                    UserId = 3,
-                    Role = "",
-                    Rights = ""
-                }
-            );*/
-
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

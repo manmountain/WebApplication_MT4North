@@ -1,4 +1,4 @@
-import { ActivityInfo, Note, Project } from '@app/_models';
+import { ActivityInfo, Note, Project, Resource } from '@app/_models';
 import { ActivityStatus } from "./enums";
 
 
@@ -9,7 +9,7 @@ export class Activity {
   startdate: string;
   finishdate: string;
   deadlinedate: string;
-  resources: string;
+  resources: Resource[];
   projectid: string;
   baseactivityinfoid: number;
   customactivityinfoid: number;
@@ -25,7 +25,7 @@ export class Activity {
     this.startdate = null;
     this.finishdate = null;
     this.deadlinedate = null;
-    this.resources = null;
+    this.resources = [];
     this.projectid = null;
     this.baseactivityinfoid = null;
     this.customactivityinfoid = null;

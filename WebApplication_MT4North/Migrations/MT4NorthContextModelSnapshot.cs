@@ -179,9 +179,6 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Resources")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -384,6 +381,26 @@ namespace WebApplication_MT4North.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("WebApplication_MT4North.Models.Resource", b =>
+                {
+                    b.Property<int>("ResourceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResourceId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("Resources");
+                });
+
             modelBuilder.Entity("WebApplication_MT4North.Models.Theme", b =>
                 {
                     b.Property<int>("ThemeId")
@@ -519,6 +536,13 @@ namespace WebApplication_MT4North.Migrations
                 {
                     b.HasOne("WebApplication_MT4North.Models.Activity", null)
                         .WithMany("Notes")
+                        .HasForeignKey("ActivityId");
+                });
+
+            modelBuilder.Entity("WebApplication_MT4North.Models.Resource", b =>
+                {
+                    b.HasOne("WebApplication_MT4North.Models.Activity", null)
+                        .WithMany("Resources")
                         .HasForeignKey("ActivityId");
                 });
 

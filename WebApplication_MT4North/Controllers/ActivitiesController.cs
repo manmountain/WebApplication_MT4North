@@ -83,6 +83,7 @@ namespace WebApplication_MT4North.Controllers
                     var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
                 }
                 var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+                var resources = await _context.Resources.Where(r => r.ActivityId == activity.ActivityId).ToListAsync<Resource>();
             }
             // Return the activites found
             return activities;
@@ -129,8 +130,7 @@ namespace WebApplication_MT4North.Controllers
                 return Unauthorized();
             }
 
-            // fetch base or custom -activity, project and notes
-            // fetch base or custom -activity, project and notes
+            // fetch base or custom -activity, project, notes and resources
             var project = await _context.Projects.Where(p => p.ProjectId == activity.ProjectId).ToListAsync<Project>();
             if (activity.BaseActivityInfoId != null)
             {
@@ -143,6 +143,7 @@ namespace WebApplication_MT4North.Controllers
                 var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
             }
             var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+            var resources = await _context.Resources.Where(r => r.ActivityId == activity.ActivityId).ToListAsync<Resource>();
             return activity;
         }
 
@@ -322,6 +323,7 @@ namespace WebApplication_MT4North.Controllers
                 var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
             }
             var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+            var resources = await _context.Resources.Where(r => r.ActivityId == activity.ActivityId).ToListAsync<Resource>();
 
             return CreatedAtAction("GetActivity", new { id = activity.ActivityId }, activity);
         }
@@ -444,6 +446,7 @@ namespace WebApplication_MT4North.Controllers
                     var theme = await _context.Themes.FirstOrDefaultAsync(t => t.ThemeId == activity.CustomActivityInfo.ThemeId);
                 }
                 var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+                var resources = await _context.Resources.Where(r => r.ActivityId == activity.ActivityId).ToListAsync<Resource>();
             }
             return activities;
         }

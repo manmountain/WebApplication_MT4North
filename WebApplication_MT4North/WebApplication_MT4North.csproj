@@ -141,6 +141,7 @@
     <TypeScriptCompile Remove="ClientApp\src\app\_helpers\jwt.interceptor.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_modals\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_models\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_models\resource.model.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\account.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\alert.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\index.ts" />

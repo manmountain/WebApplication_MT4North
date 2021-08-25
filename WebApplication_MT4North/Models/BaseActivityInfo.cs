@@ -19,7 +19,6 @@ namespace WebApplication_MT4North.Models
     {
         public BaseActivityInfo()
         {
-            //Activities = new HashSet<Activity>();
         }
 
         [JsonPropertyName("baseactivityid")]
@@ -34,17 +33,10 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        /*TODO: Enums
-         CONCEPTUALIZATION = "Konceptualisering",
-         VALIDATION = "Konceptvalidering",
-         DEVELOPMENT = "Produktutveckling",
-         LAUNCH = "Produktlansering"
-        */
         [JsonPropertyName("phase")]
         public ActivityPhase Phase { get; set; }
 
         [JsonPropertyName("theme")]
         public virtual Theme Theme { get; set; }
-        //public virtual ICollection<Activity> Activities { get; set; }
     }
 }

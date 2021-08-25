@@ -374,8 +374,11 @@ export class MyPagesActivityStatusComponent {
       .subscribe(
         activity => {
           this.alertService.success('Aktiviteten har tagits bort', { keepAfterRouteChange: true });
+          this.closeEditActivityModal.nativeElement.click();
         },
         error => {
+          this.closeEditActivityModal.nativeElement.click();
+
           if (error.status == 403) {
             if (isBaseActivity) {
               this.alertService.error('Otillåtet. Du måste ha Administrations rättigheter för att ta bort en bas aktivitet');

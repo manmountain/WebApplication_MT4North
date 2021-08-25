@@ -109,6 +109,14 @@
                 <i class="fa fa-circle fa-stack-2x float-left im-theme-{{i}}"></i>
                 <i *ngIf="theme.name == 'Teknikutveckling'" class="fa fa-cog fa-stack-1x fa-inverse float-left"></i>
                 <i *ngIf="theme.name == 'Klinisk validering'" class="fa fa-hospital fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Affärsutveckling'" class="fa fa-chart-line fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Team'" class="fa fa-users fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Jämlikhet'" class="fa fa-transgender fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Hållbarhet'" class="fa fa-leaf fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Kommunikation'" class="fa fa-bullhorn fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Finansiering'" class="fa fa-dollar-sign fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'IPR'" class="fa fa-lock fa-stack-1x fa-inverse float-left"></i>
+                <i *ngIf="theme.name == 'Regelverk'" class="fa fa-gavel fa-stack-1x fa-inverse float-left"></i>
               </span><span class="align-middle im-theme-text ml-2">{{theme.name}}</span>
             </td>
 
@@ -207,7 +215,7 @@
                                                         <small>
                                                           <!--<a *ngIf="note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Redigera anteckning" ng-click="editNote(activity, note)"><i class="fa fa-edit"></a>
 
-                          <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
+                                                          <a *ngIf="hasRights || note.userid == currentUser.id" class="btn icon-btn p-0 align-middle" data-toggle="tooltip" data-placement="bottom" title="Ta bort anteckning" ng-click="removeNote(activity, note)"><i class="fa fa-trash-alt"></a>-->
 
                                                           <a *ngIf="note.userid == currentUser.id" class="align-middle im-link-btn mr-3" role="button" title="Redigera anteckning" (click)="editNote(activity, note)">Redigera</a>
 
@@ -465,7 +473,7 @@
           </div>
           <div class="modal-footer">
             <div class="form-group">
-              <button type="button" class="btn btn-danger btn-sm mr-1 float-left" data-dismiss="modal" (click)="deleteActivity(currentActivity.activityid, currentActivityInfo.customactivityinfoid || currentActivityInfo.baseactivityid, currentActivityInfo.hasOwnProperty('baseactivityid'));">Ta bort</button>
+              <button type="button" class="btn btn-danger btn-sm mr-1 float-left" data-target="#deleteActivityModal" data-toggle="modal">Ta bort</button>
               <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
               <button type="submit" [disabled]="!editActivityInfoForm.valid || !editActivityInfoForm.dirty" class="btn btn-primary btn-sm">Spara</button>
             </div>
@@ -475,6 +483,33 @@
     </div>
   </form>
 
+
+  <div class="modal" id="deleteActivityModal" tabindex="-1" role="dialog" aria-labelledby="deleteActivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
+      <div class="modal-content">
+        <!--<div class="modal-header">
+          <h5 class="modal-title">
+            Nollställ projekt
+          </h5>
+          <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>-->
+        <div class="modal-body">
+          <h6 class="text-wrap">
+            Är du säker på att du vill ta bort aktiviteten?
+          </h6>
+          <p>Aktiviteten kommer tas bort permanent. Åtgärden går inte att ångra.</p>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Nej, avbryt</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="deleteActivity(currentActivity.activityid, currentActivityInfo.customactivityinfoid || currentActivityInfo.baseactivityid, currentActivityInfo.hasOwnProperty('baseactivityid'));">Ja, ta bort</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!---->
   <form [formGroup]="editActivityDatesForm" (ngSubmit)="editActivityDates()">
     <div class="modal fade" id="editActivityDatesModal" tabindex="-1" role="dialog" [attr.aria-labelledby]="editActivityDatesModalLabel" aria-hidden="true">
@@ -482,7 +517,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              Datum 
+              Datum
               <br />
               <small>för {{currentActivityInfo?.name}} i {{currentActivityInfo?.theme?.name}}</small>
             </h5>
@@ -503,17 +538,17 @@
               <label for="activityFinishedDate">Avslutad</label>
               <input id="activityFinishedDate" type="text" formControlName="finished" class="form-control rounded" type="date" [value]="currentActivity?.finishdate?.split('T')[0]" />
             </div>
-          <div class="modal-footer">
-            <div class="form-group">
-              <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
-              <button type="submit" class="btn btn-primary btn-sm" [disabled]="isActivityDatesClean()">Spara</button>
+            <div class="modal-footer">
+              <div class="form-group">
+                <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Avbryt</button>
+                <button type="submit" class="btn btn-primary btn-sm" [disabled]="isActivityDatesClean()">Spara</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
   <!---->
 
   <div id="download">

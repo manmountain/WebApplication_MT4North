@@ -34,7 +34,6 @@ namespace WebApplication_MT4North.Models
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
-
         /*TODO: Enums
          CONCEPTUALIZATION = "Konceptualisering",
          VALIDATION = "Konceptvalidering",

@@ -3,4 +3,5 @@ export class Resource {
   activityid: string;
   url: string;
   text: string;
+  isEditable = false;
 }

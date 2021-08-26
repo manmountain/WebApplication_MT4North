@@ -391,6 +391,9 @@ namespace WebApplication_MT4North.Migrations
                     b.Property<int?>("ActivityId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 

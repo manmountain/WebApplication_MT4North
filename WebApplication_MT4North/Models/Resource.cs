@@ -19,7 +19,10 @@ namespace WebApplication_MT4North.Models
         public int? ActivityId { get; set; }
 
         [JsonPropertyName("url")]
-        public String? Url { get; set; } 
+        public String? Url { get; set; }
+
+        [JsonPropertyName("text")]
+        public String? Text { get; set; }
 
     }
 }

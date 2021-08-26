@@ -630,7 +630,21 @@ export class ProjectService {
       );
   } 
 
-
+  resetProject(projectId: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/Projects/reset/${projectId}`, { observe: 'response' })
+      .pipe(
+        tap(
+          project => {
+            // just return the project. We should reload everything by redericting to reaload the project
+            return project;
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
+  } 
 
 
   //update(id, params) {

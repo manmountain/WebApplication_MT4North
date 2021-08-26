@@ -113,13 +113,33 @@ export class MyPagesProjectSettingsComponent implements OnDestroy {
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.success('Projektet tagits bort', { keepAfterRouteChange: true });
+          this.alertService.success('Projektet har tagits bort', { keepAfterRouteChange: true });
           // redirect to 'mina-sidor'
           this.router.navigate(['/my-pages/start']);
         },
         error => {
           if (error.status == 403) {
             this.alertService.error('Otillåtet. Du måste vara projektägare för att ta bort projektet');
+          }
+          if (error.status == 404) {
+            this.alertService.error('Projektet hittades inte. Försök igen senare');
+          }
+        }
+      );
+  }
+
+  resetProject(projectId: string) {
+    this.projectService.resetProject(projectId)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Projektet har nollställts', { keepAfterRouteChange: true });
+          // redirect to 'start page of the project'
+          this.router.navigate([`/my-pages/projects/${projectId}/activity-status`]);
+        },
+        error => {
+          if (error.status == 403) {
+            this.alertService.error('Otillåtet. Du måste vara projektägare för att nollställa projektet');
           }
           if (error.status == 404) {
             this.alertService.error('Projektet hittades inte. Försök igen senare');

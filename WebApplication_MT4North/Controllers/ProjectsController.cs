@@ -55,7 +55,7 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            
+
             // fetch all user-projects where the user is a member
             //var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
             var userProjects = await _context.UserProjects.Where(p => p.UserId == user.Id && p.Status == UserProjectStatus.ACCEPTED).ToListAsync<UserProject>();
@@ -145,7 +145,7 @@ namespace WebApplication_MT4North.Controllers
             // Save project
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
-            
+
             // Create a userProject with the current user as owner
             var userProject = new UserProject();
             userProject.Project = project;
@@ -258,7 +258,7 @@ namespace WebApplication_MT4North.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Project>> DeleteProject(int id)
         {
-            // Check if the caller got the WRITE rights! Otherwise return Unauthorized
+            // Check if the caller got the OWNER rights! Otherwise return Forbidden
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && p.Role == UserProjectRoles.OWNER /*&& (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)*/);
@@ -275,14 +275,24 @@ namespace WebApplication_MT4North.Controllers
             }
 
             // Remove all activities for this project
-            var activities = await _context.Activities.Where(p => p.ProjectId == id).ToListAsync<Activity>(); 
+            var activities = await _context.Activities.Where(p => p.ProjectId == id).ToListAsync<Activity>();
             var customActivityInfos = new List<CustomActivityInfo>();
-            foreach(var activity in activities)
+            foreach (var activity in activities)
             {
                 if (activity.CustomActivityInfoId != null)
                 {
                     var customActivityInfo = await _context.CustomActivityInfos.FirstAsync(a => a.CustomActivityInfoId == activity.CustomActivityInfoId);
                     customActivityInfos.Add(customActivityInfo);
+                }
+                var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+                var resources = await _context.Resources.Where(r => r.ActivityId == activity.ActivityId).ToListAsync<Resource>();
+                if (notes.Count > 0)
+                {
+                    _context.Notes.RemoveRange(notes);
+                }
+                if (resources.Count > 0)
+                {
+                    _context.Resources.RemoveRange(resources);
                 }
             }
             _context.CustomActivityInfos.RemoveRange(customActivityInfos);
@@ -302,6 +312,72 @@ namespace WebApplication_MT4North.Controllers
         private bool ProjectExists(int id)
         {
             return _context.Projects.Any(e => e.ProjectId == id);
+        }
+
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [Authorize()]
+        [HttpDelete("reset/{id}")]
+        public async Task<ActionResult<Project>> ResetProject(int id)
+        {
+            // Check if the caller got the OWNER rights! Otherwise return Forbidden
+            string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
+            var caller = await _userManager.FindByEmailAsync(callerEmail);
+            var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && p.Role == UserProjectRoles.OWNER /*&& (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)*/);
+            if (callerUserProject == null)
+            {
+                // The caller is not a owner to this project
+                return Forbid();
+            }
+
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            // Remove all custom and reset all base -activities for this project
+            var activities = await _context.Activities.Where(p => p.ProjectId == id).ToListAsync<Activity>();
+            var customActivityInfosToDelete = new List<CustomActivityInfo>();
+            var activitiesToDelete = new List<Activity>();
+            foreach (var activity in activities)
+            {
+                if (activity.CustomActivityInfoId != null)
+                {
+                    // Delete custom activities
+                    var customActivityInfo = await _context.CustomActivityInfos.FirstAsync(a => a.CustomActivityInfoId == activity.CustomActivityInfoId);
+                    customActivityInfosToDelete.Add(customActivityInfo);
+                    activitiesToDelete.Add(activity);
+                }
+                else
+                {
+                    // Reset base activities
+                    activity.Status = ActivityStatus.STATUS_NOTSTARTED;
+                    activity.IsExcluded = false;
+                    activity.DeadlineDate = null;
+                    activity.FinishDate = null;
+                    activity.StartDate = null;
+                }
+                var notes = await _context.Notes.Where(n => n.ActivityId == activity.ActivityId).ToListAsync<Note>();
+                var resources = await _context.Resources.Where(r => r.ActivityId == activity.ActivityId).ToListAsync<Resource>();
+                if (notes.Count > 0)
+                {
+                    _context.Notes.RemoveRange(notes);
+                }
+                if (resources.Count > 0)
+                {
+                    _context.Resources.RemoveRange(resources);
+                }
+            }
+            _context.CustomActivityInfos.RemoveRange(customActivityInfosToDelete);
+            _context.Activities.RemoveRange(activitiesToDelete);
+            // Apply changes to database
+            await _context.SaveChangesAsync();
+
+            return Ok(project);
         }
     }
 }

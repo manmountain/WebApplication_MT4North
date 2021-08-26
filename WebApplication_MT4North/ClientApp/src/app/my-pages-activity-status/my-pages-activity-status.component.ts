@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Theme, Activity, ActivityPhase, ActivityStatus, ActivityInfo, UserProject, User, ProjectRights, ProjectRole, Note } from "../_models";
+import { Theme, Activity, ActivityPhase, ActivityStatus, ActivityInfo, UserProject, User, ProjectRights, ProjectRole, Note, Resource } from "../_models";
 import { AddActivityModal } from "../_modals";
 import { AlertService, ViewService, ProjectService, AccountService } from "../_services";
 import { first } from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class MyPagesActivityStatusComponent {
   phases = ActivityPhase;
   themes: Theme[] = [];
   noteForm: FormGroup;
-  resourcesForm: FormGroup;
+  resourceForm: FormGroup;
   activityInfoForm: FormGroup;
   editActivityInfoForm: FormGroup;
   editActivityDatesForm: FormGroup;
@@ -40,13 +40,18 @@ export class MyPagesActivityStatusComponent {
   isAdmin = false;
   currentUser: User;
   currentNote: Note;
+  currentResource: Resource;
   currentActivity: Activity;
   currentActivityInfo = new ActivityInfo();
   currentTheme: Theme;
   currentPhase: ActivityPhase;
   error = '';
   submittedActivity = false;
+  submittedNote = false;
+  submittedResource = false;
   isEditingNote = false;
+  isEditingResource = false;
+  htmlPattern = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
   @ViewChildren('themeElement', { read: ElementRef }) themeElements: QueryList<ElementRef>;
   @ViewChildren('activityElement', { read: ElementRef }) activityElements: QueryList<ElementRef>;
@@ -143,8 +148,10 @@ export class MyPagesActivityStatusComponent {
       finished: []
     });
 
-    this.resourcesForm = this.formBuilder.group({
-      url: []
+    this.resourceForm = this.formBuilder.group({
+      resourceid: [0],
+      activityid: [0],
+      url: ['', [Validators.required, Validators.pattern(this.htmlPattern)]]
     });
   }
 
@@ -208,6 +215,13 @@ export class MyPagesActivityStatusComponent {
     this.hideFinished = value;
   }
 
+  getCorrectedURL(url: string): string {
+    if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+      url = "http://" + url;
+    }
+    return url;
+  }
+
   updateStatus(activity: Activity) {
     switch (activity.status) {
       case ActivityStatus.NOTSTARTED: {
@@ -235,6 +249,7 @@ export class MyPagesActivityStatusComponent {
   get f() { return this.activityInfoForm.controls; }
   get fEdit() { return this.editActivityInfoForm.controls; }
   get fEditDates() { return this.editActivityDatesForm.controls; }
+  get fResources() { return this.resourceForm.controls; }
 
   addActivity() {
     this.submittedActivity = true;
@@ -273,6 +288,7 @@ export class MyPagesActivityStatusComponent {
           this.clearAddActivityForm();
           this.closeAddActivityModal.nativeElement.click();
           this.alertService.success('Dina ändringar har sparats.', { keepAfterRouteChange: true });
+          this.submittedActivity = false;
         },
         error => {
           this.clearAddActivityForm();
@@ -423,9 +439,99 @@ export class MyPagesActivityStatusComponent {
         });
   }
 
+
+  addResource(activity: Activity) {
+    this.submittedResource = true;
+    if (this.resourceForm.invalid) {
+      return;
+    }
+    var correctedUrl = this.getCorrectedURL(this.resourceForm.controls.url.value)
+    this.resourceForm.controls.url.setValue(correctedUrl);
+    this.alertService.clear();
+
+    this.projectService.addResource(activity.activityid, this.resourceForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Resursen har lagts till', { keepAfterRouteChange: true });
+          this.resourceForm.controls.url.setValue('');
+          this.submittedResource = false;
+        },
+        error => {
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
+        });
+  }
+
+  updateResource(activity: Activity, resource: Resource) {
+    if (!resource.url.match(this.htmlPattern)) {
+      return;
+    }
+
+    resource.isEditable = false;
+
+    this.alertService.clear();
+
+    resource.url = this.getCorrectedURL(resource.url);
+
+
+    this.projectService.updateResource(activity.activityid, resource.resourceid, resource)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Resursen har uppdaterats', { keepAfterRouteChange: true });
+          this.isEditingResource = false;
+        },
+        error => {
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
+          this.isEditingResource = false;
+
+        });
+
+  }
+
+  resetResource(activity: Activity, resource: Resource) {
+    this.toggleEditResource(activity, resource);
+
+    this.projectService.getResource(activity.activityid, resource.resourceid)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Resursen har inte ändrats', { keepAfterRouteChange: true });
+        },
+        error => {
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
+        });
+
+  }
+
+
+  removeResource() {
+    this.alertService.clear();
+
+    this.projectService.removeResource(this.currentActivity.activityid, this.currentResource.resourceid)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Resursen har tagits bort', { keepAfterRouteChange: true });
+        },
+        error => {
+          const err = error.error.message || error.statusText;
+          this.alertService.error(err);
+        });
+  }
+
   toggleEditNote(activity: Activity, note: Note) {
     note.isEditable = !note.isEditable;
     this.isEditingNote = !this.isEditingNote;
+
+  }
+
+  toggleEditResource(activity: Activity, resource: Resource) {
+    resource.isEditable = !resource.isEditable;
+    this.isEditingResource = !this.isEditingResource;
 
   }
 
@@ -506,6 +612,11 @@ export class MyPagesActivityStatusComponent {
 
   setCurrentNote(note: Note, activity: Activity) {
     this.currentNote = note;
+    this.currentActivity = activity;
+  }
+
+  setCurrentResource(resource: Resource, activity: Activity) {
+    this.currentResource = resource;
     this.currentActivity = activity;
   }
 

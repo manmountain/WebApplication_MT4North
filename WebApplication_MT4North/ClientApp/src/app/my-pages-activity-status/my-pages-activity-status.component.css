@@ -40,6 +40,9 @@ button.closeModal {
   overflow-y: auto;
 }
 
+a.button-link:hover {
+  text-decoration: underline !important;
+}
 
 .closeModal {
   float: right;

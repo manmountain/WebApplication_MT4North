@@ -81,7 +81,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Nej, avbryt</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Ja, nollställ projektet</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" [hidden]="!hasRights"  (click)="resetProject(selectedProject.projectid)">Ja, nollställ projektet</button>
           </div>
         </div>
       </div>

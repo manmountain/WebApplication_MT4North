@@ -18,6 +18,7 @@ namespace WebApplication_MT4North.Models
         public Activity()
         {
             Notes = new HashSet<Note>();
+            Resources = new HashSet<Resource>();
         }
 
         [JsonPropertyName("activityid")]

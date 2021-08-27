@@ -151,7 +151,8 @@ export class MyPagesActivityStatusComponent {
     this.resourceForm = this.formBuilder.group({
       resourceid: [0],
       activityid: [0],
-      url: ['', [Validators.required, Validators.pattern(this.htmlPattern)]]
+      url: ['', [Validators.required, Validators.pattern(this.htmlPattern)]],
+      text: []
     });
   }
 
@@ -455,6 +456,7 @@ export class MyPagesActivityStatusComponent {
         data => {
           this.alertService.success('Resursen har lagts till', { keepAfterRouteChange: true });
           this.resourceForm.controls.url.setValue('');
+          this.resourceForm.controls.text.setValue('');
           this.submittedResource = false;
         },
         error => {

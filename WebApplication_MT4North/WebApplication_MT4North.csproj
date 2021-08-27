@@ -81,6 +81,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
+    <None Remove="ClientApp\src\app\my-pages-delete-account\my-pages-delete-account.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-edit-account\my-pages-edit-account.component.ts" />
     <None Remove="ClientApp\src\app\_components\addActivityModal.component.ts" />
     <None Remove="ClientApp\src\app\_components\alert.component.ts" />
@@ -131,6 +132,7 @@
     <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\home\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\login\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\my-pages-delete-account\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\my-pages-edit-account\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.spec.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\register\register.component.ts" />

@@ -132,7 +132,7 @@ export class ProjectService {
           },
           error => {
             if (error.status == 403) {
-              console.log('Otillåtet. Du måste ha läs rättigheter för att besöka projektet');
+              console.log('Otillåtet. Du måste ha läsrättigheter för att besöka projektet');
             } else if (error.status == 404) {
               console.log('Projektet hittades inte');
             } else {

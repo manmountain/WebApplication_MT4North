@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <h4 class="display-8 text-black-50 pl-0">Ta bort konto</h4>
+    <p *ngIf="!isAdmin && projects?.length == 0" class=" text-black mb-3">Ta bort ditt konto genom att klicka på knappen nedan.</p>
+    <p *ngIf="isAdmin" class=" text-black mb-3">Du kan inte ta bort ditt konto eftersom du är administratör.</p>
+    <p *ngIf="!isAdmin && projects?.length == 1" class=" text-black mb-3">Du måste lämna projektet du ingår i innan du kan ta bort ditt konto.</p>
+    <p *ngIf="!isAdmin && projects?.length > 1" class=" text-black mb-3">Du måste lämna de projekt du ingår i innan du kan ta bort ditt konto.</p>
+
+    <button class="btn btn-danger btn-sm float-left mr-3" type="button" [disabled]="isAdmin || projects?.length > 0" data-target="#deleteAccountModal" data-toggle="modal">Ta bort konto</button>
+
+    <div class="modal" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
+        <div class="modal-content">
+          <!--<div class="modal-header">
+          <h5 class="modal-title">
+            Nollställ projekt
+          </h5>
+          <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>-->
+          <div class="modal-body">
+            <h6 class="text-wrap">
+              Är du säker på att du vill ta bort ditt konto?
+            </h6>
+            <p>Kontot kommer tas bort permanent. Åtgärden går inte att ångra.</p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Nej, avbryt</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="deleteAccount()">Ja, ta bort</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <alert></alert>
+  </div>
+</div>

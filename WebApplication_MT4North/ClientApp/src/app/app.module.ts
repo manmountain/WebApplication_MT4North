@@ -26,6 +26,7 @@ import { MyPagesProjectComponent } from './my-pages-project/my-pages-project.com
 import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pages-activity-status.component';
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
 import { MyPagesEditAccountComponent } from './my-pages-edit-account';
+import { MyPagesDeleteAccountComponent } from './my-pages-delete-account';
 import { MatchesPhaseAndThemePipe, EnumToArrayPipe, NumberToPhasePipe, NumberToRolePipe, NumberToRightsPipe, NumberToStatusPipe, JsonToDatePipe } from './_models';
 import { AddActivityModal } from './_modals';
 import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
@@ -74,6 +75,10 @@ const routes: Routes = [
       {
         path: 'edit-account',
         component: MyPagesEditAccountComponent
+      },
+      {
+        path: 'delete-account',
+        component: MyPagesDeleteAccountComponent
       }
     ]
   }
@@ -99,6 +104,7 @@ const routes: Routes = [
     MyPagesMembersComponent,
     MyPagesProjectSettingsComponent,
     MyPagesEditAccountComponent,
+    MyPagesDeleteAccountComponent,
     MatchesPhaseAndThemePipe,
     EnumToArrayPipe,
     NumberToPhasePipe,

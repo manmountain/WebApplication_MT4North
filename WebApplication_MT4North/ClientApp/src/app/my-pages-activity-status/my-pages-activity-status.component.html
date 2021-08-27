@@ -170,7 +170,9 @@
                                     <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="setCurrentActivityDates(activity)">
                                         <p>
-                                          <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum</span>
+                                          <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum </span>
+                                          <span *ngIf="activity.deadlinedate"><span class="badge badge-danger">{{activity.deadlinedate | jsonToDate}}</span></span>
+
                                         </p>
                                       </a>
                                     </div>
@@ -283,20 +285,23 @@
                                               <ul class="list-group list-group-flush pl-0">
                                                 <li class="list-group-item pt-0">
                                                   <a *ngIf="!resource.isEditable" class="button-link" style="font-size: 12px;" href="{{resource.url}}" target="_blank">
-                                                    {{resource.url}} &#8599;
+                                                    {{resource.text || resource.url}} &#8599;
                                                   </a>
-                                                  <form ngNoForm>
-                                                    <input *ngIf="resource.isEditable" class="w-100 form-control" type="url" style="font-size: 12px;" maxlength="250" name="editURL" [(ngModel)]="resource.url" required value="{{resource.url}}" pattern="{{htmlReg}}" />
-                                                    <br />
+                                                  <form ngNoForm *ngIf="resource.isEditable" >
+                                                    <p class="p-0 m-0"><label for="url-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länk:</label></p>
+                                                    <input id="url-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="w-100 form-control" type="url" style="font-size: 12px;" maxlength="250" name="editURL" [(ngModel)]="resource.url" required value="{{resource.url}}" pattern="{{htmlReg}}" />
 
+                                                    <p class="p-0 m-0"><label for="url-text-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länktext (valfritt):</label></p>
+                                                    <input *ngIf="resource.isEditable" id="url-text-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="w-100 form-control mt-2 mb-3" type="url" style="font-size: 12px;" maxlength="250" name="editURLtext" [(ngModel)]="resource.text" value="{{resource.text}}" pattern="{{htmlReg}}" />
+
+                                                    <input class="align-middle btn btn-primary btn-sm mr-3" title="Spara resurs" (click)="updateResource(activity, resource)" value="Spara" type="submit">
+
+                                                    <a *ngIf="resource.isEditable" class="align-middle btn btn-secondary btn-sm mr-3" role="button" title="Avbryt redigera resurs" (click)="resetResource(activity, resource)" style="color: white;">Avbryt</a>
+                                                  </form>
+                                                  <br *ngIf="!resource.isEditable"/>
                                                     <a *ngIf="!resource.isEditable && hasEditRights" id="note-r{{i}}c{{j}}-{{k}}-{{m}}" class="align-middle im-link-btn mr-3" role="button" title="Redigera resurs" (click)="toggleEditResource(activity, resource)">Redigera</a>
 
-                                                    <input *ngIf="resource.isEditable" class="align-middle btn btn-primary btn-sm mr-3" title="Spara resurs" (click)="updateResource(activity, resource)" value="Spara" type="submit">
-
-                                                    <a *ngIf="resource.isEditable" class="align-middle btn btn-secondary btn-sm mr-3" role="button" title="Avbryt redigera resurs" (click)="resetResource(activity, resource)">Avbryt</a>
-
                                                     <a *ngIf="!resource.isEditable && hasEditRights" role="button" class="align-middle im-link-btn" data-target="#removeResourceModal" data-toggle="modal" (click)="setCurrentResource(resource, activity)">Ta bort</a>
-                                                  </form>
 
                                                 </li>
                                               </ul>
@@ -309,13 +314,23 @@
                                           </div>
                                           <div class="modal-footer">
                                             <form *ngIf="hasEditRights" [formGroup]="resourceForm" ngNativeValidate class="form-group mt-2 w-100" id="resourceForm-r{{i}}c{{j}}-{{k}}-{{m}}" (ngSubmit)="addResource(activity)">
-                                              <p class="p-0 m-0"><label for="note-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Ny resurs:</label></p>
-                                              <input type="text" class="form-control" formControlName="url" id="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required [ngClass]="{ 'is-invalid': submittedResource && fResources.url.errors }" placeholder="Ange en webbadress" />
+
+                                              <p class="p-0 m-0"><label for="url-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länk:</label></p>
+                                              <input type="text" class="form-control" formControlName="url" id="url-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" required [ngClass]="{ 'is-invalid': submittedResource && fResources.url.errors }" placeholder="Ange en webbadress" />
+
                                               <div *ngIf="submittedResource && fResources.url.errors" class="invalid-feedback">
                                                 <div *ngIf="fResources.url.errors.required">Ange en webbadress.</div>
                                                 <div *ngIf="fResources.url.errors.pattern" style="font-size: 12px;">Ange en giltig webbadress på formen www.exemple.com.</div>
-
                                               </div>
+
+                                                <p class="p-0 m-0"><label for="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länktext (valfritt):</label></p>
+                                                <input type="text" class="form-control" formControlName="text" id="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" [ngClass]="{ 'is-invalid': submittedResource && fResources.text.errors }" placeholder="Ange en adresstext" />
+                                              <!--<div *ngIf="submittedResource && fResources.text.errors" class="invalid-feedback">
+        <div *ngIf="fResources.url.errors.required">Ange en webbadress.</div>
+        <div *ngIf="fResources.url.errors.pattern" style="font-size: 12px;">Ange en giltig webbadress på formen www.exemple.com.</div>
+
+
+      </div>-->
                                               <input type="submit" class="btn btn-primary mt-2 float-right" [disabled]="!resourceForm.dirty || isEditingResource" value="Lägg till" />
                                             </form>
                                             <p *ngIf="!hasEditRights" class="text-center w-100">Du har inte behörighet att lägga till resurser.</p>

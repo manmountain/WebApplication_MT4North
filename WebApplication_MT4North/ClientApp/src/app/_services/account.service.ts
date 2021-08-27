@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User, UserAuth } from '@app/_models';
@@ -98,6 +98,22 @@ export class AccountService {
           }
           return x;
         }));
+  }
+
+  delete(): Observable<any> {
+
+    return this.http.delete(`${environment.apiUrl}/Account/user`, { observe: 'response' })
+      .pipe(
+        tap(
+          response => {
+            this.logout();
+          },
+          error => {
+            // something went wrong
+            return throwError(error);
+          }
+        )
+      );
   }
 
   refreshToken() {

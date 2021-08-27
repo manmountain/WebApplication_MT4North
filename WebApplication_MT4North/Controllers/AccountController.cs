@@ -15,6 +15,7 @@ using WebApplication_MT4North.Resources;
 using System.Linq;
 using System.Collections.Generic;
 using WebApplication_MT4North.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication_MT4North.Controllers
 {
@@ -24,6 +25,7 @@ namespace WebApplication_MT4North.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
+        private readonly MT4NorthContext _context;
         //private readonly IUserService _userService;
         private readonly IJwtAuthManager _jwtAuthManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -31,11 +33,13 @@ namespace WebApplication_MT4North.Controllers
 
         public AccountController(
             ILogger<AccountController> logger,
+            MT4NorthContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IJwtAuthManager jwtAuthManager)
         {
             _logger = logger;
+            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtAuthManager = jwtAuthManager;
@@ -455,9 +459,29 @@ namespace WebApplication_MT4North.Controllers
                     Errors = new List<string>()
                 });
             }
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // If user is a admin user, forbid delete action
+            if(roles.Contains("AdminUser"))
+            {
+                return Forbid();
+            }
+            // fetch all user-projects where the user is a member
+            var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName && p.Status == UserProjectStatus.ACCEPTED).ToListAsync<UserProject>();
+            if (userProjects.Count() > 0)
+            {
+                // If the user is still a member of projects, forbid delete action
+                return Forbid();
+            }
+
             var deleteResult = await _userManager.DeleteAsync(user);
             if (deleteResult.Succeeded)
             {
+                // also delete project invitations
+                var projectInvitations = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
+                _context.UserProjects.RemoveRange(projectInvitations);
+                await _context.SaveChangesAsync();
+
                 return Ok(new StatusResult
                 {
                     Message = "User " + userEmail + " deleted"

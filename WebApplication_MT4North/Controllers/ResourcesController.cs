@@ -41,17 +41,21 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(activityId);
             if (activity == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             var project  = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             // Check user permissions
             var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ)).ToListAsync<UserProject>();
@@ -72,6 +76,10 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             var resource = await _context.Resources.FindAsync(id);
             // Make sure that we got a note to return 
@@ -84,12 +92,12 @@ namespace WebApplication_MT4North.Controllers
             var activity = await _context.Activities.FindAsync(resource.ActivityId);
             if (activity == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             var project = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             // Get userprojects with permissions R/RW
             var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ)).ToListAsync<UserProject>();
@@ -114,16 +122,21 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(resource.ActivityId);
             if (activity == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             var project = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             // Get userprojects with permissions W/RW
             var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
@@ -173,14 +186,14 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user != null)
             {
-                BadRequest();
+                Unauthorized();
             }
             
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(activityId);
             if (activity == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             var project = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
@@ -222,7 +235,11 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             // Fetch resource
             var resource = await _context.Resources.FindAsync(id);
             if (resource == null)
@@ -234,12 +251,12 @@ namespace WebApplication_MT4North.Controllers
             var activity = await _context.Activities.FindAsync(resource.ActivityId);
             if (activity == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             var project = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             // Get userprojects with permissions W/RW
             var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();

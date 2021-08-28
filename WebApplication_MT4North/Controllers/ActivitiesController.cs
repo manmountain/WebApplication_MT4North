@@ -55,7 +55,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             // Get all user projects for the user where the user have R or RW permissions
@@ -113,7 +113,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             var activity = await _context.Activities.FindAsync(id);
@@ -173,7 +173,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             if (id != activity.ActivityId)
@@ -285,6 +285,10 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the RW rights! Otherwise return Forbidden
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == activity.ProjectId && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)); // TODO Enum non R-read RW-readwrite
             if (callerUserProject == null)
             {
@@ -357,12 +361,11 @@ namespace WebApplication_MT4North.Controllers
 
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            var roles = await _userManager.GetRolesAsync(user);
-
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
+            var roles = await _userManager.GetRolesAsync(user);
 
             // Check if its a baseactivity, then require that the user got AdminUser-Role
             if (activity.BaseActivityInfoId != null && !roles.Contains("AdminUser"))
@@ -419,7 +422,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             var userproject = await _context.UserProjects.FirstOrDefaultAsync(p => p.ProjectId == projectId &&
@@ -451,24 +454,6 @@ namespace WebApplication_MT4North.Controllers
             return activities;
         }
 
-        /*
-        // POST /api/Activities/Project/{projectId}
-        // create an activitys for user in project with ProjectId == projectId
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [Authorize()]
-        [HttpPost("Project/{projectId}")]
-        public async Task<ActionResult<Activity>> PostActivity(int projectId, Activity activity)
-        {
-
-            //_context.Activities.Add(activity);
-            //await _context.SaveChangesAsync();
-            // TODO: 
-
-
-            return CreatedAtAction("GetActivity", new { id = activity.ActivityId }, activity);
-        }*/
-
         private bool ActivityExists(int id)
         {
             return _context.Activities.Any(e => e.ActivityId == id);
@@ -485,13 +470,3 @@ namespace WebApplication_MT4North.Controllers
         }
     }
 }
-
-
-
-// GET  /api/Activities                                             all activitys for user
-// GET  /api/Activities/{id}                                        activity with ActivityId == id
-// PUT  /api/Activities/{id}                                        update activity with ActivityId == id
-// DEL  /api/Activities/{id}                                        delete activity with ActivityId == id
-// GET  /api/Activities/Project/{projectId}                         all activitys for project with ProjectId == projectId
-// POST /api/Activities/Project/{projectId}/customActivity/{id}     create an activitys for user in project with ProjectId == projectId
-// POST /api/Activities/Project/{projectId}/baseActivity/{id}       create an activitys for user in project with ProjectId == projectId

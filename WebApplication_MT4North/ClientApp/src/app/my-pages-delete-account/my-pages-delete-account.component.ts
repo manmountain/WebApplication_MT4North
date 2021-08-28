@@ -26,20 +26,21 @@ export class MyPagesDeleteAccountComponent implements OnDestroy {
     private viewService: ViewService,
     private accountService: AccountService,
     private alertService: AlertService,
+    private router: Router
   ) {
-    this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; this.isAdmin = this.currentUser.userrole == 'AdminUser'; });
-
-    this.projectsSubscription = this.projectService.projects.subscribe(x => this.projects = x);
-    this.projectService.getProjects()
-      .pipe(first())
-      .subscribe(
-        data => {
-        },
-
-        error => {
-          const err = error.error.message || error.statusText;
-          this.alertService.error(err);
-        });
+    if (this.currentUser) {
+      this.accountSubscription = this.accountService.currentUser.subscribe(x => { this.currentUser = x; this.isAdmin = this.currentUser.userrole == 'AdminUser'; });
+      this.projectsSubscription = this.projectService.projects.subscribe(x => this.projects = x);
+      this.projectService.getProjects()
+        .pipe(first())
+        .subscribe(
+          data => {
+          },
+          error => {
+            const err = error.error.message || error.statusText;
+            this.alertService.error(err);
+          });
+    }
   }
 
   ngOnInit() {
@@ -47,9 +48,12 @@ export class MyPagesDeleteAccountComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.accountSubscription.unsubscribe();
-    this.projectsSubscription.unsubscribe();
-
+    if (this.accountSubscription) {
+      this.accountSubscription.unsubscribe();
+    }
+    if (this.projectsSubscription) {
+      this.projectsSubscription.unsubscribe();
+    }
   }
 
   isFullscreen() {
@@ -63,6 +67,8 @@ export class MyPagesDeleteAccountComponent implements OnDestroy {
       .pipe(first())
       .subscribe(
         data => {
+          // redirect to landing-page
+          this.router.navigate(['/']);
         },
         error => {
           if (error.status == 403) {

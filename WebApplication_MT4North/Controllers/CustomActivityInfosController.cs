@@ -67,7 +67,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             var activity = await _context.Activities.FirstAsync(a => a.CustomActivityInfoId == customActivityInfo.CustomActivityInfoId);
@@ -81,10 +81,10 @@ namespace WebApplication_MT4North.Controllers
                                                                p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ)).FirstOrDefault();
             if (userproject == null)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
-            return customActivityInfo;
+            return Ok(customActivityInfo);
         }
 
         // PUT: api/CustomActivityInfos/5
@@ -124,7 +124,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             var activity = await _context.Activities.FirstAsync(a => a.CustomActivityInfoId == customActivityInfo.CustomActivityInfoId);
@@ -144,7 +144,7 @@ namespace WebApplication_MT4North.Controllers
                                                                p.UserId == user.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).FirstOrDefault();
             if (userproject == null)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             _context.Entry(customActivityInfo).State = EntityState.Modified;
@@ -165,54 +165,7 @@ namespace WebApplication_MT4North.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
-        
-        /*
-        // DELETE: api/CustomActivityInfos/5
-        [Authorize()]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<CustomActivityInfo>> DeleteCustomActivityInfo(int id)
-        {
-            var customActivityInfo = await _context.CustomActivityInfos.FindAsync(id);
-            if (customActivityInfo == null)
-            {
-                return NotFound();
-            }
-
-            string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var activity = await _context.Activities.FirstAsync(a => a.CustomActivityInfoId == customActivityInfo.CustomActivityInfoId);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects.FindAsync(activity.ProjectId);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            // Check if user got W or RW permissions for the project the activity belongs to
-            var userproject = _context.UserProjects.Where(p => p.ProjectId == project.ProjectId &&
-                                                               p.UserId == user.Id && (p.Rights == "RW" || p.Rights == "W")).FirstOrDefault();
-            if (userproject == null)
-            {
-                return Unauthorized();
-            }
-
-            _context.CustomActivityInfos.Remove(customActivityInfo);
-            await _context.SaveChangesAsync();
-
-            return customActivityInfo;
-        }*/
 
         private bool CustomActivityInfoExists(int id)
         {

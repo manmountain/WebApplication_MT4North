@@ -58,7 +58,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user != null)
+            if (user == null) {
+                return Unauthorized();
+            } 
+            else
             {
                 // fetch all user-projects where the user is a member
                 var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName && p.Status == UserProjectStatus.ACCEPTED).ToListAsync<UserProject>();
@@ -69,7 +72,6 @@ namespace WebApplication_MT4North.Controllers
                 }
                 return Ok(userProjects);
             }
-            return NotFound();
         }
 
         // GET: api/UserProjects/{id}
@@ -96,7 +98,7 @@ namespace WebApplication_MT4North.Controllers
             var userproject = await _context.UserProjects.FindAsync(id);
             if (userproject == null)
             {
-                return NotFound();
+                return Unauthorized();
             }
 
             // Check if the caller got the READ rights for the project the UserProject with id belongs to! Otherwise return Unauthorized
@@ -154,6 +156,10 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the READ rights for project with id projectId! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
             // TODO Enum non R-read RW-readwrite
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == projectId && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.READ));
             if (callerUserProject == null)
@@ -205,7 +211,8 @@ namespace WebApplication_MT4North.Controllers
             {
                 var error = new ErrorResult();
                 error.Message = "User " + userEmail + " not found";
-                return NotFound(error);
+                //return NotFound(error);
+                return Unauthorized();
             }
 
             /*UserProjectPermissions? rights = null;
@@ -314,6 +321,10 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the RW rights! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == userproject.ProjectId && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE));
             if (callerUserProject == null)
             {
@@ -359,8 +370,6 @@ namespace WebApplication_MT4North.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         //GET: api/UserProjects/Invites/
@@ -417,6 +426,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
             // fetch user-project for user with UserProjectId id and Status pending 
             var invite = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.UserProjectId == id && p.UserId == user.Id && p.Status == UserProjectStatus.PENDING);
             if (invite == null)
@@ -456,6 +469,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
             // fetch user-project for user with UserProjectId id and Status pending 
             var invite = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.UserProjectId == id && p.UserId == user.Id && p.Status == UserProjectStatus.PENDING);
             if (invite == null)
@@ -500,6 +517,10 @@ namespace WebApplication_MT4North.Controllers
 
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
 
             var userProject = await _context.UserProjects.FindAsync(id);
             if (userProject == null)

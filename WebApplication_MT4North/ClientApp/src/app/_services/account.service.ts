@@ -101,7 +101,6 @@ export class AccountService {
   }
 
   delete(): Observable<any> {
-
     return this.http.delete(`${environment.apiUrl}/Account/user`, { observe: 'response' })
       .pipe(
         tap(

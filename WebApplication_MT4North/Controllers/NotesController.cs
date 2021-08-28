@@ -39,6 +39,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             var notes = await _context.Notes.Where(n => n.UserId == user.Id).ToListAsync<Note>();
             return notes;
@@ -54,6 +58,10 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(activityId);
@@ -85,6 +93,10 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             var note = await _context.Notes.FindAsync(id);
             // Make sure that we got a note to return 
@@ -127,6 +139,11 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             // Fetch activity and project
             var activity = await _context.Activities.FindAsync(note.ActivityId);
             if (activity == null)
@@ -186,7 +203,7 @@ namespace WebApplication_MT4North.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user != null)
             {
-                BadRequest();
+                return Unauthorized();
             }
             
             // Fetch activity and project
@@ -205,7 +222,7 @@ namespace WebApplication_MT4North.Controllers
             // Check if the user is allowed to do that
             if (userproj.Count == 0)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             // Note with empty string content is not Ok 
@@ -243,7 +260,10 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            
+            if (user == null)
+            {
+                return Unauthorized();
+            }
             // Fetch note
             var note = await _context.Notes.FindAsync(id);
             if (note == null)
@@ -255,17 +275,17 @@ namespace WebApplication_MT4North.Controllers
             var activity = await _context.Activities.FindAsync(note.ActivityId);
             if (activity == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             var project = await _context.Projects.FindAsync(activity.ProjectId);
             if (project == null)
             {
-                return NoContent();
+                return BadRequest();
             }
             // Get userprojects with permissions W/RW
             var userproj = await _context.UserProjects.Where(p => p.ProjectId == project.ProjectId && p.User.Id == user.Id && p.Status == UserProjectStatus.ACCEPTED && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)).ToListAsync<UserProject>();
             // Check if the user is allowed to do that
-            if (note.UserId != user.Id && userproj.Count == 0)
+            if (note.UserId != user.Id || userproj.Count == 0)
             {
                 return Unauthorized();
             }

@@ -55,6 +55,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             // fetch all user-projects where the user is a member
             //var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
@@ -102,6 +106,10 @@ namespace WebApplication_MT4North.Controllers
             // Fetch current user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
             // Get the project
             var project = await _context.Projects.FindAsync(id);
 
@@ -141,6 +149,10 @@ namespace WebApplication_MT4North.Controllers
             // Fetch current user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
 
             // Save project
             _context.Projects.Add(project);
@@ -204,6 +216,10 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the WRITE rights! Otherwise return Unauthorized
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE));
             if (callerUserProject == null)
             {
@@ -261,6 +277,10 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the OWNER rights! Otherwise return Forbidden
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && p.Role == UserProjectRoles.OWNER /*&& (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)*/);
             if (callerUserProject == null)
             {
@@ -326,6 +346,10 @@ namespace WebApplication_MT4North.Controllers
             // Check if the caller got the OWNER rights! Otherwise return Forbidden
             string callerEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var caller = await _userManager.FindByEmailAsync(callerEmail);
+            if (caller == null)
+            {
+                return Unauthorized();
+            }
             var callerUserProject = await _context.UserProjects.FirstOrDefaultAsync<UserProject>(p => p.ProjectId == id && p.UserId == caller.Id && p.Role == UserProjectRoles.OWNER /*&& (p.Rights == UserProjectPermissions.READWRITE || p.Rights == UserProjectPermissions.WRITE)*/);
             if (callerUserProject == null)
             {

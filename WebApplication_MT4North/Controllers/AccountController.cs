@@ -295,13 +295,12 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            //var roles = await _userManager.GetRolesAsync(user);
-            List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
-
             if (user == null)
             {
                 return NotFound();
             }
+            //var roles = await _userManager.GetRolesAsync(user);
+            List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
 
             user.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
             return Ok(user);
@@ -329,6 +328,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
             var roles = await _userManager.GetRolesAsync(user);
 
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -373,6 +376,10 @@ namespace WebApplication_MT4North.Controllers
         public async Task<ActionResult> UpdateUserAsync(string userEmail, [FromBody] UserRequest request)
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
             var roles = await _userManager.GetRolesAsync(user);
 
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -419,6 +426,10 @@ namespace WebApplication_MT4North.Controllers
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
             var roles = await _userManager.GetRolesAsync(user);
             var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword); 
             if (result.Succeeded)
@@ -438,6 +449,7 @@ namespace WebApplication_MT4North.Controllers
         }
 
         [HttpDelete("user")]
+        [Authorize]
         public async Task<ActionResult> DeleteUserAsync()
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
@@ -473,15 +485,18 @@ namespace WebApplication_MT4North.Controllers
                 // If the user is still a member of projects, forbid delete action
                 return Forbid();
             }
-
+            // fetch and delete all user-projects project invitations
+            var projectInvitations = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
+            if (projectInvitations.Count > 0)
+            {
+                _context.UserProjects.RemoveRange(projectInvitations);
+                await _context.SaveChangesAsync();
+            }
             var deleteResult = await _userManager.DeleteAsync(user);
             if (deleteResult.Succeeded)
             {
-                // also delete project invitations
-                var projectInvitations = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
-                _context.UserProjects.RemoveRange(projectInvitations);
                 await _context.SaveChangesAsync();
-
+                _jwtAuthManager.RemoveRefreshTokenByUserName(user.UserName);
                 return Ok(new StatusResult
                 {
                     Message = "User " + userEmail + " deleted"
@@ -520,6 +535,13 @@ namespace WebApplication_MT4North.Controllers
                     Message = "Can't find user with email: " + userEmail + " to delete",
                     Errors = new List<string>()
                 });
+            }
+            // delete all old UserProjects, such as invatations ..
+            var userProjects = await _context.UserProjects.Where(u => u.UserId == user.Id).ToListAsync<UserProject>();
+            if (userProjects.Count > 0)
+            {
+                _context.UserProjects.RemoveRange(userProjects);
+                await _context.SaveChangesAsync();
             }
             var deleteResult = await _userManager.DeleteAsync(user);
             if (deleteResult.Succeeded)
@@ -610,6 +632,10 @@ namespace WebApplication_MT4North.Controllers
         public async Task<IActionResult> AddUserToRole(string userEmail, string roleName)
         {
             var user = _userManager.Users.SingleOrDefault(u => u.UserName == userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
             var result = await _userManager.AddToRoleAsync(user, roleName);
 
             if (result.Succeeded)
@@ -630,6 +656,10 @@ namespace WebApplication_MT4North.Controllers
         public async Task<IActionResult> RemoveUserFromRole(string userEmail, string roleName)
         {
             var user = _userManager.Users.SingleOrDefault(u => u.UserName == userEmail);
+            if (user == null)
+            {
+                return NotFound();
+            }
             var result = await _userManager.RemoveFromRoleAsync(user, roleName);
 
             if (result.Succeeded)

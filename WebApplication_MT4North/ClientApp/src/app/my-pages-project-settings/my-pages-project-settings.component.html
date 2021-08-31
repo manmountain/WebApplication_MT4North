@@ -14,8 +14,8 @@
             </div>
           </td>
           <!--<td class="w-25">
-            <button class="btn btn-primary btn-sm float-right" [hidden]="!hasRights || projectNameIsEditable">Ändra</button>
-          </td>-->
+          <button class="btn btn-primary btn-sm float-right" [hidden]="!hasRights || projectNameIsEditable">Ändra</button>
+        </td>-->
         </tr>
         <tr>
           <td class="w-25">
@@ -28,38 +28,64 @@
             </div>
           </td>
           <!--<td class="w-25">
-            <button class="btn btn-primary btn-sm float-right" [hidden]="!hasRights || projectDescriptionIsEditable">Ändra</button>
-          </td>-->
+          <button class="btn btn-primary btn-sm float-right" [hidden]="!hasRights || projectDescriptionIsEditable">Ändra</button>
+        </td>-->
         </tr>
 
         <!--
-        <tr>
+      <tr>
 
-          <td>
-            <span class="d-inline-block" style="white-space:nowrap"><i class="fa fa-bell fa-fw"></i><b> Påminnelser</b></span>
-          </td>
-          <td class="settingDescription">
-            Få påminnelser via mail när aktiviteter som inte slutförts närmar sig deadline.
-          </td>
-          <td>
+        <td>
+          <span class="d-inline-block" style="white-space:nowrap"><i class="fa fa-bell fa-fw"></i><b> Påminnelser</b></span>
+        </td>
+        <td class="settingDescription">
+          Få påminnelser via mail när aktiviteter som inte slutförts närmar sig deadline.
+        </td>
+        <td>
 
-            <div class="custom-control custom-switch float-left">
-              <input type="checkbox" class="custom-control-input custom-switch-md" id="customSwitch1">
-              <label class="custom-control-label" for="customSwitch1"></label>
-            </div>
-          </td>
+          <div class="custom-control custom-switch float-left">
+            <input type="checkbox" class="custom-control-input custom-switch-md" id="customSwitch1">
+            <label class="custom-control-label" for="customSwitch1"></label>
+          </div>
+        </td>
 
-        </tr>
-        -->
+      </tr>
+      -->
       </tbody>
     </table>
     <hr />
-    <button class="btn btn-danger btn-sm float-left mr-3" type="button" [hidden]="!hasRights"  (click)="deleteProject(selectedProject.projectid)">Ta bort projektet</button>
+    <button class="btn btn-danger btn-sm float-left mr-3" type="button" [hidden]="!hasRights" data-toggle="modal" data-target="#deleteProjectModal">Ta bort projektet</button>
     <button type="button" class="btn btn-secondary btn-sm float-left mr-2" [hidden]="!hasRights" onmousedown="event.preventDefault()" data-toggle="modal" data-target="#resetModal">Nollställ projektet</button>
     <button type="button" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!hasRights || editModeIsOn" (click)="activateEditMode(true)">Ändra</button>
     <input type="submit" class="btn btn-primary btn-sm float-right mr-2" [hidden]="!editModeIsOn" value="Spara">
     <button type="button" class="btn btn-secondary btn-sm float-right mr-2" [hidden]="!editModeIsOn" (click)="activateEditMode(false)">Avbryt</button>
 
+
+    <div class="modal" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title">
+            Ta bort projekt
+          </h5>
+          <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body">
+            <h6 class="text-wrap">
+              Är du säker på att du vill ta bort projektet?
+            </h6>
+            <p>Projektet kommer tas bort permanent. Åtgärden går inte att ångra.</p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Nej, avbryt</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="deleteProject(selectedProject.projectid)">Ja, ta bort</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -81,7 +107,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Nej, avbryt</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" [hidden]="!hasRights"  (click)="resetProject(selectedProject.projectid)">Ja, nollställ projektet</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" [hidden]="!hasRights" (click)="resetProject(selectedProject.projectid)">Ja, nollställ projektet</button>
           </div>
         </div>
       </div>

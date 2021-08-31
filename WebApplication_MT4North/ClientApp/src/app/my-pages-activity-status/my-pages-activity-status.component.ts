@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewChildren, QueryList, ViewEncapsulation } from '@angular/core';
 import { Theme, Activity, ActivityPhase, ActivityStatus, ActivityInfo, UserProject, User, ProjectRights, ProjectRole, Note, Resource } from "../_models";
 import { AddActivityModal } from "../_modals";
 import { AlertService, ViewService, ProjectService, AccountService } from "../_services";
@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-my-pages-activity-status',
   templateUrl: './my-pages-activity-status.component.html',
-  styleUrls: ['./my-pages-activity-status.component.css'],
+  styleUrls: ['./my-pages-activity-status.component.css']
 })
 
 export class MyPagesActivityStatusComponent {
@@ -63,7 +63,8 @@ export class MyPagesActivityStatusComponent {
   @ViewChild('closeEditActivityDatesModal', { static: false }) closeEditActivityDatesModal; 
   @ViewChild('openEditActivityModalButton', { static: false }) openEditActivityModalButton;
   @ViewChild('openEditActivityDatesModalButton', { static: false }) openEditActivityDatesModalButton;
-  
+  @ViewChildren('markdownElement', { read: ElementRef }) markdownElements: QueryList<ElementRef>;
+
 
   selectedDate = new Date().toISOString().split('T')[0];
   isFullscreen: boolean = false;
@@ -84,7 +85,6 @@ export class MyPagesActivityStatusComponent {
             .subscribe(
               data => {
                 this.isDataLoaded = true;
-
               },
 
               error => {
@@ -161,6 +161,29 @@ export class MyPagesActivityStatusComponent {
     this.activitiesSubscription.unsubscribe();
     this.userProjectsSubscription.unsubscribe();
     //this.accountSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    this.markdownElements.changes.subscribe((comps: QueryList<ElementRef>) => {
+      // Now you can access to the child component
+      this.addCSStoMarkdown();
+    });
+  }
+
+  addCSStoMarkdown() {
+    //$(".markdown-description").closest('ul').addClass('pl-3');
+    console.log('hej');
+    //this.markdownElements.toArray().forEach(val => { val.nativeElement.getElementsByTagName('ul').className += "pl-3"; });
+    this.markdownElements.toArray().forEach(val => {
+      if (val.nativeElement.getElementsByTagName('ul') != null && val.nativeElement.getElementsByTagName('ul').length != 0) {
+        const listItems = val.nativeElement.getElementsByTagName('ul');
+        for (let i = 0; i <= listItems.length - 1; i++) {
+          if (!listItems[i].className.includes('pl-3')) {
+            listItems[i].className += "pl-3";
+          }
+        }
+      }
+    });  
   }
 
   sortNotes(notes) {
@@ -350,6 +373,25 @@ export class MyPagesActivityStatusComponent {
              this.editActivityDatesForm.controls.finished.dirty );
   }
 
+  getCheckboxTitle(activity: Activity) {
+    var title;
+    switch (activity.status) {
+      case ActivityStatus.NOTSTARTED: {
+        title = "Markera som påbörjad";
+        break;
+      }
+      case ActivityStatus.ONGOING: {
+        title = "Markera som avslutad";
+        break;
+      }
+      default: {
+        title = "Markera som ej påbörjad";
+        break;
+      }
+    }
+    return title;
+  }
+
   editActivityDates() {
     let edits = 0;
     if (this.editActivityDatesForm.controls.deadline.dirty) {
@@ -382,6 +424,7 @@ export class MyPagesActivityStatusComponent {
 
     if (edits > 0) {
       // console.log(edits + 'st ändringar sparas');
+      this.updateActivityStatusBasedOnDates();
       this.updateActivity(this.currentActivity);
     } else {
       // console.log('Inga ändringar sparas');
@@ -389,6 +432,47 @@ export class MyPagesActivityStatusComponent {
     }
     this.closeEditActivityDatesModal.nativeElement.click();
   }
+
+  updateActivityStatusBasedOnDates() {
+    if (this.currentActivity.startdate != null && this.currentActivity.finishdate == null) {
+      this.currentActivity.status = ActivityStatus.ONGOING;
+    } else if (this.currentActivity.finishdate != null) {
+      this.currentActivity.status = ActivityStatus.FINISHED;
+    } else {
+      this.currentActivity.status = ActivityStatus.NOTSTARTED;
+    }
+  }
+
+  getMaxStartedDate() {
+    if (this.currentActivity != null) {
+      if (this.currentActivity.finishdate) {
+        return this.formatDate(this.currentActivity.finishdate);
+      }
+    }
+  }
+
+  getMinFinishedDate() {
+    if (this.currentActivity != null) {
+      if (this.currentActivity.startdate) {
+        return this.formatDate(this.currentActivity.startdate);
+      }
+    }
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
 
   deleteActivity(activityid: string, activityinfoid: string, isBaseActivity: boolean) {
     this.projectService.deleteActivity(parseInt(activityid), isBaseActivity)
@@ -604,6 +688,24 @@ export class MyPagesActivityStatusComponent {
     return baseActivities.length > 0 || customActivities.length > 0;
     //return baseActivities.length > 0;
 
+  }
+
+  numberOfDates(activity: Activity) {
+    let finishdate = activity.finishdate == null ? 0 : 1;
+    let startdate = activity.startdate == null ? 0 : 1;
+    let deadlinedate = activity.deadlinedate == null ? 0 : 1;
+
+    return finishdate + startdate + deadlinedate;
+  }
+
+  getActivityTimeLapse(activity: Activity) {
+    var differenceInTime = 0;
+
+    differenceInTime = activity.finishdate == null ? (new Date().getTime() - new Date(activity.startdate).getTime())
+      : (new Date(activity.finishdate).getTime() - new Date(activity.startdate).getTime());
+
+    // Return difference in days
+    return Math.ceil(differenceInTime / (1000 * 3600 * 24));
   }
 
   setCurrentActivityDates(activity: Activity) {

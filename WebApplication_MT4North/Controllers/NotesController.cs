@@ -201,7 +201,7 @@ namespace WebApplication_MT4North.Controllers
             // Get user
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user != null)
+            if (user == null)
             {
                 return Unauthorized();
             }

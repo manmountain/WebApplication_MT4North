@@ -150,7 +150,7 @@
                                   <a #activityElement class="im-checkbox collapsed im-theme-{{i}}" [class.excluded]="activity.isexcluded" id="checkbox-r{{i}}c{{j}}-{{k}}" data-toggle="collapse" [attr.data-parent]="'#accordion-r'+i+'c'+j+'-'+k" href="#collapse-r{{i}}c{{j}}-{{k}}" aria-expanded="false">
                                     <label class="vertical-nav align-items-center d-flex">
                                       <!--<input [attr.data-parent]="'#row'+i+'col'+i+'-progress'" type="checkbox" value="10">-->
-                                      <input *ngIf="hasEditRights" type="checkbox" [indeterminate]="(activity.status | numberToStatus) === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation();" (ngModelChange)="updateStatus(activity)" [ngModel]="(activity.status | numberToStatus) === 'checked'" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">
+                                      <input *ngIf="hasEditRights" type="checkbox" [indeterminate]="(activity.status | numberToStatus) === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation();" (ngModelChange)="updateStatus(activity)" [ngModel]="(activity.status | numberToStatus) === 'checked'" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded" [title]="getCheckboxTitle(activity)">
                                       <!--<input type="checkbox" [indeterminate]="activity.status === 'crossed'" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stopPropagation()" [ngModel]="activity.status | numberToStatus === 'checked'" (ngModelChange)="checkStatus(activity)" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
                                       <!--<input type="checkbox" [indeterminate]="activity.status == 1" name="input-r{{i}}c{{j}}-{{k}}" (click)="$event.stoppropagation()" [ngmodel]="activity.status == 2" [attr.data-parent]="'#row'+i+'col'+i+'-progress'" [disabled]="activity.isexcluded">-->
                                       {{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}}
@@ -162,7 +162,8 @@
 
                               <div id="collapse-r{{i}}c{{j}}-{{k}}" class="panel-collapse collapse in">
                                 <div class="panel-body im-theme-{{i}}">
-                                  <div class="markdown-description" markdown ngPreserveWhitespaces [data]="(activity.baseactivityinfo)?(activity.baseactivityinfo?.description):(activity.customactivityinfo?.description)"></div>
+                                  <p class="mb-1"><span *ngIf="activity.deadlinedate" title="Deadline"><span class="badge badge-danger opacity-75 mr-2"><i class="fa fa-stopwatch fa-fw"></i> {{activity.deadlinedate | jsonToDate}}</span></span><span class="badge opacity-75" [ngClass]="(activity.finishdate == null) ? 'badge-info' : 'badge-success'"><span *ngIf="activity.startdate" title="Tidsåtgång"><i class="fa fa-fw" [ngClass]="(activity.finishdate == null) ? 'fa-hourglass-half' : 'fa-hourglass-end'"></i> {{ getActivityTimeLapse(activity) }} dagar</span></span></p>
+                                  <div #markdownElement class="markdown-description" markdown ngPreserveWhitespaces [data]="(activity.baseactivityinfo)?(activity.baseactivityinfo?.description):(activity.customactivityinfo?.description)"></div>
                                   <!--<a class="btn p-0"><p>Visa alternativ</p></a>-->
                                   <hr class="m-0 pb-1" />
                                   <div class="row">
@@ -170,9 +171,7 @@
                                     <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" (click)="setCurrentActivityDates(activity)">
                                         <p>
-                                          <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum </span>
-                                          <span *ngIf="activity.deadlinedate"><span class="badge badge-danger">{{activity.deadlinedate | jsonToDate}}</span></span>
-
+                                          <i class="fa fa-calendar fa-fw"></i><span class="ml-1">Datum ({{ numberOfDates(activity) }})</span>
                                         </p>
                                       </a>
                                     </div>
@@ -262,7 +261,7 @@
                                     <div class="col-12">
                                       <a class="btn activity-function-btn p-0 im-theme-{{i}}" data-toggle="modal" [attr.data-target]="'#resourcesModal-r'+i+'c'+j+'-'+k">
                                         <p>
-                                          <i class="fa fa-book fa-fw"></i><span class="ml-1">Resurser ({{activity.resources?.length}})</span>
+                                          <i class="fa fa-link fa-fw"></i><span class="ml-1">Länkar ({{activity.resources?.length}})</span>
                                         </p>
                                       </a>
                                     </div>
@@ -272,7 +271,7 @@
                                         <div class="modal-content">
                                           <div class="modal-header">
                                             <h5 class="modal-title" id="resourcesModalLabel-r{{i}}c{{j}}-{{k}}">
-                                              Resurser
+                                              Länkar
                                               <br />
                                               <small>{{activity.baseactivityinfo?.name}}{{activity.customactivityinfo?.name}} i {{theme.name}}</small>
                                             </h5>
@@ -287,28 +286,28 @@
                                                   <a *ngIf="!resource.isEditable" class="button-link" style="font-size: 12px;" href="{{resource.url}}" target="_blank">
                                                     {{resource.text || resource.url}} &#8599;
                                                   </a>
-                                                  <form ngNoForm *ngIf="resource.isEditable" >
+                                                  <form ngNoForm *ngIf="resource.isEditable">
                                                     <p class="p-0 m-0"><label for="url-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länk:</label></p>
                                                     <input id="url-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="w-100 form-control" type="url" style="font-size: 12px;" maxlength="250" name="editURL" [(ngModel)]="resource.url" required value="{{resource.url}}" pattern="{{htmlReg}}" />
 
                                                     <p class="p-0 m-0"><label for="url-text-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länktext (valfritt):</label></p>
                                                     <input *ngIf="resource.isEditable" id="url-text-edit-r{{i}}c{{j}}-{{k}}-{{m}}" class="w-100 form-control mt-2 mb-3" type="url" style="font-size: 12px;" maxlength="250" name="editURLtext" [(ngModel)]="resource.text" value="{{resource.text}}" pattern="{{htmlReg}}" />
 
-                                                    <input class="align-middle btn btn-primary btn-sm mr-3" title="Spara resurs" (click)="updateResource(activity, resource)" value="Spara" type="submit">
+                                                    <input class="align-middle btn btn-primary btn-sm mr-3" title="Spara länk" (click)="updateResource(activity, resource)" value="Spara" type="submit">
 
-                                                    <a *ngIf="resource.isEditable" class="align-middle btn btn-secondary btn-sm mr-3" role="button" title="Avbryt redigera resurs" (click)="resetResource(activity, resource)" style="color: white;">Avbryt</a>
+                                                    <a *ngIf="resource.isEditable" class="align-middle btn btn-secondary btn-sm mr-3" role="button" title="Avbryt redigera länk" (click)="resetResource(activity, resource)" style="color: white;">Avbryt</a>
                                                   </form>
-                                                  <br *ngIf="!resource.isEditable"/>
-                                                    <a *ngIf="!resource.isEditable && hasEditRights" id="note-r{{i}}c{{j}}-{{k}}-{{m}}" class="align-middle im-link-btn mr-3" role="button" title="Redigera resurs" (click)="toggleEditResource(activity, resource)">Redigera</a>
+                                                  <br *ngIf="!resource.isEditable" />
+                                                  <a *ngIf="!resource.isEditable && hasEditRights" id="note-r{{i}}c{{j}}-{{k}}-{{m}}" class="align-middle im-link-btn mr-3" role="button" title="Redigera länk" (click)="toggleEditResource(activity, resource)">Redigera</a>
 
-                                                    <a *ngIf="!resource.isEditable && hasEditRights" role="button" class="align-middle im-link-btn" data-target="#removeResourceModal" data-toggle="modal" (click)="setCurrentResource(resource, activity)">Ta bort</a>
+                                                  <a *ngIf="!resource.isEditable && hasEditRights" role="button" class="align-middle im-link-btn" data-target="#removeResourceModal" data-toggle="modal" (click)="setCurrentResource(resource, activity)">Ta bort</a>
 
                                                 </li>
                                               </ul>
                                               <br />
                                             </ng-container>
                                             <h6 *ngIf="activity.resources?.length == 0">
-                                              <small>Resurser saknas för denna aktivitet.</small>
+                                              <small>Länkar saknas för denna aktivitet.</small>
                                             </h6>
 
                                           </div>
@@ -323,17 +322,17 @@
                                                 <div *ngIf="fResources.url.errors.pattern" style="font-size: 12px;">Ange en giltig webbadress på formen www.exemple.com.</div>
                                               </div>
 
-                                                <p class="p-0 m-0"><label for="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länktext (valfritt):</label></p>
-                                                <input type="text" class="form-control" formControlName="text" id="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" [ngClass]="{ 'is-invalid': submittedResource && fResources.text.errors }" placeholder="Ange en adresstext" />
+                                              <p class="p-0 m-0"><label for="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" class="col-form-label">Länktext (valfritt):</label></p>
+                                              <input type="text" class="form-control" formControlName="text" id="url-text-r{{i}}c{{j}}-{{k}}-{{m}}" maxlength="250" [ngClass]="{ 'is-invalid': submittedResource && fResources.text.errors }" placeholder="Ange en adresstext" />
                                               <!--<div *ngIf="submittedResource && fResources.text.errors" class="invalid-feedback">
-        <div *ngIf="fResources.url.errors.required">Ange en webbadress.</div>
-        <div *ngIf="fResources.url.errors.pattern" style="font-size: 12px;">Ange en giltig webbadress på formen www.exemple.com.</div>
+                                                <div *ngIf="fResources.url.errors.required">Ange en webbadress.</div>
+                                                <div *ngIf="fResources.url.errors.pattern" style="font-size: 12px;">Ange en giltig webbadress på formen www.exemple.com.</div>
 
 
-      </div>-->
+                                              </div>-->
                                               <input type="submit" class="btn btn-primary mt-2 float-right" [disabled]="!resourceForm.dirty || isEditingResource" value="Lägg till" />
                                             </form>
-                                            <p *ngIf="!hasEditRights" class="text-center w-100">Du har inte behörighet att lägga till resurser.</p>
+                                            <p *ngIf="!hasEditRights" class="text-center w-100">Du har inte behörighet att lägga till länkar.</p>
                                           </div>
                                         </div>
                                       </div>
@@ -380,7 +379,73 @@
     </div>
   </div>
 
-  <div class="modal" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModalLabel" aria-hidden="true">
+
+  <div class="modal" id="markdownInfoModal" tabindex="-1" role="dialog" aria-labelledby="markdownInfoModalLabel" aria-hidden="true" data-backdrop="false" style="z-index: 1500 !important;">
+    <div class="modal-dialog" style="top: 10%; left:10%;" role="dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Formateringshjälp
+          </h5>
+          <button type="button" class="close mr-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Medtech Innovation Model använder Markdown för att formatera text. Se den kompletta syntaxen <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">här</a>.
+          </p>
+          <table class="table table-markdown">
+            <thead>
+              <tr>
+                <th scope="col">Formatering</th>
+                <th scope="col">Markdown syntax</th>
+                <!--<th scope="col">Resultat</th>-->
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <!--<td>Fet text</td>-->
+                <td><b>Fet text</b></td>
+                <td>**Fet text**</td>
+
+              </tr>
+              <tr>
+                <!--<td>Kursiv text</td>-->
+                <td><i>Kursiv text</i></td>
+                <td>*Kursiv text* eller _Kursiv text_</td>
+              </tr>
+              <tr>
+                <!--<td>Understruken text</td>-->
+                <td><u>Genomstrukten text</u></td>
+                <td>~~Genomstrukten text~~</td>
+              </tr>
+              <tr>
+                <!--<td>Länk</td>-->
+                <td><a href="" onclick="return false">Länk</a></td>
+                <td>[Länk] eller http://www.exempel.com</td>
+              </tr>
+              <tr>
+                <!--<td>Punktlista</td>-->
+                <td><ul style="font-size: 14px;"><li>Första</li><li>Andra</li><li>Tredje</li></ul></td>
+                <td>* Första<br />* Andra<br />* Tredje</td>
+
+              </tr>
+              <!--<tr>
+                <td>Horisontell linje</td>
+                <td>---</td>
+                <td><hr /></td>
+              </tr>-->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
       <div class="modal-content">
         <!--<div class="modal-header">
@@ -406,7 +471,7 @@
     </div>
   </div>
 
-  <div class="modal" id="removeResourceModal" tabindex="-1" role="dialog" aria-labelledby="removeResourceModalLabel" aria-hidden="true">
+  <div class="modal" id="removeResourceModal" tabindex="-1" role="dialog" aria-labelledby="removeResourceModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
       <div class="modal-content">
         <!--<div class="modal-header">
@@ -419,9 +484,9 @@
         </div>-->
         <div class="modal-body">
           <h6 class="text-wrap">
-            Är du säker på att du vill ta bort resursen?
+            Är du säker på att du vill ta bort länken?
           </h6>
-          <p>Resursen kommer tas bort permanent. Åtgärden går inte att ångra.</p>
+          <p>Länken kommer tas bort permanent. Åtgärden går inte att ångra.</p>
 
         </div>
         <div class="modal-footer">
@@ -475,6 +540,7 @@
               <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
                 <div *ngIf="f.description.errors.required">Beskrivning är obligatoriskt</div>
               </div>
+              <button type="button" class="btn btn-light float-right mt-2" data-target="#markdownInfoModal" data-toggle="modal">Formateringshjälp</button>
             </div>
           </div>
           <div class="modal-footer">
@@ -531,9 +597,10 @@
               <div *ngIf="submitted && fEdit.description.errors" class="invalid-feedback">
                 <div *ngIf="fEdit.description.errors.required">Beskrivning är obligatoriskt</div>
               </div>
+              <button type="button" class="btn btn-light float-right mt-2" data-target="#markdownInfoModal" data-toggle="modal">Formateringshjälp</button>
             </div>
             <div class="form-group">
-              <label [attr.for]="'theme-sel-r'+i+'c'+j+'-'+k">Tema</label>
+              <label [attr.for]="'theme-sel-r'+i+'c'+j+'-'+k" class="mt-3">Tema</label>
               <select [attr.id]="'theme-sel-r'+i+'c'+j+'-'+k" class="form-control" formControlName="theme">
                 <option *ngFor="let optionTheme of themes" [ngValue]="optionTheme" [selected]="optionTheme.themeid === currentActivityInfo?.theme?.themeid">{{optionTheme.name}}</option>
               </select>
@@ -564,7 +631,7 @@
   </form>
 
 
-  <div class="modal" id="deleteActivityModal" tabindex="-1" role="dialog" aria-labelledby="deleteActivityModalLabel" aria-hidden="true">
+  <div class="modal" id="deleteActivityModal" tabindex="-1" role="dialog" aria-labelledby="deleteActivityModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog modal-sm" style="top: 10%" role="dialog">
       <div class="modal-content">
         <!--<div class="modal-header">
@@ -608,15 +675,15 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="activityDeadlineDate">Deadline</label>
-              <input id="activityDeadlineDate" type="text" formControlName="deadline" class="form-control rounded" type="date" [value]="currentActivity?.deadlinedate?.split('T')[0]" />
+              <input id="activityDeadlineDate" formControlName="deadline" [disabled]="currentActivity?.finisheddate" class="form-control rounded" type="date" [value]="currentActivity?.deadlinedate?.split('T')[0]" />
             </div>
             <div class="form-group">
               <label for="activityStartedDate">Påbörjad</label>
-              <input id="activityStartedDate" type="text" formControlName="started" class="form-control rounded" type="date" [value]="currentActivity?.startdate?.split('T')[0]" />
+              <input id="activityStartedDate" formControlName="started" class="form-control rounded" [max]="getMaxStartedDate()" type="date" [value]="currentActivity?.startdate?.split('T')[0]" />
             </div>
             <div class="form-group">
               <label for="activityFinishedDate">Avslutad</label>
-              <input id="activityFinishedDate" type="text" formControlName="finished" class="form-control rounded" type="date" [value]="currentActivity?.finishdate?.split('T')[0]" />
+              <input id="activityFinishedDate" formControlName="finished" class="form-control rounded" [min]="getMinFinishedDate()" type="date" [value]="currentActivity?.finishdate?.split('T')[0]" />
             </div>
             <div class="modal-footer">
               <div class="form-group">

@@ -10,6 +10,19 @@ html {
   overflow-y: scroll;
 }
 
+body:not(.modal-open) {
+  padding-right: 0px !important;
+}
+.navbar, .navbar-toggler {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+.modal-open {
+  overflow: auto;
+  padding-right: 0 !important;
+}
+
 im-background-color {
   background: #336699 !important;
 }
@@ -46,6 +59,14 @@ im-background-color {
 
   .im-btn-primary:hover {
     background: #9BE3A1;
+  }
+
+.im-btn-secondary {
+  background: #336699;
+}
+
+  .im-btn-secondary:hover {
+    background: #4e7ead;
   }
 
 code {

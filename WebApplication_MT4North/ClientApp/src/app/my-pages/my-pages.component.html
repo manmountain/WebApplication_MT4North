@@ -11,8 +11,29 @@
       <div class="media d-flex align-items-center">
        <!-- <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">-->
         <div class="media-body">
+          <div class="d-inline-flex">
+          <button type="button" id="btn-im-home" class="btn btn-default btn-sm im-btn-secondary mr-2" [routerLink]="['/my-pages/start']"><span class="fa fa-home"></span></button>
           <h4 class="m-0">{{currentUser?.firstname}} {{currentUser?.lastname}}</h4>
-          <p class="font-weight-light text-muted mb-0">Organisation</p>
+
+          </div>
+          <!--<p class="font-weight-light text-muted mb-0">Organisation</p>-->
+          <!--<button type="button" class="btn accordion card card-header">
+    <span><i class="fa fa-home"></i></span>
+  </button>-->
+          <!--<div class="accordion mb-2" id="accordionExampleZero">
+
+  <div class="card">
+    <div class="card-header" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero" id="headingZero">
+      <h2 class="mb-0 m-0 p-0">
+        <a>
+          <span><i class="fa fa-home"></i>-->
+          <!--Hem-->
+          <!--</span>
+          </a>
+        </h2>
+      </div>
+    </div>
+  </div>-->
         </div>
       </div>
     </div>
@@ -24,18 +45,31 @@
     -->
     <div class="col-lg">
       <!--
-    <div class="row">
-      <div class="col-lg">
-        <p class="text-gray font-weight-bold text-uppercase float-left">PROJECTS</p>
-        <p class="float-right"><span class="fa fa-plus-circle"></span></p>
-      </div>
+  <div class="row">
+    <div class="col-lg">
+      <p class="text-gray font-weight-bold text-uppercase float-left">PROJECTS</p>
+      <p class="float-right"><span class="fa fa-plus-circle"></span></p>
     </div>
-    -->
+  </div>
+  -->
+      <!--<div class="accordion mb-2" id="accordionExampleZero">
+        <div class="card">
+          <div class="card-header" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero" id="headingZero">
+            <h2 class="mb-0 m-0 p-0">
+              <a>
+                <span>
+                  <i class="fa fa-home"></i> Hem
+                </span>
+              </a>
+            </h2>
+          </div>
+        </div>
+      </div>-->
       <div class="accordion mb-2" id="accordionExample">
         <div class="card">
           <div class="card-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" id="headingOne">
             <h2 class="mb-0">
-              <a >
+              <a>
                 <span><i class="fa fa-user"></i> Konto</span>
                 <i class="fa fa-chevron-down toggle"></i>
               </a>
@@ -52,7 +86,7 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"S>
+          <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" S>
             <h2 class="mb-0">
               <a>
                 <span><i class="fa fa-briefcase"></i> Projekt</span>
@@ -64,7 +98,9 @@
             <div class="card-body">
               <ul class="list-group">
                 <ng-container *ngFor="let project of projects; let i = index">
-                  <li class="btn text-left list-group-item" (click)="selectProject(project?.projectid)"><a>{{project?.name}}</a> <!--<span class="badge badge-pill badge-primary">20</span>--></li>
+                  <li class="btn text-left list-group-item" (click)="selectProject(project?.projectid)">
+                    <a>{{project?.name}}</a> <!--<span class="badge badge-pill badge-primary">20</span>-->
+                  </li>
                 </ng-container>
               </ul>
               <button class="btn w-100 text-left" id="addBtn" data-toggle="modal" data-target="#addProjectModal" (click)="resetModal()"><span><i class="fa fa-plus"></i> Skapa nytt projekt</span></button>
@@ -89,14 +125,14 @@
           </div>
         </div>
         <!--<div class="card">
-          <div class="card-header" id="headingFive">
-            <h2 class="mb-0"><a href="#"><i class="fa fa-power-off"></i> Logga ut</a></h2>
-          </div>
-        </div>-->
+      <div class="card-header" id="headingFive">
+        <h2 class="mb-0"><a href="#"><i class="fa fa-power-off"></i> Logga ut</a></h2>
+      </div>
+    </div>-->
       </div>
     </div>
 
-  </div>
+    </div>
   <!-- End vertical navbar -->
   <!-- Page content holder -->
   <div class="page-content" [class.pl-4]="isFullscreen() === false" [class.pt-5]="isFullscreen() === false" id="content" [class.active]="isFullscreen() === true">

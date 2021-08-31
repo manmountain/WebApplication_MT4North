@@ -309,6 +309,7 @@ export class ProjectService {
       ////localStorage.setItem('currentProjects', JSON.stringify(project));
       ////this.projectSubjects.next(project);
       //console.log('invited member');
+      if (this.selectedProjectValue.projectid == userProject.projectid) {
       this.userProjectsValue.push(userProject);
 
       const getCircularReplacer = () => {
@@ -326,7 +327,7 @@ export class ProjectService {
       localStorage.setItem('userProjects', JSON.stringify(this.userProjectsValue, getCircularReplacer()));
 
       this.userProjectsSubject.next(this.userProjectsValue);
-
+      }
       return userProject;
     }));
   }

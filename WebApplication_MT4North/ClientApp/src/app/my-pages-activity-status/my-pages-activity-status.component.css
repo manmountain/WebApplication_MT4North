@@ -40,6 +40,10 @@ button.closeModal {
   overflow-y: auto;
 }
 
+/*.markdown-description ul {
+  padding-left: 16px !important;
+}*/
+
 a.button-link:hover {
   text-decoration: underline !important;
 }
@@ -54,6 +58,10 @@ a.button-link:hover {
   filter: alpha(opacity=20);
   opacity: .2;
   margin-right: 20px;
+}
+
+.modal {
+    overflow: auto;
 }
 
 .alert p {
@@ -136,6 +144,10 @@ input[type="checkbox"] {
 
 .table tr {
   cursor: pointer;
+}
+
+.table-markdown tr {
+  cursor: auto !important;
 }
 
 .hiddenRow {
@@ -1195,6 +1207,7 @@ input.rounded {
 }
 
 /* DONT work -something wrong with the selector */
-.markdown-description ul {
-  padding-inline-start: 16px;
-}
+  /*.markdown-description ul {*/
+/*    padding-inline-start: 16px;
+*/    /*padding-left: 16px;
+  }*/

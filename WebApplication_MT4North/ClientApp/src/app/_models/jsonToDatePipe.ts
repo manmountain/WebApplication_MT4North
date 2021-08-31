@@ -6,6 +6,8 @@ import { PipeTransform, Pipe } from '@angular/core';
 })
 export class JsonToDatePipe implements PipeTransform {
   transform(input: string): string { //string type
-    return new Date(input).toDateString();
+    //const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+    return new Date(input).toLocaleDateString('se-SE');
   }
 }

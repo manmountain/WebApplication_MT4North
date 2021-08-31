@@ -144,6 +144,10 @@ li:focus {
 */ color: #68B06E;
 }
 
+#btn-im-home {
+    color: white;
+}
+
 #show-sidebar,
 #close-sidebar {
   -webkit-transition: all 0.3s ease;

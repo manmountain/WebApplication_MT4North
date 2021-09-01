@@ -73,6 +73,11 @@ li:focus {
   margin-right: .25rem;
 }
 
+.accordion .fas {
+  width: 20px;
+  margin-right: .25rem;
+}
+
 .accordion .card-header a {
   float: left;
   width: 100%;

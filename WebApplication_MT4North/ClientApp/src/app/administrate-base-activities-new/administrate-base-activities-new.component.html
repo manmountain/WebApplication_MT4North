@@ -1,0 +1,54 @@
+<h2 class="display-4 text-black-50">Skapa Ny Basaktivitet.</h2>
+<br />
+<div *ngIf="isDataLoaded">
+  <div class="row mt-4">
+    <div class="col-12" style="max-width: 1100px;">
+      <!---->
+      <form [formGroup]="newForm" (ngSubmit)="newActivity()">
+        <div class="">
+          <div class="form-group">
+            <label for="formcontrolid">Id</label>
+            <input id="formcontrolid" type="number" formControlName="id" class="form-control rounded" [value]="formId"/>
+          </div>
+          <div class="form-group">
+            <label for="formcontrolname">Namn</label>
+            <input id="formcontrolname" type="text" formControlName="name" class="form-control rounded" [value]="formName"/>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontroldescription">Beskrivning</label>
+                <textarea id="formcontroldescription" type="text" formControlName="description" class="form-control rounded" rows="10" [(ngModel)]="formDescription"></textarea>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontroldescriptionpreview">Förhandsgranskning</label>
+                <markdown id="formcontroldescriptionpreview" class="" style="height: 100% !important;" [data]="formDescription"></markdown>
+              </div>
+              <!---->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="formcontroltheme">Tema</label>
+            <select id="formcontroltheme" class="form-control" formControlName="theme">
+              <option *ngFor="let theme of themes" [ngValue]="theme">{{theme.name}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="formcontrolphase">Fas</label>
+            <select id="formcontroltheme" class="form-control" formControlName="phase">
+              <option *ngFor="let phase of phases" [ngValue]="phase">{{phase.name}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-secondary mr-1" (click)="back()">Avbryt</button>
+            <button type="submit" class="btn btn-primary" [disabled]="false">Spara</button>
+          </div>
+        </div>
+      </form>
+      <!---->
+    </div>
+  </div>
+</div>
+<alert></alert>

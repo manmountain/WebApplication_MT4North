@@ -273,6 +273,35 @@ namespace WebApplication_MT4North.Controllers
             }
         }
 
+        // GET: api/Account/Users
+        /// <summary>
+        /// Get the application users (all of them)
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>
+        /// Updated UserProject
+        /// </returns>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unautherized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [HttpGet("users")]
+        [Authorize(Roles = "AdminUser")]
+        public async Task<ActionResult<ApplicationUser>> GetAllUsersAsync()
+        {
+            var users = await _userManager.Users.ToListAsync<ApplicationUser>();
+            foreach(var user in users)
+            {
+                List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
+                user.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
+            }
+            return Ok(users);
+        }
+
         // GET: api/Account/User
         /// <summary>
         /// Get the application user

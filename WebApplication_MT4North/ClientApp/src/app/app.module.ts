@@ -27,6 +27,13 @@ import { MyPagesActivityStatusComponent } from './my-pages-activity-status/my-pa
 import { MyPagesActivityComponent } from './my-pages-activity/my-pages-activity.component';
 import { MyPagesEditAccountComponent } from './my-pages-edit-account';
 import { MyPagesDeleteAccountComponent } from './my-pages-delete-account';
+import { AdministrateBaseActivities } from './administrate-base-activities';
+import { AdministrateBaseActivitiesEdit } from './administrate-base-activities-edit';
+import { AdministrateBaseActivitiesNew } from './administrate-base-activities-new';
+import { AdministrateThemes } from './administrate-themes';
+import { AdministrateThemesEdit } from './administrate-themes-edit';
+import { AdministrateThemesNew } from './administrate-themes-new';
+import { AdministrateUsers } from './administrate-users';
 import { MatchesPhaseAndThemePipe, EnumToArrayPipe, NumberToPhasePipe, NumberToRolePipe, NumberToRightsPipe, NumberToStatusPipe, JsonToDatePipe } from './_models';
 import { AddActivityModal } from './_modals';
 import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
@@ -79,6 +86,34 @@ const routes: Routes = [
       {
         path: 'delete-account',
         component: MyPagesDeleteAccountComponent
+      },
+      {
+        path: 'administrate-base-activities',
+        component: AdministrateBaseActivities
+      },
+      {
+        path: 'administrate-base-activities-edit/:id',
+        component: AdministrateBaseActivitiesEdit
+      },
+      {
+        path: 'administrate-base-activities-new',
+        component: AdministrateBaseActivitiesNew
+      },
+      {
+        path: 'administrate-themes', 
+        component: AdministrateThemes
+      },
+      {
+        path: 'administrate-themes-edit/:id', 
+        component: AdministrateThemesEdit
+      },
+      {
+        path: 'administrate-themes-new', 
+        component: AdministrateThemesNew
+      },
+      {
+        path: 'administrate-users', /* http://localhost:5000/my-pages/administrate-users */
+        component: AdministrateUsers
       }
     ]
   }
@@ -105,6 +140,13 @@ const routes: Routes = [
     MyPagesProjectSettingsComponent,
     MyPagesEditAccountComponent,
     MyPagesDeleteAccountComponent,
+    AdministrateBaseActivities,
+    AdministrateBaseActivitiesEdit,
+    AdministrateBaseActivitiesNew,
+    AdministrateThemes,
+    AdministrateThemesEdit,
+    AdministrateThemesNew,
+    AdministrateUsers,
     MatchesPhaseAndThemePipe,
     EnumToArrayPipe,
     NumberToPhasePipe,

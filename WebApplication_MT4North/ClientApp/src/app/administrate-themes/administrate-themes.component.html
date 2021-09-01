@@ -1,0 +1,40 @@
+<h2 class="display-4 text-black-50">Administrera Teman.</h2>
+<p class="lead text-black mb-0">Lägg till, ändra eller ta bort teman</p>
+<br />
+<button type="button" class="btn btn-primary"  [routerLink]="['../administrate-themes-new']"><i class="fas fa-plus"> </i> Skapa Ny</button>
+<br />
+<div class="row mt-4">
+  <div class="col-12" style="max-width: 1100px;">
+    <table class="table table-borderless table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" style="border-radius: 6px 0 0 0;">#</th>
+          <th scope="col">Id</th>
+          <th scope="col">Namn</th>
+          <th scope="col">Beskrivning</th>
+          <th scope="col">Åtgärder</th>
+          <th scope="col" style="border-radius: 0 6px 0 0;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let theme of themes; let i = index">
+          <tr>
+            <td class="align-middle">{{i}}</td>
+            <td class="align-middle">{{theme.themeid}}</td>
+            <td class="align-middle">{{theme.name}}</td>
+            <td class="align-middle">{{theme.description}}</td>
+            <td class="align-middle">
+              <button type="button" class="btn btn-primary btn-sm" [routerLink]="['../administrate-themes-edit', theme.themeid]"><i class="fas fa-edit"></i> Redigera</button>
+              <!--&nbsp;-->
+            </td>
+            <td class="align-middle">
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeTheme(theme.themeid);"><i class="fas fa-trash"></i> Ta Bort</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+<alert></alert>
+

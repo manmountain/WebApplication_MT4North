@@ -10,10 +10,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./account.service"), exports);
-__exportStar(require("./admin.service"), exports);
-__exportStar(require("./project.service"), exports);
-__exportStar(require("./user.service"), exports);
-__exportStar(require("./view.service"), exports);
-__exportStar(require("./alert.service"), exports);
+__exportStar(require("./administrate-themes.component"), exports);
 //# sourceMappingURL=index.js.map

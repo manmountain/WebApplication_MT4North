@@ -220,4 +220,8 @@ export class MyPagesComponent implements OnDestroy {
     let idToRemove = this.userInvitations.filter(x => x.email == email)[0].id-1;
     this.userInvitations.splice(idToRemove, 1);
   }
+
+  isAdministrator(): boolean {
+    return this.currentUser.userrole == ('AdminUser');
+  }
 }

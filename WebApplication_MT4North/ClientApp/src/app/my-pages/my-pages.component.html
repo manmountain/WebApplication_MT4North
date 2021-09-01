@@ -124,11 +124,34 @@
             </div>
           </div>
         </div>
+        <!-- Start Administration -->
+        <div class="card" [hidden]="!isAdministrator()">
+          <!--[hidden]="true"-->
+          <div class="card-header" id="headingFive" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            <h2 class="mb-0">
+              <a>
+                <span><i class="fa fa-tools"></i> Administrera</span>
+                <i class="fa fa-chevron-down toggle"></i>
+              </a>
+            </h2>
+          </div>
+          <!---->
+          <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+            <div class="card-body">
+              <ul class="list-group">
+                <li class="btn text-left list-group-item" [routerLink]="['./administrate-users']"><i class="fa fa-user-astronaut"></i> Användare</li>
+                <li class="btn text-left list-group-item" [routerLink]="['./administrate-base-activities']"><i class="fa fa-tasks"></i> Bas Aktiviteter</li>
+                <li class="btn text-left list-group-item" [routerLink]="['./administrate-themes']"><i class="fa fa-palette"></i> Teman</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Slut Administrera-->
         <!--<div class="card">
-      <div class="card-header" id="headingFive">
-        <h2 class="mb-0"><a href="#"><i class="fa fa-power-off"></i> Logga ut</a></h2>
-      </div>
-    </div>-->
+    <div class="card-header" id="headingFive">
+      <h2 class="mb-0"><a href="#"><i class="fa fa-power-off"></i> Logga ut</a></h2>
+    </div>
+  </div>-->
       </div>
     </div>
 

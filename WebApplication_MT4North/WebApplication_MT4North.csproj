@@ -80,6 +80,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\administrate-base-activities\administrate-base-activities.ts" />
+    <None Remove="ClientApp\src\app\administrate-themes\administrate-base-activities.ts" />
     <None Remove="ClientApp\src\app\footer - Copy (2)\footer.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-delete-account\my-pages-delete-account.component.ts" />
     <None Remove="ClientApp\src\app\my-pages-edit-account\my-pages-edit-account.component.ts" />
@@ -128,6 +130,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-base-activities\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes-edit\administrate-themes-edit.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes-edit\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes-new\administrate-themes-new.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes-new\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-users\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.spec.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\home\index.ts" />
@@ -145,6 +154,7 @@
     <TypeScriptCompile Remove="ClientApp\src\app\_models\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_models\resource.model.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\account.service.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\_services\admin.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\alert.service.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\_services\project.service.ts" />
@@ -218,6 +228,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\src\app\administrate-themes\administrate-base-activities.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\_models\activity.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

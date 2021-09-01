@@ -1,0 +1,43 @@
+<h2 class="display-4 text-black-50">Administrera Basaktiviteter.</h2>
+<p class="lead text-black mb-0">Lägg till, ändra eller ta bort bas aktiviteter</p>
+<br />
+<button type="button" class="btn btn-primary" [routerLink]="['../administrate-base-activities-new']"><i class="fas fa-plus"> </i> Skapa Ny</button>
+<br />
+<div class="row mt-4">
+  <div class="col-12" style="max-width: 1100px;">
+    <table class="table table-borderless table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" style="border-radius: 6px 0 0 0;">#</th>
+          <th scope="col">Id</th>
+          <th scope="col">Namn</th>
+          <th scope="col">Beskrivning</th>
+          <th scope="col">Tema</th>
+          <th scope="col">Fas</th>
+          <th scope="col">Åtgärder</th>
+          <th scope="col" style="border-radius: 0 6px 0 0;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let baseactivity of baseactivityinfos; let i = index">
+          <tr>
+            <td class="align-middle">{{i}}</td>
+            <td class="align-middle">{{baseactivity.baseactivityid}}</td>
+            <td class="align-middle">{{baseactivity.name}}</td>
+            <td class="align-middle"><markdown>{{(baseactivity.description && baseactivity.description.length>126)?(baseactivity.description.substring(0, 126)+'..'):(baseactivity.description)}}</markdown></td>
+            <td class="align-middle">{{baseactivity.theme.name}}</td>
+            <td class="align-middle">{{baseactivity.phase}}</td>
+            <td class="align-middle">
+              <button type="button" class="btn btn-primary btn-sm" [routerLink]="['../administrate-base-activities-edit', baseactivity.baseactivityid]"><i class="fas fa-edit"> </i> Redigera</button>
+              <!--&nbsp;-->
+            </td>
+            <td class="align-middle">
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeActivity(baseactivity.baseactivityid);"><i class="fas fa-trash"></i> Ta Bort</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+<alert></alert>

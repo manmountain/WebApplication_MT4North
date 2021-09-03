@@ -34,6 +34,8 @@ import { AdministrateThemes } from './administrate-themes';
 import { AdministrateThemesEdit } from './administrate-themes-edit';
 import { AdministrateThemesNew } from './administrate-themes-new';
 import { AdministrateUsers } from './administrate-users';
+import { AdministrateUsersEdit } from './administrate-users-edit';
+import { AdministrateUsersNew } from './administrate-users-new';
 import { MatchesPhaseAndThemePipe, EnumToArrayPipe, NumberToPhasePipe, NumberToRolePipe, NumberToRightsPipe, NumberToStatusPipe, JsonToDatePipe } from './_models';
 import { AddActivityModal } from './_modals';
 import { JwtInterceptor, ErrorInterceptor, AuthGuard } from './_helpers';
@@ -112,8 +114,16 @@ const routes: Routes = [
         component: AdministrateThemesNew
       },
       {
-        path: 'administrate-users', /* http://localhost:5000/my-pages/administrate-users */
+        path: 'administrate-users',
         component: AdministrateUsers
+      },
+      {
+        path: 'administrate-users-edit/:id',
+        component: AdministrateUsersEdit
+      },
+      {
+        path: 'administrate-users-new',
+        component: AdministrateUsersNew
       }
     ]
   }
@@ -147,6 +157,8 @@ const routes: Routes = [
     AdministrateThemesEdit,
     AdministrateThemesNew,
     AdministrateUsers,
+    AdministrateUsersEdit,
+    AdministrateUsersNew,
     MatchesPhaseAndThemePipe,
     EnumToArrayPipe,
     NumberToPhasePipe,

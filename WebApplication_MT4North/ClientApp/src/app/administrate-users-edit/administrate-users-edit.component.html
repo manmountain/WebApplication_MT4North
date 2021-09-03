@@ -1,0 +1,99 @@
+<h2 class="display-4 text-black-50">Redigera Användare.</h2>
+<br />
+<div *ngIf="isDataLoaded">
+  <div class="row mt-4">
+    <div class="col-12" style="max-width: 1100px;">
+      <!---->
+      <form [formGroup]="editForm" (ngSubmit)="saveUser()">
+        <div class="">
+          <div class="form-group">
+            <label for="formcontrolid">Id</label>
+            <input id="formcontrolid" type="text" formControlName="id" class="form-control rounded" [value]="user.id" />
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolfname">Förnamn</label>
+                <input id="formcontrolfname" type="text" formControlName="firstname" class="form-control rounded" [value]="user.firstname" />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolsname">Efternamn</label>
+                <input id="formcontrolsname" type="text" formControlName="lastname" class="form-control rounded" [value]="user.lastname" />
+              </div>
+            </div>
+          </div>
+
+          <!---->
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolemail">Epost</label>
+                <input id="formcontrolemail" type="text" formControlName="email" class="form-control rounded" [value]="user.email" />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolgender">Könsidentitet</label>
+                <select id="formcontrolgender" class="form-control" formControlName="gender">
+                  <option *ngFor="let gender of gender_options" [ngValue]="gender">{{gender.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!---->
+
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolcompany">Organisation</label>
+                <input id="formcontrolcompany" type="text" formControlName="company" class="form-control rounded" [value]="user.companyname" />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolcountry">Region / Land</label>
+                <input id="formcontrolcountry" type="text" formControlName="country" class="form-control rounded" [value]="user.country" />
+              </div>
+            </div>
+          </div>
+          <!--
+          <div class="form-group">
+            <label for="formcontrolrole">Applikations-Roll</label>
+            <select id="formcontrolrole" class="form-control" formControlName="role">
+              <option *ngFor="let role of roles" [ngValue]="role">{{role}}</option>
+            </select>
+          </div>
+          -->
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolrole">Applikations-Roll</label>
+                <input id="formcontrolrole" type="text" formControlName="company" class="form-control rounded" [value]="user.userrole" />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="formcontrolroleactions">Byt Roll</label>
+                <div id="formcontrolroleactions">
+                  <button type="button" class="btn btn-warning mr-1" (click)="switchRoleToAdmin()" [disabled]="user.userrole == 'AdminUser'">Administrator</button>
+                  <button type="button" class="btn btn-warning mr-1" (click)="switchRoleToBasic()" [disabled]="user.userrole != 'AdminUser'">Användare</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <div class="form-group">
+            <button type="button" class="btn btn-secondary mr-1" (click)="back()">Avbryt</button>
+            <button type="submit" class="btn btn-primary mr-1" [disabled]="false">Spara</button>
+            <button type="button" class="btn btn-info mr-1" (click)="generateNewPassword()"><i class="fas fa-key"> </i> Generera Nytt Lösenord</button>
+            <span *ngIf="newpassword != ''" class="font-weight-bold" id="newpasswordfield">{{newpassword}}</span>
+          </div>
+        </div>
+      </form>
+      <!---->
+    </div>
+  </div>
+</div>
+<alert></alert>

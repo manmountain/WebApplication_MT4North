@@ -302,6 +302,24 @@ namespace WebApplication_MT4North.Controllers
             return Ok(users);
         }
 
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [HttpGet("user/{userId}")]
+        [Authorize(Roles = "AdminUser")]
+        public async Task<ActionResult<ApplicationUser>> GetUserByIdAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId); 
+            if (user == null)
+            {
+                return NotFound();
+            }
+            List<string> roles = (List<string>)await _userManager.GetRolesAsync(user);
+            user.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
+            return Ok(user);
+        }
+
         // GET: api/Account/User
         /// <summary>
         /// Get the application user
@@ -353,7 +371,7 @@ namespace WebApplication_MT4North.Controllers
         [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
         [HttpPut("user")]
         [Authorize]
-        public async Task<ActionResult> UpdateCurrentUserAsync([FromBody] UserRequest request)
+        public async Task<ActionResult> UpdateCurrentUserAsync([FromBody] ApplicationUser request)
         {
             string userEmail = ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Email).FirstOrDefault().Value;
             var user = await _userManager.FindByEmailAsync(userEmail);
@@ -378,9 +396,13 @@ namespace WebApplication_MT4North.Controllers
             {
                 user.LastName = request.LastName;
             }
-            if (!string.IsNullOrWhiteSpace(request.Gender))
+            if (request.Gender != "")
             {
                 user.Gender = request.Gender;
+            }
+            if (!string.IsNullOrWhiteSpace(request.CompanyName))
+            {
+                user.CompanyName = request.CompanyName;
             }
             //
             var updateResult = await _userManager.UpdateAsync(user);
@@ -400,11 +422,11 @@ namespace WebApplication_MT4North.Controllers
         }
 
 
-        [HttpPut("user/{userEmail}")]
+        [HttpPut("user/{id}")]
         [Authorize(Roles = "AdminUser")]
-        public async Task<ActionResult> UpdateUserAsync(string userEmail, [FromBody] UserRequest request)
+        public async Task<ActionResult> UpdateUserAsync(string id, [FromBody] ApplicationUser request)
         {
-            var user = await _userManager.FindByEmailAsync(userEmail);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -428,17 +450,21 @@ namespace WebApplication_MT4North.Controllers
             {
                 user.LastName = request.LastName;
             }
-            if (!string.IsNullOrWhiteSpace(request.Gender))
+            if (request.Gender != "")
             {
                 user.Gender = request.Gender;
+            }
+            if (!string.IsNullOrWhiteSpace(request.CompanyName))
+            {
+                user.CompanyName = request.CompanyName;
             }
             //
             var updateResult = await _userManager.UpdateAsync(user);
 
             if (updateResult.Succeeded)
             {
-                //updateResult.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
-                return Ok(updateResult);
+                user.UserRole = roles.Contains("AdminUser") ? "AdminUser" : "BasicUser";
+                return Ok(user);
             }
 
             var errors = updateResult.Errors.Select(x => x.Description).ToList();
@@ -469,6 +495,33 @@ namespace WebApplication_MT4North.Controllers
                 });
             }
 
+            var errors = result.Errors.Select(x => x.Description).ToList();
+            return BadRequest(new ErrorResult
+            {
+                Message = "Error updating password",
+                Errors = errors
+            });
+        }
+
+        [HttpPut("user/password/{id}")]
+        [Authorize(Roles = "AdminUser")]
+        public async Task<ActionResult> UpdateUserPasswordById(string id, [FromBody] UpdatePasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordToken, request.NewPassword); //ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok(new StatusResult
+                {
+                    Message = "Password updated"
+                });
+            }
             var errors = result.Errors.Select(x => x.Description).ToList();
             return BadRequest(new ErrorResult
             {
@@ -542,31 +595,38 @@ namespace WebApplication_MT4North.Controllers
             }
         }
 
-        [HttpDelete("user/{userEmail}")]
+        [HttpDelete("user/{id}")]
         [Authorize(Roles = "AdminUser")]
-        public async Task<ActionResult> DeleteUserByEmailAsync(string userEmail)
+        public async Task<ActionResult> DeleteUserByEmailAsync(string id)
         {
-            var email = userEmail;
-            if(string.IsNullOrWhiteSpace(email))
-            {
-                return BadRequest(new ErrorResult
-                {
-                    Message = "Email cant be empty",
-                    Errors = new List<string>()
-                });
-            }
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                //return BadRequest("Can't find user to delete");
-                return BadRequest(new ErrorResult
-                {
-                    Message = "Can't find user with email: " + userEmail + " to delete",
-                    Errors = new List<string>()
-                });
+                // Can't find user to delete
+                return NotFound();
             }
-            // delete all old UserProjects, such as invatations ..
-            var userProjects = await _context.UserProjects.Where(u => u.UserId == user.Id).ToListAsync<UserProject>();
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // If user is a admin user, forbid delete action
+            if (roles.Contains("AdminUser"))
+            {
+                return Forbid();
+            }
+            // fetch all user-projects where the user is a owner
+            var userProjectsOwners = await _context.UserProjects.Where(p => p.User.UserName == user.UserName && p.Role == UserProjectRoles.OWNER).ToListAsync<UserProject>();
+            if (userProjectsOwners.Count > 0)
+            {
+                foreach(var projectowner in userProjectsOwners)
+                {
+                    var projectToRemove = await _context.Projects.FirstAsync(p => p.ProjectId == projectowner.ProjectId);
+                    _context.Projects.Remove(projectToRemove);
+                    var projectsUserProjectsToRemove = await _context.UserProjects.Where(p => p.ProjectId == projectToRemove.ProjectId).ToListAsync<UserProject>();
+                    _context.UserProjects.RemoveRange(projectsUserProjectsToRemove);
+                }
+                await _context.SaveChangesAsync();
+            }
+            // fetch all user-projects where the user is a member
+            var userProjects = await _context.UserProjects.Where(p => p.User.UserName == user.UserName).ToListAsync<UserProject>();
             if (userProjects.Count > 0)
             {
                 _context.UserProjects.RemoveRange(userProjects);
@@ -575,16 +635,19 @@ namespace WebApplication_MT4North.Controllers
             var deleteResult = await _userManager.DeleteAsync(user);
             if (deleteResult.Succeeded)
             {
+                await _context.SaveChangesAsync();
+                _jwtAuthManager.RemoveRefreshTokenByUserName(user.UserName);
                 return Ok(new StatusResult
                 {
-                    Message = "User " + userEmail + " deleted"
+                    Message = "User " + id + " deleted"
                 });
-            } else
+            }
+            else
             {
                 var errors = deleteResult.Errors.Select(x => x.Description).ToList();
                 return BadRequest(new ErrorResult
                 {
-                    Message = "Error deleting user with email: " + userEmail,
+                    Message = "Error deleting user with email: " + id,
                     Errors = errors
                 });
             }
@@ -599,6 +662,52 @@ namespace WebApplication_MT4North.Controllers
             {
                 Roles = _roleManager.Roles.Select(x => x.Name).ToList()
             });
+        }
+
+        [HttpPut("user/roles/admin/{id}")]
+        [Authorize(Roles = "AdminUser")]
+        public async Task<IActionResult> MakeUserAdmin(string id)
+        {
+            var user = _userManager.Users.SingleOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userroles = await _userManager.GetRolesAsync(user);
+            if(Array.IndexOf(userroles.ToArray<string>(), "BasicUser") > -1 )
+            {
+                await _userManager.RemoveFromRoleAsync(user, "BasicUser");
+            }
+            var result = await _userManager.AddToRoleAsync(user, "AdminUser");
+            if (result.Succeeded)
+            {
+                user.UserRole = "AdminUser";
+                return Ok(user);
+            }
+            return Problem(result.Errors.First().Description, null, 500);
+        }
+
+        [HttpPut("user/roles/basic/{id}")]
+        [Authorize(Roles = "AdminUser")]
+        public async Task<IActionResult> MakeUserBasic(string id)
+        {
+            var user = _userManager.Users.SingleOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userroles = await _userManager.GetRolesAsync(user);
+            if (Array.IndexOf(userroles.ToArray<string>(), "AdminUser") > -1)
+            {
+                await _userManager.RemoveFromRoleAsync(user, "AdminUser");
+            }
+            var result = await _userManager.AddToRoleAsync(user, "BasicUser");
+            if (result.Succeeded)
+            {
+                user.UserRole = "BasicUser";
+                return Ok(user);
+            }
+            return Problem(result.Errors.First().Description, null, 500);
         }
 
         [HttpPost("roles/{roleName}")]

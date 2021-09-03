@@ -2,7 +2,7 @@ export class User {
   firstname: string;
   lastname: string;
   gender?: string;
-  companyName?: string;
+  companyname?: string;
   country?: string;
   profilePicture?: string;
   usertype?: string;

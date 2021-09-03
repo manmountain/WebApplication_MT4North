@@ -136,6 +136,8 @@
     <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes-new\administrate-themes-new.component.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes-new\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\administrate-themes\index.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-users-edit\administrate-users-edit.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\administrate-users-edit\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\administrate-users\index.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.spec.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\help\help.component.ts" />

@@ -151,6 +151,45 @@ namespace WebApplication_MT4North.Controllers
             }
         }
 
+        /*
+         var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+            // Send signup confirmation email
+            var fullName = newUser.FirstName + " " + newUser.LastName;
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { emailToken, email = newUser.Email }, Request.Scheme);
+            //var message = new Message(new string[] { existingUser.Email }, "Confirmation email link", confirmationLink);
+            //await _emailSender.SendEmailAsync(message);
+            // Remove, sensitive data should not be logged
+            Console.WriteLine("Email Confirmation token: "+emailToken); // REMOVEME
+        */
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)] // ???? return FORBIDDEN or UNAUTH 
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]    // ???? on token error
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous]
+        [HttpPost("resend-confirm")]
+        public async Task<IActionResult> resendEmailConformation(string email)
+        {
+            var user = await _userManager.FindByNameAsync(email);
+            if( user == null )
+            {
+                return BadRequest(new ErrorResult()
+                {
+                    Message = "BadRequest. Cant find user with email: " + email,
+                    Errors = new List<string>()
+                });
+            }
+            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            // Send signup confirmation email
+            var fullName = user.FirstName + " " + user.LastName;
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { emailToken, email = user.Email }, Request.Scheme);
+            //var message = new Message(new string[] { existingUser.Email }, "Confirmation email link", confirmationLink);
+            //await _emailSender.SendEmailAsync(message);
+            // Remove, sensitive data should not be logged
+            Console.WriteLine("New email Confirmation token: " + emailToken); // REMOVEME
+            return Ok();
+        }
+
         // GET: api/Account/login
         /// <summary>
         /// Authenticate user credentials
@@ -229,7 +268,7 @@ namespace WebApplication_MT4North.Controllers
                 CompanyName = existingUser.CompanyName,
                 Country = existingUser.Country,
                 ProfilePicture = existingUser.ProfilePicture,*/
-                Roles = roles.ToList<string>(),
+        Roles = roles.ToList<string>(),
                 //UsertYPE & uSERrOLE ? TODO:
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
@@ -264,6 +303,70 @@ namespace WebApplication_MT4North.Controllers
             _jwtAuthManager.RemoveRefreshTokenByUserName(userName);
             _logger.LogInformation($"User [{userName}] logged out the system.");
             return Ok();
+        }
+
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [HttpPost("email-reset-password")]
+        [AllowAnonymous]
+        public async Task<ActionResult> emailPasswordReset(string email)
+        {
+            /*
+             * get user
+             * om user existerar
+             * skapa en länk och reset token
+             * maila länken och tokenet
+             */
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                return BadRequest(new ErrorResult()
+                {
+                    Message = "BadRequest. Cant find user with email: " + email,
+                    Errors = new List<string>()
+                });
+            }
+            var resetPasswordtoken = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+            //var message = new Message(new string[] { existingUser.Email }, "Confirmation email link", confirmationLink);
+            //await _emailSender.SendEmailAsync(message);
+            // Remove, sensitive data should not be logged
+            Console.WriteLine("Password Reset token: " + resetPasswordtoken); // REMOVEME
+            return Ok();
+        }
+
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<ActionResult> resetPassword(string email, string token, string newPassword)
+        {
+            /*
+             * get user
+             * om user existerar
+             * om token valideras
+             * sätt password till newPassword
+             */
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                return BadRequest(new ErrorResult()
+                {
+                    Message = "BadRequest. Cant find user with email: " + email,
+                    Errors = new List<string>()
+                });
+            }
+            var result = await _userManager.ResetPasswordAsync(existingUser, token, newPassword);
+            if (result.Succeeded)
+            {
+                return Ok();
+            } else
+            {
+                return Forbid();
+            }
         }
 
         // POST: api/Account/refresh-token

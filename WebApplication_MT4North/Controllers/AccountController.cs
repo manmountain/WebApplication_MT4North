@@ -16,6 +16,7 @@ using System.Linq;
 using System.Collections.Generic;
 using WebApplication_MT4North.Models;
 using Microsoft.EntityFrameworkCore;
+using WebApplication_MT4North.Infrastructure.mail;
 
 namespace WebApplication_MT4North.Controllers
 {
@@ -97,6 +98,15 @@ namespace WebApplication_MT4North.Controllers
             });
             }
 
+            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+            // Send signup confirmation email
+            var fullName = newUser.FirstName + " " + newUser.LastName;
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { emailToken, email = newUser.Email }, Request.Scheme);
+            //var message = new Message(new string[] { existingUser.Email }, "Confirmation email link", confirmationLink);
+            //await _emailSender.SendEmailAsync(message);
+            // Remove, sensitive data should not be logged
+            Console.WriteLine("Email Confirmation token: "+emailToken); // REMOVEME
+
             var roleResult = await _userManager.AddToRoleAsync(newUser, "BasicUser");
             var roles = await _userManager.GetRolesAsync(newUser);
             if (userCreated.Succeeded && roleResult.Succeeded)
@@ -115,6 +125,30 @@ namespace WebApplication_MT4North.Controllers
                 Message = "Error creating user with email: "+request.Email+" and username: "+request.UserName,
                 Errors = roleResult.Errors.Select(x => x.Description).ToList()
             });
+        }
+
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status200OK)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized)] // ???? return FORBIDDEN or UNAUTH 
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status403Forbidden)]    // ???? on token error
+        [ProducesResponseType(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous]
+        [HttpPost("confirm")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByNameAsync(email);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                // Remove, sensitive data should not be logged
+                Console.WriteLine("User with email: "+email+" is confirmed by token: "+token); // REMOVEME
+                return Ok();
+            }
+            else
+            {
+                Console.WriteLine("Error trying to confirm User with email: " + email + " by token: " + token);
+                return BadRequest();
+            }
         }
 
         // GET: api/Account/login
@@ -152,6 +186,15 @@ namespace WebApplication_MT4North.Controllers
                 });
             }
 
+            var canSignIn = await _userManager.IsEmailConfirmedAsync(existingUser);
+            if (!canSignIn)
+            {
+                return BadRequest(new ErrorResult()
+                {
+                    Message = "BadRequest. User email is NOT confirmed: " + request.Email,
+                    Errors = new List<string>()
+                });
+            }
             var isCorrect = await _userManager.CheckPasswordAsync(existingUser, request.Password);
             if (!isCorrect)
             {

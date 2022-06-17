@@ -64,7 +64,8 @@ namespace WebApplication_MT4North
             //services.AddScoped<IUserService, UserService>(); //REMOVEME: FIXME:
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
